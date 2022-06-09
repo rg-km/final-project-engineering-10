@@ -1,0 +1,118 @@
+CREATE TABLE admin (
+id INTEGER PRIMARY KEY,
+nama VARCHAR (50) NOT NULL,
+email VARCHAR (50) NOT NULL,
+password VARCHAR (50) NOT NULL
+);
+
+CREATE TABLE sekolah (
+id INTEGER PRIMARY KEY ,
+nama_sekolah VARCHAR (50) NOT NULL,
+kode_sekolah INTEGER NOT NULL
+
+);
+
+
+CREATE TABLE guru (
+id INTEGER,
+nama VARCHAR (50) NOT NULL,
+email VARCHAR (50) NOT NULL,
+password VARCHAR (50) NOT NULL,
+kode_sekolah INTEGER NOT NULL,
+token INTEGER(10) NOT NULL,
+
+FOREIGN KEY (kode_sekolah) REFERENCES sekolah(kode_sekolah)
+);
+
+
+
+
+CREATE TABLE siswa (
+id INTEGER,
+nama VARCHAR (50) NOT NULL,
+email VARCHAR (50) NOT NULL,
+password VARCHAR (50) NOT NULL,
+credit_score INTEGER(100) NOT NULL,
+catatan_minat VARCHAR (250),
+kode_sekolah INTEGER NOT NULL,
+token INTEGER(10) NOT NULL,
+
+FOREIGN KEY (kode_sekolah) REFERENCES sekolah(kode_sekolah)
+);
+
+CREATE TABLE siswa_credit_score (
+id INTEGER,
+goals VARCHAR (50) NOT NULL,
+deskripsi VARCHAR (250) NOT NULL,
+password VARCHAR (50) NOT NULL,
+bukti varchar(50) NOT NULL,
+status VARCHAR (50),
+point INTEGER NOT NULL,
+id_siswa INTEGER(10) NOT NULL,
+
+FOREIGN KEY (id_siswa) REFERENCES siswa(id)
+);
+
+
+CREATE TABLE siswa_soft_skill (
+id INTEGER,
+leadership VARCHAR (50) NOT NULL,
+desicion_making VARCHAR (250) NOT NULL,
+public_speaking VARCHAR (50) NOT NULL,
+team_work varchar(50) NOT NULL,
+analysis_thinking VARCHAR (50),
+id_siswa INTEGER(10) NOT NULL,
+
+FOREIGN KEY (id_siswa) REFERENCES siswa(id)
+);
+
+
+
+
+	
+CREATE TABLE mata_pelajaran (
+kode_kelas INTEGER PRIMARY KEY ,
+nama_kelas VARCHAR (50) NOT NULL
+);
+
+CREATE TABLE mata_pelajaran_siswa (
+id INTEGER PRIMARY KEY ,
+rata_rata INTEGER,
+kode_kelas INTEGER  NOT NULL ,
+id_siswa INTEGER NOT NULL,
+FOREIGN KEY (kode_kelas) REFERENCES mata_pelajaran(kode_kelas),
+FOREIGN KEY (id_siswa) REFERENCES siswa(id)
+
+);
+
+
+CREATE TABLE tugas (
+id INTEGER PRIMARY KEY ,
+judul VARCHAR(100),
+deskripsi VARCHAR  (250) ,
+tipe VARCHAR (50),
+id_mata_pelajaran INTEGER,
+FOREIGN KEY (id_mata_pelajaran) REFERENCES mata_pelajaran(kode_kelas)
+
+
+);
+
+
+CREATE TABLE pengumpulan_tugas (
+id INTEGER PRIMARY KEY ,
+link_pengumpulan VARCHAR(250),
+nilai INTEGER ,
+status VARCHAR(50),
+id_siswa INTEGER,
+id_tugas INTEGER,
+id_mata_pelajaran INTEGER,
+FOREIGN KEY (id_siswa) REFERENCES siswa(id),
+FOREIGN KEY (id_tugas) REFERENCES tugas(id),
+FOREIGN KEY (id_mata_pelajaran) REFERENCES mata_pelajaran(kode_kelas)
+
+
+);
+
+
+
+
