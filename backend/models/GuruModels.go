@@ -50,6 +50,25 @@ return guru,nil
 }
 
 
+func Register(newGuru Guru)(bool,error){
+	tx,err:= DB.Begin()
+	if err!=nil {
+		return false,err
+	}
+
+	sqlstmt,err:=tx.Prepare(`INSERT INTO guru (nama,email,password,kode_sekolah,token)VALUES (?,?,?,?,?)`)
+	if err!=nil {
+		return false,err
+	}
+	defer sqlstmt.Close()
+	_,Err:= sqlstmt.Exec(newGuru.Nama,newGuru.Email,newGuru.Password,newGuru.Kode_sekolah,newGuru.Token)
+	if Err!=nil {
+		return false,err
+	}
+	tx.Commit()
+	return true,nil
+}
+
 
 func UpdateToken(id int)(bool,error){
 
