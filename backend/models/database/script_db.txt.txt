@@ -1,0 +1,122 @@
+CREATE TABLE admin (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+nama VARCHAR (50) NOT NULL,
+email VARCHAR (50) NOT NULL,
+password VARCHAR (50) NOT NULL
+);
+
+CREATE TABLE sekolah (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+nama_sekolah VARCHAR (50) NOT NULL,
+kode_sekolah INTEGER NOT NULL
+
+);
+
+
+CREATE TABLE guru (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+nama VARCHAR (50) NOT NULL,
+email VARCHAR (50) NOT NULL,
+password VARCHAR (50) NOT NULL,
+kode_sekolah INTEGER NOT NULL,
+token INTEGER(10) NOT NULL,
+
+FOREIGN KEY (kode_sekolah) REFERENCES sekolah(kode_sekolah)
+);
+
+
+
+
+CREATE TABLE siswa (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+nama VARCHAR (50) NOT NULL,
+email VARCHAR (50) NOT NULL,
+password VARCHAR (50) NOT NULL,
+credit_score INTEGER(100) NOT NULL,
+catatan_minat VARCHAR (250),
+kode_sekolah INTEGER NOT NULL,
+token INTEGER(10) NOT NULL,
+
+FOREIGN KEY (kode_sekolah) REFERENCES sekolah(kode_sekolah)
+);
+
+CREATE TABLE siswa_credit_score (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+goals VARCHAR (50) NOT NULL,
+deskripsi VARCHAR (250) NOT NULL,
+password VARCHAR (50) NOT NULL,
+bukti varchar(50) NOT NULL,
+status VARCHAR (50),
+point INTEGER NOT NULL,
+id_siswa INTEGER(10) NOT NULL,
+
+FOREIGN KEY (id_siswa) REFERENCES siswa(id)
+);
+
+
+CREATE TABLE siswa_soft_skill (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+leadership VARCHAR (50) NOT NULL,
+desicion_making VARCHAR (250) NOT NULL,
+public_speaking VARCHAR (50) NOT NULL,
+team_work varchar(50) NOT NULL,
+analysis_thinking VARCHAR (50),
+id_siswa INTEGER(10) NOT NULL,
+
+FOREIGN KEY (id_siswa) REFERENCES siswa(id)
+);
+
+
+
+
+	
+CREATE TABLE mata_pelajaran (
+kode_kelas INTEGER PRIMARY KEY AUTOINCREMENT ,
+nama_kelas VARCHAR (50) NOT NULL
+);
+
+CREATE TABLE mata_pelajaran_siswa (
+id INTEGER PRIMARY KEY AUTOINCREMENT ,
+rata_rata INTEGER,
+kode_kelas INTEGER  NOT NULL ,
+id_siswa INTEGER NOT NULL,
+FOREIGN KEY (kode_kelas) REFERENCES mata_pelajaran(kode_kelas),
+FOREIGN KEY (id_siswa) REFERENCES siswa(id)
+
+);
+
+
+CREATE TABLE tugas (
+id INTEGER PRIMARY KEY AUTOINCREMENT ,
+judul VARCHAR(100),
+deskripsi VARCHAR  (250) ,
+tipe VARCHAR (50),
+id_mata_pelajaran INTEGER,
+FOREIGN KEY (id_mata_pelajaran) REFERENCES mata_pelajaran(kode_kelas)
+
+
+);
+
+
+CREATE TABLE pengumpulan_tugas (
+id INTEGER PRIMARY KEY AUTOINCREMENT ,
+link_pengumpulan VARCHAR(250),
+nilai INTEGER ,
+status VARCHAR(50),
+id_siswa INTEGER,
+id_tugas INTEGER,
+id_mata_pelajaran INTEGER,
+FOREIGN KEY (id_siswa) REFERENCES siswa(id),
+FOREIGN KEY (id_tugas) REFERENCES tugas(id),
+FOREIGN KEY (id_mata_pelajaran) REFERENCES mata_pelajaran(kode_kelas)
+
+
+);
+
+
+--
+INSERT INTO sekolah (nama_sekolah,kode_sekolah) VALUES ("SMA 1",1),("SMA 2",2),("SMA 3", 3)
+INSERT INTO guru (nama,email,password,kode_sekolah,token) VALUES ("andi","andi@email.com","password",1,12345),("budi","budi@email.com","password",2,23451)
+
+SELECT * FROM guru
+SELECT * FROM sekolah
