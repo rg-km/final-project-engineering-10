@@ -42,7 +42,7 @@ func GuruLogin (c *gin.Context){
 
 
 func GetAllGuru (c *gin.Context){
-	guru,err:=models.GetUser()
+	guru,err:=models.GetGuru()
 	CheckErr(err)
 	if guru==nil {
 		c.JSON(http.StatusBadRequest,gin.H{"message": "data tidak ditemukan"})
@@ -52,3 +52,25 @@ func GetAllGuru (c *gin.Context){
 
 	}
 }
+
+
+func RegisterGuru( c * gin.Context){
+
+
+	var guru models.Guru
+
+	if err := c.ShouldBindJSON(&guru); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	success, err := models.RegisterGuru(guru)
+	if success {
+		c.JSON(http.StatusOK, gin.H{"message": "Success"})
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+	}
+
+}
+
+
+

@@ -95,3 +95,27 @@ return guru,nil
 
 
 
+func RegisterGuru(NewGuru Guru) (bool, error) {
+	tx, err := DB.Begin()
+	if err != nil {
+		return false, err
+	}
+	pwSlice, err := bcrypt.GenerateFromPassword([]byte(NewGuru.Password), 14)
+	if err != nil {
+		return false, err
+	}
+
+	NewGuru.Password = string(pwSlice[:])
+
+	sqlstmt, err := tx.Prepare(`INSERT INTO guru (nama,email,password,kode_sekolah,token)VALUES (?,?,?,?,?)`)
+	if err != nil {
+		return false, err
+	}
+	defer sqlstmt.Close()
+	_, Err := sqlstmt.Exec(NewGuru.Nama, NewGuru.Email, NewGuru.Password, NewGuru.Kode_sekolah, NewGuru.Token)
+	if Err != nil {
+		return false, err
+	}
+	tx.Commit()
+	return true, nil
+}

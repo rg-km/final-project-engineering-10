@@ -22,13 +22,13 @@ const (
 
 func Register(c *gin.Context) {
 
-	var guru models.Siswa
+	var siswa models.Siswa
 
-	if err := c.ShouldBindJSON(&guru); err != nil {
+	if err := c.ShouldBindJSON(&siswa); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	success, err := models.Register(guru)
+	success, err := models.Register(siswa)
 	if success {
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})
 	} else {
@@ -47,7 +47,7 @@ func Login(c *gin.Context) {
 
 	CheckErr(err)
 	if user.Email == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Email tidak ditemukan"})
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Email tidak "})
 	}
 	// } else {
 	// 	c.JSON(http.StatusOK, gin.H{"data": user})
@@ -102,4 +102,21 @@ func GetAll(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": guru})
 
 	}
+}
+
+func GetUserByUsername(c *gin.Context){
+	var user models.Siswa
+
+	if err:=c.ShouldBindJSON(&user);err!=nil {
+		c.JSON(http.StatusBadRequest,gin.H{"error":err.Error()})
+		return
+	}
+	user,err:=models.GetSiswaByEmail(user.Email)
+	CheckErr(err)
+	if user.Email=="" {
+		c.JSON(http.StatusBadRequest,gin.H{"message": "Username tidak ditemukan"})
+	}else{
+		c.JSON(http.StatusOK,gin.H{"data":user})
+	}
+
 }
