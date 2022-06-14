@@ -30,8 +30,37 @@ func AddMapel(newMapel Mata_pelajaran) (bool, error) {
 	return true, nil
 }
 
+
+func GetAllMapel()([]Mata_pelajaran,error){
+	rows, err := DB.Query(`SELECT * FROM mata_pelajaran`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	Mapel := make([]Mata_pelajaran, 0)
+	for rows.Next() {
+		mapel := Mata_pelajaran{}
+		err := rows.Scan(&mapel.Kode_kelas,&mapel.Nama_kelas)
+		if err != nil {
+			return nil, err
+		}
+		Mapel = append(Mapel, mapel)
+	}
+	err = rows.Err()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return Mapel, err
+}
+
+
+
+
 func SearchMapel(nama_kelas string) (Mata_pelajaran, error) {
-	sqlstmt, err := DB.Prepare(`SELECT * FROM mata_pelajaran WHERE nama_kelas = ?`)
+	sqlstmt, err := DB.Prepare(`SELECT * FROM mata_pelajaran WHERE nama_kelas =  ?`)
 	if err != nil {
 		return Mata_pelajaran{}, err
 	}
@@ -47,6 +76,8 @@ func SearchMapel(nama_kelas string) (Mata_pelajaran, error) {
 	}
 	return mata_pelajaran, nil
 }
+
+
 
 func UpdateMapel(ourMapel Mata_pelajaran, id int) (bool, error) {
 

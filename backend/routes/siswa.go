@@ -29,7 +29,8 @@ func SiswaRoutes(route *gin.Engine) {
 		v3.POST("/create", repository.AddMapel)
 		v3.DELETE("/delete", repository.DeleteMapel)
 		v3.PUT("/update", repository.UpdateMapel)
-		v3.GET("/search", repository.GetMapel)
+		v3.GET("/search", repository.SearchMapel)
+		v3.GET("/list", repository.GetAllMapel)
 	}
 
 }

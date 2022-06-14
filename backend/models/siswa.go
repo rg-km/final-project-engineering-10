@@ -33,20 +33,7 @@ type Siswa struct {
 
 func Login(email string, password string, id int) (Siswa, error) {
 	siswa := Siswa{}
-	// success, err := UpdateToken(id)
-	// if !success {
-	// 	return Siswa{}, err
-	// }
 
-	// result := Siswa{Email: siswa.Email}
-
-	// if err := result.getByEmail; err != nil {
-	// 	return Siswa{}, err
-	// }
-
-	// if err := bcrypt.CompareHashAndPassword([]byte(result.Password), []byte(siswa.Password)); err != nil {
-	// 	return Siswa{}, err
-	// }
 
 	user, err := GetSiswaByEmail(email)
 	if err != nil {
@@ -74,28 +61,6 @@ func Login(email string, password string, id int) (Siswa, error) {
 	return siswa, nil
 }
 
-// func Login(email string, password string, id int) (Siswa, error) {
-
-// 	success, err := UpdateToken(id)
-// 	if !success {
-// 		return Siswa{}, err
-// 	}
-
-// 	sqlstmt, err := DB.Prepare("SELECT * FROM siswa WHERE email = ? AND password = ?")
-// 	if err != nil {
-// 		return Siswa{}, err
-// 	}
-// 	siswa := Siswa{}
-// 	rows := sqlstmt.QueryRow(email, password).Scan(&siswa.Id, &siswa.Nama, &siswa.Email, &siswa.Password, &siswa.Credit_score, &siswa.Catatan_minat, &siswa.Kode_sekolah, &siswa.Token)
-// 	if rows != nil {
-// 		if rows == sql.ErrNoRows {
-// 			return Siswa{}, nil
-// 		}
-// 		return Siswa{}, rows
-
-// 	}
-// 	return siswa, nil
-// }
 
 func Register(newSiswa Siswa) (bool, error) {
 	tx, err := DB.Begin()

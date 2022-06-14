@@ -23,7 +23,7 @@ func AddMapel(c *gin.Context) {
 	}
 }
 
-func GetMapel(c *gin.Context) {
+func SearchMapel(c *gin.Context) {
 	var mapel models.Mata_pelajaran
 
 	if err := c.ShouldBindJSON(&mapel); err != nil {
@@ -40,22 +40,18 @@ func GetMapel(c *gin.Context) {
 
 }
 
-// func GetUserByUsername(c *gin.Context){
-// 	var user models.Siswa
 
-// 	if err:=c.ShouldBindJSON(&user);err!=nil {
-// 		c.JSON(http.StatusBadRequest,gin.H{"error":err.Error()})
-// 		return
-// 	}
-// 	user,err:=models.GetSiswaByEmail(user.Email)
-// 	CheckErr(err)
-// 	if user.Email=="" {
-// 		c.JSON(http.StatusBadRequest,gin.H{"message": "Username tidak ditemukan"})
-// 	}else{
-// 		c.JSON(http.StatusOK,gin.H{"data":user})
-// 	}
+func GetAllMapel(c *gin.Context){
+	mapel, err := models.GetAllMapel()
+	CheckErr(err)
+	if mapel == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "data tidak ditemukan"})
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{"message": mapel})
 
-// }
+	}
+}
 
 func UpdateMapel(c *gin.Context) {
 
