@@ -120,3 +120,4 @@ func GetUserByUsername(c *gin.Context){
 	}
 
 }
+

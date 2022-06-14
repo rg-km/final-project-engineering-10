@@ -14,6 +14,7 @@ func SiswaRoutes(route *gin.Engine) {
 		v1.POST("/register/", repository.Register)
 		v1.GET("/list/",repository.GetAll)
 		v1.GET("/email", repository.GetUserByUsername)
+		v1.POST("/enroll/")
 	}
 
 	v2:=route.Group("/Guru")

@@ -95,7 +95,7 @@ return guru,nil
 
 
 
-func RegisterGuru(NewGuru Guru) (bool, error) {
+func RegisterGuru(NewGuru Guru) (bool, error) {				//fungsi untuk testing db
 	tx, err := DB.Begin()
 	if err != nil {
 		return false, err

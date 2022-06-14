@@ -52,6 +52,7 @@ func Login(email string, password string, id int) (Siswa, error) {
 
 	user,err:=GetSiswaByEmail(email)
 		if err!=nil {
+				
 			return  Siswa{}, err
 		}
 
