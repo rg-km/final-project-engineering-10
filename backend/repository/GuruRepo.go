@@ -38,6 +38,7 @@ func GuruLogin (c *gin.Context){
 		return
 	}
 	c.SetCookie("jwt", token, 3600, "/", "localhost", false, true)
+	
 }
 
 
