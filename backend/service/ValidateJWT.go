@@ -15,7 +15,6 @@ type Claims struct {
 
 func AuthJwt() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		
 		claims:= &Claims{}
 		authHeader := c.GetHeader("Set-Cookie")
 		if authHeader == "" {
@@ -38,7 +37,5 @@ func AuthJwt() gin.HandlerFunc {
 			c.Writer.WriteHeader(http.StatusUnauthorized)
 			return
 		}
-
 	}
-
 }
