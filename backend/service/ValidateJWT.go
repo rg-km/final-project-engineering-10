@@ -1,8 +1,6 @@
 package service
 
 import (
-	"fmt"
-
 	"net/http"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
@@ -26,8 +24,20 @@ func AuthJwt() gin.HandlerFunc {
 		}
 		
 		tkn, err := jwt.ParseWithClaims(authHeader, claims, func(token *jwt.Token) (interface{}, error) {
-			return "ueu",nil
+			return "qwe123",nil
 		})
+		if err!= nil {
+			if err ==jwt.ErrSignatureInvalid {
+				c.Writer.WriteHeader(http.StatusUnauthorized)
+				return
+			}
+			c.Writer.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		if !tkn.Valid {
+			c.Writer.WriteHeader(http.StatusUnauthorized)
+			return
+		}
 
 	}
 
