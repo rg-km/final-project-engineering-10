@@ -1,6 +1,6 @@
 import { Table } from 'antd';
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const columns = [
 	{
@@ -13,6 +13,11 @@ const columns = [
 		title: 'Nama Siswa',
 		dataIndex: 'nama_siswa',
 		key: 'nama_siswa',
+		render: (_, record) => (
+			<Link to={`${record.nama_siswa}`} className="h-full">
+				<p className="text-black">{record.nama_siswa}</p>
+			</Link>
+		),
 	},
 	{
 		title: 'Rata-rata',

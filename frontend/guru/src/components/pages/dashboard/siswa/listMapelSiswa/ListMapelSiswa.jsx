@@ -1,6 +1,6 @@
 import { Table } from 'antd';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const columns = [
 	{
@@ -14,7 +14,7 @@ const columns = [
 		dataIndex: 'nama_pelajaran',
 		key: 'nama_pelajaran',
 		render: (_, record) => (
-			<Link to={`/dashboard/pelajaran/${record.nama_pelajaran}`} className="h-full">
+			<Link to={`${record.nama_pelajaran}`} className="h-full">
 				<p className="text-black">{record.nama_pelajaran}</p>
 			</Link>
 		),
@@ -23,10 +23,9 @@ const columns = [
 		title: 'Action',
 		key: 'action',
 		render: (_, record) => (
-			<Link to="/dashboard/pelajaran/edit" className="flex gap-4 items-center justify-center">
-				<img src="/image/dashboard/edit.svg" alt="edit" />
-				<img src="/image/dashboard/trash.svg" alt="edit" />
-			</Link>
+			<div to="/dashboard/pelajaran/edit" className="flex gap-4 items-center justify-center">
+				<img src="/image/dashboard/trash.svg" alt="delete" />
+			</div>
 		),
 	},
 ];
@@ -46,10 +45,12 @@ const data = [
 	},
 ];
 
-function ListPelajaran() {
+function ListMapelSiswa() {
+	const { nama } = useParams();
+
 	return (
 		<div>
-			<div className="text-2xl font-bold mb-4">List Mata Pelajaran</div>
+			<div className="text-2xl font-bold mb-4">List Mata Pelajaran {nama}</div>
 			<div className="flex justify-end my-4">
 				<Link
 					to="/dashboard/pelajaran/create"
@@ -66,4 +67,4 @@ function ListPelajaran() {
 	);
 }
 
-export default ListPelajaran;
+export default ListMapelSiswa;
