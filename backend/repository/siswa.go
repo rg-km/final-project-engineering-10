@@ -49,9 +49,7 @@ func Login(c *gin.Context) {
 	if user.Email == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Email tidak "})
 	}
-	// } else {
-	// 	c.JSON(http.StatusOK, gin.H{"data": user})
-	// }
+
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Issuer:    strconv.Itoa(int(user.Id)),
 		ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
@@ -63,7 +61,7 @@ func Login(c *gin.Context) {
 		return
 	}
 	c.SetCookie("jwt", token, 3600, "/", "localhost", false, true)
-	// c.JSON(http.StatusOK, gin.H{"data": user})
+
 
 }
 

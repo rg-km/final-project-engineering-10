@@ -10,7 +10,7 @@ import (
 
 func main() {
 	r := gin.Default()
-	routes.SiswaRoutes(r)
+	routes.Routes(r)
 	err := models.ConnectDB()
 	repository.CheckErr(err)
 	r.Run()
