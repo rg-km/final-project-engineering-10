@@ -12,7 +12,7 @@ import (
 func main() {
 	r := gin.Default()
 	r.Use(middleware.CORSMiddleware())
-	routes.SiswaRoutes(r)
+	routes.Routes(r)
 	err := models.ConnectDB()
 	repository.CheckErr(err)
 	r.Run()
