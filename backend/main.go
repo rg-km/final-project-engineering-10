@@ -1,6 +1,7 @@
 package main
 
 import (
+	"mactiv/middleware"
 	"mactiv/models"
 	"mactiv/repository"
 	"mactiv/routes"
@@ -10,6 +11,7 @@ import (
 
 func main() {
 	r := gin.Default()
+	r.Use(middleware.CORSMiddleware())
 	routes.SiswaRoutes(r)
 	err := models.ConnectDB()
 	repository.CheckErr(err)
