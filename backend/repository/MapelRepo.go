@@ -62,24 +62,20 @@ func UpdateMapel(c *gin.Context) {
 		return
 	}
 
-	kodeKelas, err := strconv.Atoi(c.Param("kode_kelas"))
-
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid kode_kelas"})
-	}
-
-	success, err := models.UpdateMapel(json, kodeKelas)
+	success, err := models.UpdateMapel(json)
 
 	if success {
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})
+		return
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return 
 	}
 }
 
 func DeleteMapel(c *gin.Context) {
 
-	kodeKelas, err := strconv.Atoi(c.Param("kode_kelas"))
+	kodeKelas, err := strconv.Atoi(c.Param("id"))
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid kode_kelas"})

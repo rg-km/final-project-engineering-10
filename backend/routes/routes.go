@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SiswaRoutes(route *gin.Engine) {
+func Routes(route *gin.Engine) {
 	v1 := route.Group("/siswa")
 	{
 		v1.GET("/", repository.GetAll)
@@ -27,8 +27,8 @@ func SiswaRoutes(route *gin.Engine) {
 	v3 := route.Group("/Mapel")
 	{
 		v3.POST("/create", repository.AddMapel)
-		v3.DELETE("/delete", repository.DeleteMapel)
-		v3.PUT("/update", repository.UpdateMapel)
+		v3.DELETE("/:id/delete", repository.DeleteMapel)
+		v3.PUT("/update/", repository.UpdateMapel)
 		v3.GET("/search", repository.SearchMapel)
 		v3.GET("/list", repository.GetAllMapel)
 	}

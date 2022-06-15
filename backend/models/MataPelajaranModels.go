@@ -12,23 +12,24 @@ type Mata_pelajaran struct {
 }
 
 func AddMapel(newMapel Mata_pelajaran) (bool, error) {
-	tx, err := DB.Begin()
-	if err != nil {
-		return false, err
+	tx,err:= DB.Begin()
+	if err!=nil {
+		return false,err
 	}
 
-	sqlstmt, err := tx.Prepare(`INSERT INTO mata_pelajaran (kode_kelas, nama_kelas) VALUES (?,?))`)
-	if err != nil {
-		return false, err
+	sqlstmt,err:=tx.Prepare(`INSERT INTO mata_pelajaran (nama_kelas)VALUES (?)`)
+	if err!=nil {
+		return false,err
 	}
 	defer sqlstmt.Close()
-	_, Err := sqlstmt.Exec(newMapel.Kode_kelas, newMapel.Nama_kelas)
-	if Err != nil {
-		return false, err
+	_,Err:= sqlstmt.Exec(newMapel.Nama_kelas)
+	if Err!=nil {
+		return false,err
 	}
 	tx.Commit()
-	return true, nil
+	return true,nil
 }
+
 
 
 func GetAllMapel()([]Mata_pelajaran,error){
@@ -79,7 +80,7 @@ func SearchMapel(nama_kelas string) (Mata_pelajaran, error) {
 
 
 
-func UpdateMapel(ourMapel Mata_pelajaran, id int) (bool, error) {
+func UpdateMapel(ourMapel Mata_pelajaran) (bool, error) {
 
 	tx, err := DB.Begin()
 	if err != nil {
