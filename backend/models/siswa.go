@@ -84,7 +84,7 @@ func Register(newSiswa Siswa) (bool, error) {
 		return false, err
 	}
 	defer sqlstmt.Close()
-	_, Err := sqlstmt.Exec(newSiswa.Nama, newSiswa.Email, newSiswa.Password, newSiswa.Credit_score, newSiswa.Catatan_minat, newSiswa.Kode_sekolah, newSiswa.Token)
+	_, Err := sqlstmt.Exec(newSiswa.Nama, newSiswa.Email, newSiswa.Password, 100, "", newSiswa.Kode_sekolah, newSiswa.Token)
 	if Err != nil {
 		return false, err
 	}
