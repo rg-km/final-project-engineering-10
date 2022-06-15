@@ -79,7 +79,7 @@ func Register(newSiswa Siswa) (bool, error) {
 		return false, err
 	}
 	defer sqlstmt.Close()
-	_, Err := sqlstmt.Exec(newSiswa.Nama, newSiswa.Email, newSiswa.Password, newSiswa.Credit_score, newSiswa.Catatan_minat, newSiswa.Kode_sekolah, newSiswa.Token)
+	_, Err := sqlstmt.Exec(newSiswa.Nama, newSiswa.Email, newSiswa.Password, 100, "", newSiswa.Kode_sekolah, newSiswa.Token)
 	if Err != nil {
 		return false, err
 	}
@@ -155,32 +155,9 @@ func GetSiswaByEmail(email string) (Siswa, error) {
 	return siswa, nil
 }
 
+
+
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
-
-// func getByEmail(newSiswa Siswa) ([]Siswa, error) {
-// 	rows, err := DB.Query(`SELECT * FROM siswa WHERE email = ?`)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	defer rows.Close()
-
-// 	users := make([]Siswa, 0)
-// 	for rows.Next() {
-// 		siswa := Siswa{}
-// 		err := rows.Scan(&siswa.Id, &siswa.Nama, &siswa.Email, &siswa.Password, &siswa.Kode_sekolah, &siswa.Token)
-// 		if err != nil {
-// 			return nil, err
-// 		}
-// 		users = append(users, siswa)
-// 	}
-// 	err = rows.Err()
-
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	return users, err
-// }
