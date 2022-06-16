@@ -1,14 +1,16 @@
 import { Form } from 'antd';
 import { Formik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
+import axiosConfig from '../../../utils/axiosConfig';
+import BASE_URL from '../../../utils/config';
 import { getErrorValue } from '../../../utils/getErrors';
 import FormItem from '../../reusable/FormItem';
 import Input from '../../reusable/Input';
 import SubmitButton from '../../reusable/SubmitButton';
 
 const validationSchema = Yup.object().shape({
-	email: Yup.string().email("Masukan alamat email yang valid").required('Email wajib diisi'),
+	email: Yup.string().email('Masukan alamat email yang valid').required('Email wajib diisi'),
 	password: Yup.string().required('Password wajib diisi'),
 });
 
@@ -19,9 +21,23 @@ function Login() {
 	};
 
 	const [input, setInput] = useState(initialState);
+	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState({});
-	const onSubmit = values => {};
 
+	const onSubmit = async values => {
+		try {
+			console.log(values);
+			setLoading(true);
+			const response = await axiosConfig.post(`${BASE_URL}/siswa/login/`, values);
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setLoading(false);
+
+			console.log(document.cookie);
+		}
+	};
+	
 	return (
 		<div className="h-full ">
 			<div className="w-144 px-12 py-16 bg-secondary mx-auto my-24 border-blue border-2 rounded-xl">

@@ -23,9 +23,11 @@ const columns = [
 		title: 'Action',
 		key: 'action',
 		render: (_, record) => (
-			<Link to="/dashboard/pelajaran/edit" className="flex gap-4 items-center justify-center">
-				<img src="/image/dashboard/edit.svg" alt="edit" />
-				<img src="/image/dashboard/trash.svg" alt="edit" />
+			<Link
+				to={`${record.nama_pelajaran}`}
+				className="px-8 py-4 bg-primary text-black cursor-pointer font-bold rounded-xl hover:text-white"
+			>
+				Pilih
 			</Link>
 		),
 	},
@@ -46,24 +48,14 @@ const data = [
 	},
 ];
 
-function ListPelajaran() {
+function SelectPelajaran() {
 	return (
 		<div>
-			<div className="text-2xl font-bold mb-4">List Mata Pelajaran</div>
-			<div className="flex justify-end my-4">
-				<Link
-					to="/dashboard/pelajaran/create"
-					className="p-4 bg-blue flex items-center gap-2 font-bold text-lg text-white rounded-2xl"
-				>
-					<div>
-						<img src="/image/dashboard/plus.svg" className="w-5" alt="" />
-					</div>
-					<label>Tambah Mata Pelajaran</label>
-				</Link>
-			</div>
+			<div className="text-2xl font-bold mb-4">Pilih Mata Pelajaran</div>
+
 			<Table pagination={false} columns={columns} dataSource={data} />
 		</div>
 	);
 }
 
-export default ListPelajaran;
+export default SelectPelajaran;

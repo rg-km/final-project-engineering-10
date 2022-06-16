@@ -1,5 +1,6 @@
 import { Table } from 'antd';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const columns = [
 	{
@@ -12,6 +13,11 @@ const columns = [
 		title: 'Nama Siswa',
 		dataIndex: 'nama_siswa',
 		key: 'nama_siswa',
+		render: (_, record) => (
+			<Link to={record.nama_siswa}>
+				<p className="text-black">{record.nama_siswa}</p>
+			</Link>
+		),
 	},
 	{
 		title: 'Rata-rata',
@@ -23,8 +29,7 @@ const columns = [
 		key: 'action',
 		render: (_, record) => (
 			<div className="flex gap-4 items-center justify-center">
-				<img src="/image/dashboard/edit.svg" alt="edit" />
-				<img src="/image/dashboard/trash.svg" alt="edit" />
+				<img src="/image/dashboard/trash.svg" alt="delete" />
 			</div>
 		),
 	},
@@ -51,7 +56,7 @@ const data = [
 function ListSiswa() {
 	return (
 		<div>
-			<div className="text-2xl font-bold mb-4">List Siswa</div>
+			<div className="text-2xl font-bold mb-4">List Siswa Pada Sekolah</div>
 			<Table pagination={false} columns={columns} dataSource={data} />
 		</div>
 	);
