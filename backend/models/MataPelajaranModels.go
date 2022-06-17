@@ -132,3 +132,6 @@ func DeleteMapel(kode_kelas int) (bool, error) {
 
 	return true, nil
 }
+
+
+

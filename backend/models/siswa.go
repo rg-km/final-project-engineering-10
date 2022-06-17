@@ -2,7 +2,6 @@ package models
 
 import (
 	"database/sql"
-	"fmt"
 	"mactiv/service"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -31,6 +30,8 @@ type Siswa struct {
 	Token         string `json:"token"`
 }
 
+
+
 func Login(email string, password string, id int) (Siswa, error) {
 	siswa := Siswa{}
 
@@ -43,7 +44,7 @@ func Login(email string, password string, id int) (Siswa, error) {
 
 	temp := CheckPasswordHash(password, user.Password)
 	if !temp {
-		return Siswa{}, fmt.Errorf("hashing password salah")
+		return Siswa{}, err
 	}
 
 	sqlstmt, err := DB.Prepare("SELECT * FROM siswa WHERE email = ? AND password = ?")
@@ -161,3 +162,4 @@ func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
+
