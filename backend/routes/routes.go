@@ -33,4 +33,13 @@ func Routes(route *gin.Engine) {
 		v3.GET("/list", repository.GetAllMapel)
 	}
 
+	v4 := route.Group("/tugas")
+	{
+		v4.POST("/create", repository.AddTugas)
+		v4.POST("/:id/delete", repository.DeleteTugas)
+		v4.POST("/update/", repository.UpdateTugas)
+		v4.GET("/search", repository.SearchTugas)
+		v4.GET("/list", repository.GetAllTugas)
+	}
+
 }
