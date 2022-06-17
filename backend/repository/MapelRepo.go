@@ -61,8 +61,9 @@ func UpdateMapel(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	kodeKelas, err := strconv.Atoi(c.Param("kode_kelas"))
 
-	success, err := models.UpdateMapel(json)
+	success, err := models.UpdateMapel(json,kodeKelas)
 
 	if success {
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})

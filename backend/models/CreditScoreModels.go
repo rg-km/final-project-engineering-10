@@ -60,6 +60,11 @@ func AddCreditScore (credit Credit_score,user_id int) (bool,error) {
 	}
 	tx.Commit()
 
+	// if credit.Status=="Telah disetujui" {
+	// 	UpdateCreditScore(credit.Point,user_id)
+
+	// }
+	// masih kurang yakin dengan status nya
 	UpdateCreditScore(credit.Point,user_id)
 	return true,nil
 }
