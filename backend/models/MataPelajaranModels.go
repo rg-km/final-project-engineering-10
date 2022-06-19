@@ -9,20 +9,21 @@ import (
 type Mata_pelajaran struct {
 	Kode_kelas int    `json:"kode_kelas"`
 	Nama_kelas string `json:"nama_kelas"`
+	Kode_sekolah int   `json:"kode_sekolah"`
 }
 
-func AddMapel(newMapel Mata_pelajaran) (bool, error) {
+func AddMapel(newMapel Mata_pelajaran,kode_sekolah int) (bool, error) {
 	tx,err:= DB.Begin()
 	if err!=nil {
 		return false,err
 	}
 
-	sqlstmt,err:=tx.Prepare(`INSERT INTO mata_pelajaran (nama_kelas)VALUES (?)`)
+	sqlstmt,err:=tx.Prepare(`INSERT INTO mata_pelajaran (kode_kelas,nama_kelas,kode_sekolah)VALUES (?,?,?)`)
 	if err!=nil {
 		return false,err
 	}
 	defer sqlstmt.Close()
-	_,Err:= sqlstmt.Exec(newMapel.Nama_kelas)
+	_,Err:= sqlstmt.Exec(newMapel.Kode_kelas,newMapel.Nama_kelas,kode_sekolah)
 	if Err!=nil {
 		return false,err
 	}
@@ -32,29 +33,22 @@ func AddMapel(newMapel Mata_pelajaran) (bool, error) {
 
 
 
-func GetAllMapel()([]Mata_pelajaran,error){
-	rows, err := DB.Query(`SELECT * FROM mata_pelajaran`)
+func GetAllMapel(kode_sekolah int)(Mata_pelajaran,error){
+	sqlstmt, err := DB.Prepare(`SELECT * FROM mata_pelajaran WHERE kode_sekolah =  ?`)
 	if err != nil {
-		return nil, err
+		return Mata_pelajaran{}, err
 	}
-	defer rows.Close()
+	mata_pelajaran := Mata_pelajaran{}
 
-	Mapel := make([]Mata_pelajaran, 0)
-	for rows.Next() {
-		mapel := Mata_pelajaran{}
-		err := rows.Scan(&mapel.Kode_kelas,&mapel.Nama_kelas)
-		if err != nil {
-			return nil, err
+	rows := sqlstmt.QueryRow(kode_sekolah).Scan(&mata_pelajaran.Kode_kelas, &mata_pelajaran.Nama_kelas)
+	if rows != nil {
+		if rows == sql.ErrNoRows {
+			return Mata_pelajaran{}, nil
 		}
-		Mapel = append(Mapel, mapel)
-	}
-	err = rows.Err()
+		return Mata_pelajaran{}, rows
 
-	if err != nil {
-		return nil, err
 	}
-
-	return Mapel, err
+	return mata_pelajaran, nil
 }
 
 

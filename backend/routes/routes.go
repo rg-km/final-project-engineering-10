@@ -13,25 +13,25 @@ func Routes(route *gin.Engine) {
 		v1.POST("/login/", repository.Login)
 		v1.POST("/register/", repository.Register)
 		v1.GET("/list/", repository.GetAll)
-		v1.GET("/email", repository.GetUserByUsername)
+		v1.GET("/email/", repository.GetUserByUsername)
 		v1.POST("/enroll/",repository.AddMapel_siswa)
-		v1.DELETE("/enroll/delete",repository.DeleteMapel_siswa)
+		v1.DELETE("/enroll/delete/",repository.DeleteMapel_siswa)
 
 		v3 := route.Group("/mapel")
 	{
-		v3.GET("/search", repository.SearchMapel)
-		v3.GET("/list", repository.GetAllMapel)
-		v3.GET("/:id")
-		v4 := route.Group("/:id_mapel/tugas")
+		v3.GET("/search/", repository.SearchMapel)
+		v3.GET("/list/", repository.GetAllMapel)
+		v3.GET("/:id/")
+		v4 := route.Group("/:id_mapel/tugas/")
 		{
-			v4.GET("/search", repository.SearchTugas)
-			v4.GET("/list", repository.GetAllTugas)
+			v4.GET("/search/", repository.SearchTugas)
+			v4.GET("/list/", repository.GetAllTugas)
 			v4.GET("/:id/",repository.GetTugasById)
 	
 			v5 := route.Group("/:id_tugas/pengumpulan")
 				{
-					v5.POST("/create",repository.SubmitTugas)
-					v5.GET("/:id_pengumpulan",repository.GetPengumpulanTugasById)
+					v5.POST("/create/",repository.SubmitTugas)
+					v5.GET("/:id_pengumpulan/",repository.GetPengumpulanTugasById)
 				}
 				
 		}	
@@ -46,32 +46,31 @@ func Routes(route *gin.Engine) {
 		v2.GET("/", repository.GetAllGuru)
 		v2.POST("/login/", repository.GuruLogin)
 		v2.POST("/register/", repository.RegisterGuru)
-		v2.PUT("/Mapel/siswa/update/", repository.UpdateMapel)
 
 		v3 := route.Group("/mapel")
 	{
-		v3.POST("/create", repository.AddMapel)
-		v3.DELETE("/:id/delete", repository.DeleteMapel)
+		v3.POST("/create/", repository.AddMapel)
+		v3.DELETE("/:id/delete/", repository.DeleteMapel)
 		v3.PUT("/:id/update/", repository.UpdateMapel)
-		v3.GET("/search", repository.SearchMapel)
-		v3.GET("/list", repository.GetAllMapel)
+		v3.GET("/search/", repository.SearchMapel)
+		v3.GET("/list/", repository.GetAllMapel)
 
 
 
 		v4 := route.Group(":id_mapel/tugas")
 		{
-			v4.POST("/create", repository.AddTugas)
-			v4.POST("/:id/delete", repository.DeleteTugas)
+			v4.POST("/create/", repository.AddTugas)
+			v4.POST("/:id/delete/", repository.DeleteTugas)
 			v4.POST("/:id/update/", repository.UpdateTugas)
-			v4.GET("/search", repository.SearchTugas)
-			v4.GET("/list", repository.GetAllTugas)
-			v4.GET("/:id",repository.GetTugasById)
+			v4.GET("/search/", repository.SearchTugas)
+			v4.GET("/list/", repository.GetAllTugas)
+			v4.GET("/:id/",repository.GetTugasById)
 
-			v5:= route.Group("/:id_tugas/pengumpulan")
+			v5:= route.Group("/:id_/pengumpulan")
 			{
-				v5.GET("/list")
+				v5.GET("/list/")
 				v5.GET("/:id/")
-				v5.GET("/:id/nilai")
+				v5.GET("/:id/nilai/")
 			}
 		}
 	

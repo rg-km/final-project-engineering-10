@@ -34,29 +34,22 @@ func AddTugas(newTugas Tugas) (bool, error) {
 	return true, nil
 }
 
-func GetAllTugas() ([]Tugas, error) {
-	rows, err := DB.Query(`SELECT * FROM tugas`)
+func GetAllTugas(id_mata_pelajaran int) (Tugas, error) {
+	sqlstmt, err := DB.Prepare(`SELECT * FROM tugas WHERE id_mata_pelajaran =  ?`)
 	if err != nil {
-		return nil, err
+		return Tugas{}, err
 	}
-	defer rows.Close()
+	tugas := Tugas{}
 
-	Mapel := make([]Tugas, 0)
-	for rows.Next() {
-		mapel := Tugas{}
-		err := rows.Scan(&mapel.Id_tugas, &mapel.Judul, &mapel.Deskripsi, &mapel.Tipe, &mapel.Id_Mapel)
-		if err != nil {
-			return nil, err
+	rows := sqlstmt.QueryRow(id_mata_pelajaran).Scan(&tugas.Id_tugas, &tugas.Judul, &tugas.Deskripsi, &tugas.Tipe, &tugas.Id_Mapel)
+	if rows != nil {
+		if rows == sql.ErrNoRows {
+			return Tugas{}, nil
 		}
-		Mapel = append(Mapel, mapel)
-	}
-	err = rows.Err()
+		return Tugas{}, rows
 
-	if err != nil {
-		return nil, err
 	}
-
-	return Mapel, err
+	return tugas, nil
 }
 
 func SearchTugas(nama_kelas string) (Tugas, error) {
@@ -77,14 +70,14 @@ func SearchTugas(nama_kelas string) (Tugas, error) {
 	return tugas, nil
 }
 
-func UpdateTugas(task Tugas) (bool, error) {
+func UpdateTugas(task Tugas,id_tugas int) (bool, error) {
 
 	tx, err := DB.Begin()
 	if err != nil {
 		return false, err
 	}
 
-	stmt, err := tx.Prepare("UPDATE tugas SET judul = ?, deskripsi = ?, tipe = ?, id_mata_pelajaran = ? WHERE id = ?")
+	stmt, err := tx.Prepare("UPDATE tugas SET judul = ?, deskripsi = ?, tipe = ? WHERE id = ?")
 
 	if err != nil {
 		return false, err
@@ -92,7 +85,7 @@ func UpdateTugas(task Tugas) (bool, error) {
 
 	defer stmt.Close()
 
-	_, err = stmt.Exec(task.Judul, task.Deskripsi, task.Tipe, task.Id_Mapel, task.Id_tugas)
+	_, err = stmt.Exec(task.Judul, task.Deskripsi, task.Tipe, id_tugas)
 
 	if err != nil {
 		return false, err
