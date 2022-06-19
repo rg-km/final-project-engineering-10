@@ -91,4 +91,3 @@ func DeleteMapel(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 	}
 }
-
