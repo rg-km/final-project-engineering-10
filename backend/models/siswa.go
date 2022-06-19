@@ -2,7 +2,6 @@ package models
 
 import (
 	"database/sql"
-	"fmt"
 	"mactiv/service"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -33,22 +32,20 @@ type Siswa struct {
 
 
 
-
-
 func Login(email string, password string, id int) (Siswa, error) {
 	siswa := Siswa{}
-	user,err:=GetSiswaByEmail(email)
-		if err!=nil {
-				
-			return  Siswa{}, err
-		}
 
-	temp:= CheckPasswordHash(password,user.Password)
-	if !temp {
-		return Siswa{},fmt.Errorf("hashing password salah")
+
+	user, err := GetSiswaByEmail(email)
+	if err != nil {
+
+		return Siswa{}, err
 	}
-	
 
+	temp := CheckPasswordHash(password, user.Password)
+	if !temp {
+		return Siswa{}, err
+	}
 
 	sqlstmt, err := DB.Prepare("SELECT * FROM siswa WHERE email = ? AND password = ?")
 	if err != nil {
@@ -64,7 +61,6 @@ func Login(email string, password string, id int) (Siswa, error) {
 	}
 	return siswa, nil
 }
-
 
 
 func Register(newSiswa Siswa) (bool, error) {
@@ -118,54 +114,44 @@ func UpdateToken(id int) (bool, error) {
 	return true, nil
 }
 
-func GetUser() ([]Siswa, error) {
-	rows, err := DB.Query(`SELECT * FROM siswa`)
+func GetUser(kode_sekolah int) (Siswa, error) {
+	sqlstmt, err := DB.Prepare(`SELECT * FROM siswa WHERE kode_sekolah = ? `)
 	if err != nil {
-		return nil, err
+		return Siswa{}, err
 	}
-	defer rows.Close()
-
-	users := make([]Siswa, 0)
-	for rows.Next() {
-		siswa := Siswa{}
-		err := rows.Scan(&siswa.Id,&siswa.Nama, &siswa.Email, &siswa.Password, &siswa.Credit_score, &siswa.Catatan_minat, &siswa.Kode_sekolah, &siswa.Token)
-		if err != nil {
-			return nil, err
+	siswa := Siswa{}
+	rows := sqlstmt.QueryRow(kode_sekolah).Scan(&siswa.Id, &siswa.Nama, &siswa.Email,&siswa.Credit_score, &siswa.Catatan_minat, &siswa.Kode_sekolah)
+	if rows != nil {
+		if rows == sql.ErrNoRows {
+			return Siswa{}, nil
 		}
-		users = append(users, siswa)
-	}
-	err = rows.Err()
+		return Siswa{}, rows
 
+	}
+	return siswa, nil
+}
+
+func GetSiswaByEmail(email string) (Siswa, error) {
+	sqlstmt, err := DB.Prepare(`SELECT * FROM siswa WHERE email = ? `)
 	if err != nil {
-		return nil, err
+		return Siswa{}, err
 	}
+	siswa := Siswa{}
+	rows := sqlstmt.QueryRow(email).Scan(&siswa.Id, &siswa.Nama, &siswa.Email, &siswa.Password, &siswa.Credit_score, &siswa.Catatan_minat, &siswa.Kode_sekolah, &siswa.Token)
+	if rows != nil {
+		if rows == sql.ErrNoRows {
+			return Siswa{}, nil
+		}
+		return Siswa{}, rows
 
-	return users, err
-}
-
-func GetSiswaByEmail(email string)(Siswa,error){
-	sqlstmt,err:= DB.Prepare(`SELECT * FROM siswa WHERE email = ? `)
-	if err!=nil {
-		return Siswa{},err
 	}
-	siswa:=Siswa{}
-	rows:=sqlstmt.QueryRow(email).Scan(&siswa.Id,&siswa.Nama, &siswa.Email, &siswa.Password, &siswa.Credit_score, &siswa.Catatan_minat, &siswa.Kode_sekolah, &siswa.Token)
-if rows!=nil {
-	if rows==sql.ErrNoRows {
-		return Siswa{},nil
-	}
-	return Siswa{}, rows
-
-}
-
-
-
-return siswa,nil
+	return siswa, nil
 }
 
 
 
 func CheckPasswordHash(password, hash string) bool {
-    err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-    return err == nil
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
+

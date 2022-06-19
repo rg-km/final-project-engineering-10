@@ -47,7 +47,7 @@ func Login(c *gin.Context) {
 
 	CheckErr(err)
 	if user.Email == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Email tidak "})
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Email tidak terdaftar"})
 	}
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Issuer:    strconv.Itoa(int(user.Id)),
@@ -60,8 +60,10 @@ func Login(c *gin.Context) {
 		return
 	}
 	userId:=strconv.Itoa(int(user.Id))
+	kodeSekolah:=user.Kode_sekolah
 	c.SetCookie("jwt", token, 3600, "/", "localhost", false, true)
 	c.SetCookie("user_id",userId,3600, "/", "localhost", false, true)
+	c.SetCookie("kode_sekolah",kodeSekolah,3600, "/", "localhost", false, true)
 }
 
 func UpdateToken(c *gin.Context) {
@@ -90,9 +92,20 @@ func UpdateToken(c *gin.Context) {
 }
 
 func GetAll(c *gin.Context) {
-	guru, err := models.GetUser()
+	temp,err:=c.Cookie("kode_sekolah")
 	CheckErr(err)
-	if guru == nil {
+
+	kode_sekolah,err:=strconv.Atoi(temp)
+	CheckErr(err)
+
+
+	if err==http.ErrNoCookie {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Silahlkan login ulang"})
+		return
+	}
+	guru, err := models.GetUser(kode_sekolah)
+	CheckErr(err)
+	if guru.Id == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "data tidak ditemukan"})
 		return
 	} else {

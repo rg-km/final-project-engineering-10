@@ -35,15 +35,29 @@ func GuruLogin (c *gin.Context){
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	userId:=strconv.Itoa(int(user.Id))
+	kodeSekolah:=user.Kode_sekolah
 	c.SetCookie("jwt", token, 3600, "/", "localhost", false, true)
-	
+	c.SetCookie("user_id",userId,3600, "/", "localhost", false, true)
+	c.SetCookie("kode_sekolah",kodeSekolah,3600, "/", "localhost", false, true)
 }
 
 
 func GetAllGuru (c *gin.Context){
-	guru,err:=models.GetGuru()
+	temp,err:=c.Cookie("kode_sekolah")
 	CheckErr(err)
-	if guru==nil {
+
+	kode_sekolah,err:=strconv.Atoi(temp)
+	CheckErr(err)
+
+
+	if err==http.ErrNoCookie {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Silahlkan login ulang"})
+		return
+	}
+	guru,err:=models.GetGuru(kode_sekolah)
+	CheckErr(err)
+	if guru.Id==0 {
 		c.JSON(http.StatusBadRequest,gin.H{"message": "data tidak ditemukan"})
 		return
 	}else{
