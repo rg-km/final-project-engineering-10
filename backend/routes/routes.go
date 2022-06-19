@@ -67,7 +67,7 @@ func Routes(route *gin.Engine) {
 			v4.GET("/list", repository.GetAllTugas)
 			v4.GET("/:id",repository.GetTugasById)
 
-			v5:= route.Group("/:id_mapel/pengumpulan")
+			v5:= route.Group("/:id_tugas/pengumpulan")
 			{
 				v5.GET("/list")
 				v5.GET("/:id/")
