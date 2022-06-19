@@ -47,7 +47,7 @@ func Login(c *gin.Context) {
 
 	CheckErr(err)
 	if user.Email == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Email tidak "})
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Email tidak terdaftar"})
 	}
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Issuer:    strconv.Itoa(int(user.Id)),

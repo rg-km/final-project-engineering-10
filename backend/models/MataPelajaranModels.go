@@ -80,7 +80,7 @@ func SearchMapel(nama_kelas string) (Mata_pelajaran, error) {
 
 
 
-func UpdateMapel(ourMapel Mata_pelajaran) (bool, error) {
+func UpdateMapel(ourMapel Mata_pelajaran,kode_kelas int) (bool, error) {
 
 	tx, err := DB.Begin()
 	if err != nil {
@@ -95,7 +95,7 @@ func UpdateMapel(ourMapel Mata_pelajaran) (bool, error) {
 
 	defer stmt.Close()
 
-	_, err = stmt.Exec(ourMapel.Nama_kelas, ourMapel.Kode_kelas)
+	_, err = stmt.Exec(ourMapel.Nama_kelas,kode_kelas)
 
 	if err != nil {
 		return false, err
@@ -132,3 +132,6 @@ func DeleteMapel(kode_kelas int) (bool, error) {
 
 	return true, nil
 }
+
+
+

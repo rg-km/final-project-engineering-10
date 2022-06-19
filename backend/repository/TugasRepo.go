@@ -8,14 +8,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AddMapel(c *gin.Context) {
-	var mapel models.Mata_pelajaran
+func AddTugas(c *gin.Context) {
+	var tugas models.Tugas
 
-	if err := c.ShouldBindJSON(&mapel); err != nil {
+	if err := c.ShouldBindJSON(&tugas); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	success, err := models.AddMapel(mapel)
+	success, err := models.AddTugas(tugas)
 	if success {
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})
 	} else {
@@ -23,66 +23,64 @@ func AddMapel(c *gin.Context) {
 	}
 }
 
-func SearchMapel(c *gin.Context) {
-	var mapel models.Mata_pelajaran
+func SearchTugas(c *gin.Context) {
+	var tugas models.Tugas
 
-	if err := c.ShouldBindJSON(&mapel); err != nil {
+	if err := c.ShouldBindJSON(&tugas); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	mapel, err := models.SearchMapel(mapel.Nama_kelas)
+	tugas, err := models.SearchTugas(tugas.Judul)
 	CheckErr(err)
-	if mapel.Nama_kelas == "" {
+	if tugas.Judul == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
 	} else {
-		c.JSON(http.StatusOK, gin.H{"data": mapel})
+		c.JSON(http.StatusOK, gin.H{"data": tugas})
 	}
 
 }
 
-
-func GetAllMapel(c *gin.Context){
-	mapel, err := models.GetAllMapel()
+func GetAllTugas(c *gin.Context) {
+	task, err := models.GetAllTugas()
 	CheckErr(err)
-	if mapel == nil {
+	if task == nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "data tidak ditemukan"})
 		return
 	} else {
-		c.JSON(http.StatusOK, gin.H{"message": mapel})
+		c.JSON(http.StatusOK, gin.H{"message": task})
 
 	}
 }
 
-func UpdateMapel(c *gin.Context) {
+func UpdateTugas(c *gin.Context) {
 
-	var json models.Mata_pelajaran
+	var json models.Tugas
 
 	if err := c.ShouldBindJSON(&json); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	kodeKelas, err := strconv.Atoi(c.Param("id"))
 
-	success, err := models.UpdateMapel(json,kodeKelas)
+	success, err := models.UpdateTugas(json)
 
 	if success {
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})
 		return
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
-		return 
+		return
 	}
 }
 
-func DeleteMapel(c *gin.Context) {
+func DeleteTugas(c *gin.Context) {
 
-	kodeKelas, err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.Atoi(c.Param("id"))
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid kode_kelas"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid id"})
 	}
 
-	success, err := models.DeleteMapel(kodeKelas)
+	success, err := models.DeleteTugas(id)
 
 	if success {
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})
@@ -90,4 +88,3 @@ func DeleteMapel(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 	}
 }
-
