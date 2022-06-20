@@ -31,22 +31,29 @@ func AddMapel(newMapel Mata_pelajaran, kode_sekolah int) (bool, error) {
 	return true, nil
 }
 
-func GetAllMapel(kode_sekolah int) (Mata_pelajaran, error) {
-	sqlstmt, err := DB.Prepare(`SELECT * FROM mata_pelajaran WHERE kode_sekolah =  ?`)
+func GetAllMapel(kode_sekolah int) ([]Mata_pelajaran, error) {
+	sqlstmt:=`SELECT * FROM mata_pelajaran WHERE kode_sekolah =  ?`
+	
+	kelas := make([]Mata_pelajaran,0)
+
+	rows,err:=DB.Query(sqlstmt,kode_sekolah)
 	if err != nil {
-		return Mata_pelajaran{}, err
+		return nil, err
 	}
-	mata_pelajaran := Mata_pelajaran{}
 
-	rows := sqlstmt.QueryRow(kode_sekolah).Scan(&mata_pelajaran.Kode_kelas, &mata_pelajaran.Nama_kelas,&kode_sekolah)
-	if rows != nil {
-		if rows == sql.ErrNoRows {
-			return Mata_pelajaran{}, nil
+	defer rows.Close()
+	for rows.Next(){
+		mata_pelajaran := Mata_pelajaran{}
+		err:=rows.Scan(&mata_pelajaran.Kode_kelas, &mata_pelajaran.Nama_kelas,&kode_sekolah)
+		if err!=nil {
+			return nil,err
 		}
-		return Mata_pelajaran{}, rows
+
+		kelas = append(kelas, mata_pelajaran)
 
 	}
-	return mata_pelajaran, nil
+
+	return kelas, nil
 }
 
 func SearchMapel(nama_kelas string) (Mata_pelajaran, error) {

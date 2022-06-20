@@ -53,8 +53,8 @@ func GetAllMapel(c *gin.Context) {
 
 	mapel, err := models.GetAllMapel(kode_sekolah)
 	CheckErr(err)
-	if mapel.Nama_kelas == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
+	if mapel ==nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Kelas tidak ada"})
 	} else {
 		c.JSON(http.StatusOK, gin.H{"data": mapel})
 	}
@@ -102,7 +102,7 @@ func DeleteMapel(c *gin.Context) {
 func GetMapelByID(c *gin.Context) {
 	var tugas models.Tugas
 
-	temp := c.Param("Kode_kelas")
+	temp := c.Param("id_mapel")
 	kode_kelas, err := strconv.Atoi(temp)
 	CheckErr(err)
 	if err := c.ShouldBindJSON(&tugas); err != nil {
