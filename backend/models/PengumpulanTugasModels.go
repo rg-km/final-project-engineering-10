@@ -20,6 +20,13 @@ type Pengumpulan_tugas struct{
 
 }
 
+type Avg struct{
+	Nilai		int `json:"nilai"`
+
+}
+
+
+
 
 func SubmitTugas(newPengumpulan Pengumpulan_tugas,tugas_id ,user_id,mata_pelajaran_id int) (bool, error){
 
@@ -33,7 +40,7 @@ func SubmitTugas(newPengumpulan Pengumpulan_tugas,tugas_id ,user_id,mata_pelajar
 		return false, err
 	}
 	defer sqlstmt.Close()
-	_, Err := sqlstmt.Exec(newPengumpulan.Link_pengumpulan,0,"dikumpulkan",user_id,tugas_id,mata_pelajaran_id)
+	_, Err := sqlstmt.Exec(newPengumpulan.Link_pengumpulan,0,"review",user_id,tugas_id,mata_pelajaran_id)
 	if Err != nil {
 		return false, err
 	}
@@ -43,21 +50,21 @@ func SubmitTugas(newPengumpulan Pengumpulan_tugas,tugas_id ,user_id,mata_pelajar
 }
 
 
-func AddNilai (nilai,id_pengumpulan int ) (bool,error){
+func AddNilai (nilai,id_pengumpulan int, status string ) (bool,error){
 
 	tx, err := DB.Begin()
 	if err != nil {
 		return false, err
 	}
 
-	stmt, err := tx.Prepare("UPDATE pengumpulan_tugas SET nilai = ? WHERE id = ?")
+	stmt, err := tx.Prepare("UPDATE pengumpulan_tugas SET nilai = ?, status=? WHERE id = ?")
 
 	if err != nil {
 		return false, err
 	}
 
 	defer stmt.Close()
-	_, err = stmt.Exec(nilai,id_pengumpulan)
+	_, err = stmt.Exec(nilai,status,id_pengumpulan)
 	if err != nil {
 		return false, err
 	}
@@ -83,34 +90,4 @@ func GetPengumpulanTugasById(id int )(Pengumpulan_tugas ,error){
 	return Pengumpulan_tugas{}, nil
 
 }
-
-func SetNilai (id_pengumpulan,nilai int ) (bool,error){
-	tx, err := DB.Begin()
-	if err != nil {
-		return false, err
-	}
-
-	stmt, err := tx.Prepare("UPDATE pengumpulan_tugas SET nilai = ?, status = ? WHERE id = ?")
-
-	if err != nil {
-		return false, err
-	}
-
-	defer stmt.Close()
-
-	_, err = stmt.Exec(nilai,"selesai",id_pengumpulan)
-
-	if err != nil {
-		return false, err
-	}
-
-	tx.Commit()
-
-	return true, nil
-}
-
-// func GetNilaiTugas(user_id, mata_pelajaran_id int ) {
-// 	sqlstmt:=`SELECT `
-// }
-
 
