@@ -38,12 +38,6 @@ func GetPengumpulanTugasById (c *gin.Context){
 pengumpulan_id,err:=strconv.Atoi(c.Param("id_pengumumpulan"))
 CheckErr(err)
 
-var pengumpulan models.Pengumpulan_tugas
-
-if err := c.ShouldBindJSON(&pengumpulan); err != nil {
-	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	return
-}
 pengumpulan_tugas, Err := models.GetPengumpulanTugasById(pengumpulan_id)
 CheckErr(Err)
 if pengumpulan_tugas.Id == 0 {
@@ -57,8 +51,17 @@ if pengumpulan_tugas.Id == 0 {
 }
 
 
+func SetNilai (c *gin.Context){
+	pengumpulan_id,err:=strconv.Atoi(c.Param("id_pengumumpulan"))
+	CheckErr(err)
+	var pengumpulan models.Pengumpulan_tugas
 
-
-func Addnilai (c *gin.Context){
+	pengumpulan_tugas,Err:=models.SetNilai(pengumpulan_id,pengumpulan.Nilai) 
+	CheckErr(Err)
+	if pengumpulan_id == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": pengumpulan_tugas})
+	}
 
 }

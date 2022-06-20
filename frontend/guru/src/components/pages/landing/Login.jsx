@@ -1,14 +1,19 @@
 import { Form } from 'antd';
 import { Formik } from 'formik';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+import useUserStore from '../../../store/userStore';
+import axiosConfig from '../../../utils/axiosConfig';
+import BASE_URL from '../../../utils/config';
 import { getErrorValue } from '../../../utils/getErrors';
 import FormItem from '../../reusable/FormItem';
 import Input from '../../reusable/Input';
 import SubmitButton from '../../reusable/SubmitButton';
+import { Toast } from '../../reusable/Toast';
 
 const validationSchema = Yup.object().shape({
-	email: Yup.string().email("Masukan alamat email yang valid").required('Email wajib diisi'),
+	email: Yup.string().email('Masukan alamat email yang valid').required('Email wajib diisi'),
 	password: Yup.string().required('Password wajib diisi'),
 });
 
@@ -18,9 +23,31 @@ function Login() {
 		password: '',
 	};
 
+	const navigate = useNavigate();
+	const { setUser } = useUserStore();
 	const [input, setInput] = useState(initialState);
+	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState({});
-	const onSubmit = values => {};
+
+	const onSubmit = async values => {
+		try {
+			setLoading(true);
+			const response = await axiosConfig.post(`${BASE_URL}/Guru/login/`, values);
+			Toast.fire({
+				icon: 'success',
+				title: 'Berhasil Login',
+			});
+			setUser();
+			navigate('/dashboard');
+		} catch (error) {
+			console.log(error);
+			Toast.fire({
+				icon: 'error',
+				title: 'Terdapat Kesalahan',
+			});
+			setLoading(false);
+		}
+	};
 
 	return (
 		<div className="h-full ">
@@ -70,7 +97,9 @@ function Login() {
 										type={'password'}
 									/>
 								</FormItem>
-								<SubmitButton className="py-2 my-12">Login</SubmitButton>
+								<SubmitButton className="py-2 my-12" isSubmitting={isSubmitting} isValid={isValid} dirty={dirty}>
+									Login
+								</SubmitButton>
 							</Form>
 						)}
 					</Formik>

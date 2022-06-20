@@ -1,22 +1,45 @@
 import { Form } from 'antd';
 import { Formik } from 'formik';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+import axiosConfig from '../../../../utils/axiosConfig';
+import BASE_URL from '../../../../utils/config';
 import { getErrorValue } from '../../../../utils/getErrors';
 import FormItem from '../../../reusable/FormItem';
 import Input from '../../../reusable/Input';
+import { Toast } from '../../../reusable/Toast';
 
 const validationSchema = Yup.object().shape({
-	name: Yup.string().required('Nama Pelajaran wajib diisi'),
+	Nama_kelas: Yup.string().required('Nama Pelajaran wajib diisi'),
 });
 
 function CreatePelajaran() {
 	const initialState = {
-		name: '',
+		Nama_kelas: '',
 	};
 
-	const onSubmit = values => {};
+	const onSubmit = async values => {
+		try {
+			setLoading(true);
+			const response = await axiosConfig.post(`${BASE_URL}/Mapel/create/`, values);
+			Toast.fire({
+				icon: 'success',
+				title: 'Berhasil Membuat Mata Pelajaran',
+			});
+			navigate('/dashboard/pelajaran');
+		} catch (error) {
+			console.log(error);
+			Toast.fire({
+				icon: 'error',
+				title: 'Terdapat Kesalahan',
+			});
+			setLoading(false);
+		}
+	};
+	const navigate = useNavigate();
 	const [input, setInput] = useState(initialState);
+	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState({});
 
 	return (
@@ -40,14 +63,14 @@ function CreatePelajaran() {
 						<Form onFinish={handleSubmit} className="my-16">
 							<FormItem
 								label="Nama Lengkap"
-								error={getErrorValue(errors.name, errorMessage?.name)}
-								touched={touched.name}
+								error={getErrorValue(errors.Nama_kelas, errorMessage?.Nama_kelas)}
+								touched={touched.Nama_kelas}
 							>
 								<Input
 									onChange={handleChange}
 									onBlur={handleBlur}
-									value={values.name}
-									name="name"
+									value={values.Nama_kelas}
+									name="Nama_kelas"
 									placeholder="Masukkan nama lengkap anda"
 								/>
 							</FormItem>

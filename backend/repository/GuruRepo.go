@@ -2,6 +2,8 @@ package repository
 
 import (
 	"mactiv/models"
+	"mactiv/service"
+
 	"net/http"
 	"strconv"
 	"time"
@@ -10,19 +12,17 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-
-
-func GuruLogin (c *gin.Context){
+func GuruLogin(c *gin.Context) {
 	var user models.Guru
 
-	if err:=c.ShouldBindJSON(&user);err!=nil {
-		c.JSON(http.StatusBadRequest,gin.H{"error":err.Error()})
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	user,err:=models.LoginGuru(user.Email,user.Password,user.Id)
+	user, err := models.LoginGuru(user.Email, user.Password, user.Id)
 	CheckErr(err)
-	if user.Email=="" {
-		c.JSON(http.StatusBadRequest,gin.H{"message": "Email tidak ditemukan"})
+	if user.Email == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Email tidak ditemukan"})
 	}
 
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
@@ -43,6 +43,7 @@ func GuruLogin (c *gin.Context){
 }
 
 
+
 func GetAllGuru (c *gin.Context){
 	temp,err:=c.Cookie("kode_sekolah")
 	CheckErr(err)
@@ -60,15 +61,13 @@ func GetAllGuru (c *gin.Context){
 	if guru.Id==0 {
 		c.JSON(http.StatusBadRequest,gin.H{"message": "data tidak ditemukan"})
 		return
-	}else{
-		c.JSON(http.StatusOK,gin.H{"message": guru})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"message": guru})
 
 	}
 }
 
-
-func RegisterGuru( c * gin.Context){
-
+func RegisterGuru(c *gin.Context) {
 
 	var guru models.Guru
 
@@ -85,5 +84,20 @@ func RegisterGuru( c * gin.Context){
 
 }
 
+func GetProfile(c *gin.Context) {
+	service.AuthJwt()
 
+	temp, err := c.Cookie("user_id")
+	if temp == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
+	id, _ := strconv.Atoi(temp)
+	guru, err := models.GetProfile(id)
+
+	CheckErr(err)
+
+	c.JSON(http.StatusOK, gin.H{"message": guru})
+
+}
