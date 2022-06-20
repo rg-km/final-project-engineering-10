@@ -52,11 +52,12 @@ if pengumpulan_tugas.Id == 0 {
 
 
 func SetNilai (c *gin.Context){
+	
 	pengumpulan_id,err:=strconv.Atoi(c.Param("id_pengumumpulan"))
 	CheckErr(err)
 	var pengumpulan models.Pengumpulan_tugas
 
-	pengumpulan_tugas,Err:=models.SetNilai(pengumpulan_id,pengumpulan.Nilai) 
+	pengumpulan_tugas,Err:=models.AddNilai(pengumpulan_id,pengumpulan.Nilai,pengumpulan.Status) 
 	CheckErr(Err)
 	if pengumpulan_id == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
