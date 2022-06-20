@@ -78,6 +78,24 @@ func SearchMapel(nama_kelas string) (Mata_pelajaran, error) {
 	return mata_pelajaran, nil
 }
 
+func FindMapel(kodeKelas int) (Mata_pelajaran, error) {
+	sqlstmt, err := DB.Prepare(`SELECT * FROM mata_pelajaran WHERE kode_kelas = ?`)
+	if err != nil {
+		return Mata_pelajaran{}, err
+	}
+	mata_pelajaran := Mata_pelajaran{}
+
+	rows := sqlstmt.QueryRow(kodeKelas).Scan(&mata_pelajaran.Kode_kelas, &mata_pelajaran.Nama_kelas)
+	if rows != nil {
+		if rows == sql.ErrNoRows {
+			return Mata_pelajaran{}, nil
+		}
+		return Mata_pelajaran{}, rows
+
+	}
+	return mata_pelajaran, nil
+}
+
 
 
 func UpdateMapel(ourMapel Mata_pelajaran,kode_kelas int) (bool, error) {

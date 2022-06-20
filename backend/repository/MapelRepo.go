@@ -40,8 +40,21 @@ func SearchMapel(c *gin.Context) {
 
 }
 
+func ShowMapel(c *gin.Context) {
 
-func GetAllMapel(c *gin.Context){
+	kodeKelas, err := strconv.Atoi(c.Param("id"))
+
+	mapel, err := models.FindMapel(kodeKelas)
+	CheckErr(err)
+	if mapel.Nama_kelas == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": mapel})
+	}
+
+}
+
+func GetAllMapel(c *gin.Context) {
 	mapel, err := models.GetAllMapel()
 	CheckErr(err)
 	if mapel == nil {
@@ -63,14 +76,14 @@ func UpdateMapel(c *gin.Context) {
 	}
 	kodeKelas, err := strconv.Atoi(c.Param("id"))
 
-	success, err := models.UpdateMapel(json,kodeKelas)
+	success, err := models.UpdateMapel(json, kodeKelas)
 
 	if success {
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})
 		return
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
-		return 
+		return
 	}
 }
 
@@ -90,4 +103,3 @@ func DeleteMapel(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 	}
 }
-

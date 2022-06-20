@@ -2,11 +2,10 @@ package models
 
 import (
 	"database/sql"
+
 	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/crypto/bcrypt"
-
 )
-
 
 type Guru struct {
 	Id           int    `json:"id"`
@@ -17,11 +16,18 @@ type Guru struct {
 	Token        string `json:"token"`
 }
 
+type GuruProfile struct {
+	Id           int    `json:"id"`
+	Nama         string `json:"nama"`
+	Email        string `json:"email"`
+	Kode_sekolah string `json:"kode_sekolah"`
+}
+
 func LoginGuru(email string, password string, id int) (Guru, error) {
 
-	user,err:=GetGuruByEmail(email)
-	if err!=nil {
-			return Guru{}, err
+	user, err := GetGuruByEmail(email)
+	if err != nil {
+		return Guru{}, err
 
 	}
 
@@ -29,13 +35,13 @@ func LoginGuru(email string, password string, id int) (Guru, error) {
 		return Guru{}, err
 	}
 
-	guru:=Guru{}
-	sqlstmt,err:= DB.Prepare("SELECT * FROM guru WHERE email = ? AND password = ?")
-	if err!=nil {
-		return Guru{},err
+	guru := Guru{}
+	sqlstmt, err := DB.Prepare("SELECT * FROM guru WHERE email = ? AND password = ?")
+	if err != nil {
+		return Guru{}, err
 	}
 
-	rows:= sqlstmt.QueryRow(email,user.Password).Scan(&guru.Id,&guru.Nama,&guru.Email,&guru.Password,&guru.Kode_sekolah,&guru.Token)
+	rows := sqlstmt.QueryRow(email, user.Password).Scan(&guru.Id, &guru.Nama, &guru.Email, &guru.Password, &guru.Kode_sekolah, &guru.Token)
 	if rows != nil {
 		if rows == sql.ErrNoRows {
 			return Guru{}, nil
@@ -45,10 +51,7 @@ func LoginGuru(email string, password string, id int) (Guru, error) {
 	}
 	return guru, nil
 
-
 }
-
-
 
 func GetGuru() ([]Guru, error) {
 	rows, err := DB.Query(`SELECT * FROM guru`)
@@ -75,27 +78,24 @@ func GetGuru() ([]Guru, error) {
 	return users, err
 }
 
-
-func GetGuruByEmail(email string)(Guru,error){
-	sqlstmt,err:= DB.Prepare(`SELECT * FROM guru WHERE email = ?`)
-	if err!=nil {
-		return Guru{},err
+func GetGuruByEmail(email string) (Guru, error) {
+	sqlstmt, err := DB.Prepare(`SELECT * FROM guru WHERE email = ?`)
+	if err != nil {
+		return Guru{}, err
 	}
-	guru:=Guru{}
-	rows:=sqlstmt.QueryRow(email).Scan(&guru.Id, &guru.Nama, &guru.Email, &guru.Password, &guru.Kode_sekolah, &guru.Token)
-if rows!=nil {
-	if rows==sql.ErrNoRows {
-		return Guru{},nil
+	guru := Guru{}
+	rows := sqlstmt.QueryRow(email).Scan(&guru.Id, &guru.Nama, &guru.Email, &guru.Password, &guru.Kode_sekolah, &guru.Token)
+	if rows != nil {
+		if rows == sql.ErrNoRows {
+			return Guru{}, nil
+		}
+		return Guru{}, rows
+
 	}
-	return Guru{}, rows
-
-}
-return guru,nil
+	return guru, nil
 }
 
-
-
-func RegisterGuru(NewGuru Guru) (bool, error) {				//fungsi untuk testing db
+func RegisterGuru(NewGuru Guru) (bool, error) { //fungsi untuk testing db
 	tx, err := DB.Begin()
 	if err != nil {
 		return false, err
@@ -118,4 +118,21 @@ func RegisterGuru(NewGuru Guru) (bool, error) {				//fungsi untuk testing db
 	}
 	tx.Commit()
 	return true, nil
+}
+
+func GetProfile(id int) (GuruProfile, error) {
+	sqlstmt, err := DB.Prepare(`SELECT id, nama, email, kode_sekolah FROM guru WHERE id = ?`)
+	if err != nil {
+		return GuruProfile{}, err
+	}
+	guruProfile := GuruProfile{}
+	rows := sqlstmt.QueryRow(id).Scan(&guruProfile.Id, &guruProfile.Nama, &guruProfile.Email, &guruProfile.Kode_sekolah)
+	if rows != nil {
+		if rows == sql.ErrNoRows {
+			return GuruProfile{}, nil
+		}
+		return GuruProfile{}, rows
+
+	}
+	return guruProfile, nil
 }
