@@ -18,6 +18,7 @@ func AddMapel_siswa(c *gin.Context) {
 		return
 	}
 	temp,err:=c.Cookie("user_id")
+	
 	if temp == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -26,6 +27,7 @@ func AddMapel_siswa(c *gin.Context) {
 	id,_:= strconv.Atoi(temp)
 	errMessage:="kode kelas salah atau kelas telah terdaftar"
 	success, err := models.AddMapel_siswa(mapel,id)
+	CheckErr(err)
 	if success {
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})
 	} else {
@@ -46,6 +48,8 @@ func DeleteMapel_siswa(c *gin.Context) {
 	}
 
 	temp,err:=c.Cookie("user_id")
+	CheckErr(err)
+
 
 
 	user_id,err:= strconv.Atoi(temp)
