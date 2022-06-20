@@ -41,9 +41,14 @@ func SearchTugas(c *gin.Context) {
 }
 
 func GetAllTugas(c *gin.Context) {
-	task, err := models.GetAllTugas()
+	temp:= c.Param("id_mapel")
+
+id_mapel,err:=strconv.Atoi(temp)
+CheckErr(err) 
+
+	task, err := models.GetAllTugas(id_mapel)
 	CheckErr(err)
-	if task == nil {
+	if task.Id_tugas == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "data tidak ditemukan"})
 		return
 	} else {
@@ -55,13 +60,18 @@ func GetAllTugas(c *gin.Context) {
 func UpdateTugas(c *gin.Context) {
 
 	var json models.Tugas
+temp:= c.Param("id")
+
+id_tugas,err:=strconv.Atoi(temp)
+CheckErr(err) 
+
 
 	if err := c.ShouldBindJSON(&json); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	success, err := models.UpdateTugas(json)
+	success, err := models.UpdateTugas(json,id_tugas)
 
 	if success {
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})
@@ -74,7 +84,7 @@ func UpdateTugas(c *gin.Context) {
 
 func DeleteTugas(c *gin.Context) {
 
-	id, err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.Atoi(c.Param("id_tugas"))
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid id"})
@@ -87,4 +97,25 @@ func DeleteTugas(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 	}
+}
+
+
+func GetTugasById(c *gin.Context) {
+	var tugas models.Tugas
+
+	temp:= c.Param("id")
+	tugas_id,err:=strconv.Atoi(temp)
+	CheckErr(err)
+	if err := c.ShouldBindJSON(&tugas); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	tugas, Err := models.GetTugasById(tugas_id)
+	CheckErr(Err)
+	if tugas.Judul == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": tugas})
+	}
+
 }

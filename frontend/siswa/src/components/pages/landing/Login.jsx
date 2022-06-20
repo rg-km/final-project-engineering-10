@@ -1,16 +1,13 @@
 import { Form } from 'antd';
 import { Formik } from 'formik';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
-import useUserStore from '../../../store/userStore';
 import axiosConfig from '../../../utils/axiosConfig';
 import BASE_URL from '../../../utils/config';
 import { getErrorValue } from '../../../utils/getErrors';
 import FormItem from '../../reusable/FormItem';
 import Input from '../../reusable/Input';
 import SubmitButton from '../../reusable/SubmitButton';
-import { Toast } from '../../reusable/Toast';
 
 const validationSchema = Yup.object().shape({
 	email: Yup.string().email('Masukan alamat email yang valid').required('Email wajib diisi'),
@@ -23,32 +20,24 @@ function Login() {
 		password: '',
 	};
 
-	const navigate = useNavigate();
-	const { setUser } = useUserStore();
 	const [input, setInput] = useState(initialState);
 	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState({});
 
 	const onSubmit = async values => {
 		try {
+			console.log(values);
 			setLoading(true);
-			const response = await axiosConfig.post(`${BASE_URL}/Guru/login/`, values);
-			Toast.fire({
-				icon: 'success',
-				title: 'Berhasil Login',
-			});
-			setUser();
-			navigate('/dashboard');
+			const response = await axiosConfig.post(`${BASE_URL}/siswa/login/`, values);
 		} catch (error) {
 			console.log(error);
-			Toast.fire({
-				icon: 'error',
-				title: 'Terdapat Kesalahan',
-			});
+		} finally {
 			setLoading(false);
+
+			console.log(document.cookie);
 		}
 	};
-
+	
 	return (
 		<div className="h-full ">
 			<div className="w-144 px-12 py-16 bg-secondary mx-auto my-24 border-blue border-2 rounded-xl">
@@ -97,9 +86,7 @@ function Login() {
 										type={'password'}
 									/>
 								</FormItem>
-								<SubmitButton className="py-2 my-12" isSubmitting={isSubmitting} isValid={isValid} dirty={dirty}>
-									Login
-								</SubmitButton>
+								<SubmitButton className="py-2 my-12">Login</SubmitButton>
 							</Form>
 						)}
 					</Formik>

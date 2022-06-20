@@ -1,7 +1,6 @@
 import { Form } from 'antd';
 import { Formik } from 'formik';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import axiosConfig from '../../../utils/axiosConfig';
 import BASE_URL from '../../../utils/config';
@@ -9,7 +8,6 @@ import { getErrorValue } from '../../../utils/getErrors';
 import FormItem from '../../reusable/FormItem';
 import Input from '../../reusable/Input';
 import SubmitButton from '../../reusable/SubmitButton';
-import { Toast } from '../../reusable/Toast';
 
 const validationSchema = Yup.object().shape({
 	email: Yup.string().email('Masukan alamat email yang valid').required('Email wajib diisi'),
@@ -31,28 +29,19 @@ function Register() {
 		credit_score: '100',
 	};
 
-	const navigate = useNavigate();
-
 	const [loading, setLoading] = useState(false);
 	const [input, setInput] = useState(initialState);
 	const [errorMessage, setErrorMessage] = useState({});
 	const onSubmit = async values => {
 		try {
+			console.log(values);
 			setLoading(true);
-			const response = await axiosConfig.post(`${BASE_URL}/Guru/register/`, values);
-			Toast.fire({
-				icon: 'success',
-				title: 'Berhasil Register! Silahkan Login',
-			});
-			navigate('/login');
+			const response = await axiosConfig.post(`${BASE_URL}/siswa/register/`, values);
 		} catch (error) {
 			console.log(error);
-			Toast.fire({
-				icon: 'error',
-				title: 'Terdapat Kesalahan',
-			});
-
+		} finally {
 			setLoading(false);
+			console.log(document.cookie);
 		}
 	};
 	return (
@@ -134,9 +123,7 @@ function Register() {
 									placeholder="Masukkan Kode Sekolah anda"
 								/>
 							</FormItem>
-							<SubmitButton className="py-2 my-12" isSubmitting={isSubmitting} isValid={isValid} dirty={dirty}>
-								Register
-							</SubmitButton>
+							<SubmitButton className="py-2 my-12">Register</SubmitButton>
 						</Form>
 					)}
 				</Formik>

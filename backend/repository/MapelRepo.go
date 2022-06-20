@@ -11,11 +11,16 @@ import (
 func AddMapel(c *gin.Context) {
 	var mapel models.Mata_pelajaran
 
+	temp, err := c.Cookie("kode_sekolah")
+	CheckErr(err)
+	kode_sekolah, err := strconv.Atoi(temp)
+	CheckErr(err)
+
 	if err := c.ShouldBindJSON(&mapel); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	success, err := models.AddMapel(mapel)
+	success, err := models.AddMapel(mapel, kode_sekolah)
 	if success {
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})
 	} else {
@@ -40,16 +45,18 @@ func SearchMapel(c *gin.Context) {
 
 }
 
-
-func GetAllMapel(c *gin.Context){
-	mapel, err := models.GetAllMapel()
+func GetAllMapel(c *gin.Context) {
+	temp, err := c.Cookie("kode_sekolah")
 	CheckErr(err)
-	if mapel == nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "data tidak ditemukan"})
-		return
-	} else {
-		c.JSON(http.StatusOK, gin.H{"message": mapel})
+	kode_sekolah, err := strconv.Atoi(temp)
+	CheckErr(err)
 
+	mapel, err := models.GetAllMapel(kode_sekolah)
+	CheckErr(err)
+	if mapel.Nama_kelas == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": mapel})
 	}
 }
 
@@ -62,15 +69,16 @@ func UpdateMapel(c *gin.Context) {
 		return
 	}
 	kodeKelas, err := strconv.Atoi(c.Param("id"))
+	CheckErr(err)
 
-	success, err := models.UpdateMapel(json,kodeKelas)
+	success, err := models.UpdateMapel(json, kodeKelas)
 
 	if success {
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})
 		return
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
-		return 
+		return
 	}
 }
 
@@ -91,3 +99,22 @@ func DeleteMapel(c *gin.Context) {
 	}
 }
 
+func GetMapelByID(c *gin.Context) {
+	var tugas models.Tugas
+
+	temp := c.Param("Kode_kelas")
+	kode_kelas, err := strconv.Atoi(temp)
+	CheckErr(err)
+	if err := c.ShouldBindJSON(&tugas); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	mata_pelajaran, Err := models.GetMapelByID(kode_kelas)
+	CheckErr(Err)
+	if mata_pelajaran.Nama_kelas == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": tugas})
+	}
+
+}
