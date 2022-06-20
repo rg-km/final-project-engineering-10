@@ -30,14 +30,8 @@ type Siswa struct {
 	Token         string `json:"token,omitempty"`
 }
 
-
-
-
-
-
-func Login(email string, password string, id int) (Siswa, error) {
+func Login(email string, password string) (Siswa, error) {
 	siswa := Siswa{}
-
 
 	user, err := GetSiswaByEmail(email)
 	if err != nil {
@@ -64,7 +58,6 @@ func Login(email string, password string, id int) (Siswa, error) {
 	}
 	return siswa, nil
 }
-
 
 func Register(newSiswa Siswa) (bool, error) {
 	tx, err := DB.Begin()
@@ -155,9 +148,6 @@ func GetSiswaByEmail(email string) (Siswa, error) {
 	return siswa, nil
 }
 
-
-
-
 func GetSiswaById(id int) (Siswa, error) {
 	sqlstmt, err := DB.Prepare(`SELECT * FROM siswa WHERE id = ? `)
 	if err != nil {
@@ -174,10 +164,7 @@ func GetSiswaById(id int) (Siswa, error) {
 	return siswa, nil
 }
 
-
-
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
-
