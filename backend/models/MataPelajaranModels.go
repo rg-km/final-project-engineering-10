@@ -38,7 +38,7 @@ func GetAllMapel(kode_sekolah int) (Mata_pelajaran, error) {
 	}
 	mata_pelajaran := Mata_pelajaran{}
 
-	rows := sqlstmt.QueryRow(kode_sekolah).Scan(&mata_pelajaran.Kode_kelas, &mata_pelajaran.Nama_kelas)
+	rows := sqlstmt.QueryRow(kode_sekolah).Scan(&mata_pelajaran.Kode_kelas, &mata_pelajaran.Nama_kelas,&kode_sekolah)
 	if rows != nil {
 		if rows == sql.ErrNoRows {
 			return Mata_pelajaran{}, nil

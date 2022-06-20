@@ -23,12 +23,15 @@ type Siswa struct {
 	Id            int    `json:"id"`
 	Nama          string `json:"nama"`
 	Email         string `json:"email"`
-	Password      string `json:"password"`
+	Password      string `json:"password,omitempty"`
 	Credit_score  string `json:"credit_score"`
 	Catatan_minat string `json:"catatan_minat"`
 	Kode_sekolah  string `json:"kode_sekolah"`
-	Token         string `json:"token"`
+	Token         string `json:"token,omitempty"`
 }
+
+
+
 
 
 
@@ -51,7 +54,7 @@ func Login(email string, password string, id int) (Siswa, error) {
 	if err != nil {
 		return Siswa{}, err
 	}
-	rows := sqlstmt.QueryRow(email, user.Password).Scan(&siswa.Id, &siswa.Nama, &siswa.Email, &siswa.Password, &siswa.Credit_score, &siswa.Catatan_minat, &siswa.Kode_sekolah, &siswa.Token)
+	rows := sqlstmt.QueryRow(email, user.Password).Scan(&siswa.Id, &siswa.Nama, &siswa.Email,&siswa.Password, &siswa.Password, &siswa.Credit_score, &siswa.Catatan_minat, &siswa.Kode_sekolah, &siswa.Token,&siswa.Token)
 	if rows != nil {
 		if rows == sql.ErrNoRows {
 			return Siswa{}, nil
@@ -120,7 +123,7 @@ func GetUser(kode_sekolah int) (Siswa, error) {
 		return Siswa{}, err
 	}
 	siswa := Siswa{}
-	rows := sqlstmt.QueryRow(kode_sekolah).Scan(&siswa.Id, &siswa.Nama, &siswa.Email,&siswa.Credit_score, &siswa.Catatan_minat, &siswa.Kode_sekolah)
+	rows := sqlstmt.QueryRow(kode_sekolah).Scan(&siswa.Id, &siswa.Nama, &siswa.Email,&siswa.Password,&siswa.Credit_score, &siswa.Catatan_minat, &siswa.Kode_sekolah,&siswa.Token)
 	if rows != nil {
 		if rows == sql.ErrNoRows {
 			return Siswa{}, nil
@@ -144,6 +147,25 @@ func GetSiswaByEmail(email string) (Siswa, error) {
 		}
 		return Siswa{}, rows
 
+	}
+	return siswa, nil
+}
+
+
+
+
+func GetSiswaById(id int) (Siswa, error) {
+	sqlstmt, err := DB.Prepare(`SELECT * FROM siswa WHERE id = ? `)
+	if err != nil {
+		return Siswa{}, err
+	}
+	siswa := Siswa{}
+	rows := sqlstmt.QueryRow(id).Scan(&siswa.Id, &siswa.Nama, &siswa.Email, &siswa.Password, &siswa.Credit_score, &siswa.Catatan_minat, &siswa.Kode_sekolah, &siswa.Token)
+	if rows != nil {
+		if rows == sql.ErrNoRows {
+			return Siswa{}, nil
+		}
+		return Siswa{}, rows
 	}
 	return siswa, nil
 }
