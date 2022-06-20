@@ -32,6 +32,7 @@ func Routes(route *gin.Engine) {
 	v2 := route.Group("/Guru")
 	{
 		v2.GET("/", repository.GetAllGuru)
+		v2.GET("/get-profile/", repository.GetProfile)
 		v2.POST("/login/", repository.GuruLogin)
 		v2.POST("/register/", repository.RegisterGuru)
 		v2.POST("/:id_Guru/mapel/", repository.AddMapel)

@@ -1,5 +1,6 @@
 import { Table } from 'antd';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const columns = [
 	{
@@ -12,6 +13,11 @@ const columns = [
 		title: 'Nama Siswa',
 		dataIndex: 'nama_siswa',
 		key: 'nama_siswa',
+		render: (_, record) => (
+			<Link to={record.nama_siswa}>
+				<p>{record.nama_siswa}</p>
+			</Link>
+		),
 	},
 	{
 		title: 'Credit Score',

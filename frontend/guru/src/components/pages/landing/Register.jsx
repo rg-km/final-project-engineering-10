@@ -1,15 +1,19 @@
 import { Form } from 'antd';
 import { Formik } from 'formik';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+import axiosConfig from '../../../utils/axiosConfig';
+import BASE_URL from '../../../utils/config';
 import { getErrorValue } from '../../../utils/getErrors';
 import FormItem from '../../reusable/FormItem';
 import Input from '../../reusable/Input';
 import SubmitButton from '../../reusable/SubmitButton';
+import { Toast } from '../../reusable/Toast';
 
 const validationSchema = Yup.object().shape({
 	email: Yup.string().email('Masukan alamat email yang valid').required('Email wajib diisi'),
-	name: Yup.string().required('Nama wajib diisi'),
+	nama: Yup.string().required('Nama wajib diisi'),
 	password: Yup.string().required('Password wajib diisi'),
 	confirmation_password: Yup.string().test('passwords-match', 'Konfirmasi Password harus sama', function (value) {
 		return this.parent.password === value;
@@ -20,15 +24,37 @@ const validationSchema = Yup.object().shape({
 function Register() {
 	const initialState = {
 		email: '',
-		name: '',
+		nama: '',
 		password: '',
 		confirmation_password: '',
 		kode_sekolah: '',
+		credit_score: '100',
 	};
 
+	const navigate = useNavigate();
+
+	const [loading, setLoading] = useState(false);
 	const [input, setInput] = useState(initialState);
 	const [errorMessage, setErrorMessage] = useState({});
-	const onSubmit = values => {};
+	const onSubmit = async values => {
+		try {
+			setLoading(true);
+			const response = await axiosConfig.post(`${BASE_URL}/Guru/register/`, values);
+			Toast.fire({
+				icon: 'success',
+				title: 'Berhasil Register! Silahkan Login',
+			});
+			navigate('/login');
+		} catch (error) {
+			console.log(error);
+			Toast.fire({
+				icon: 'error',
+				title: 'Terdapat Kesalahan',
+			});
+
+			setLoading(false);
+		}
+	};
 	return (
 		<div className="h-full ">
 			<div className="w-144 px-12 py-16 bg-secondary mx-auto my-24 border-blue border-2 rounded-xl">
@@ -58,12 +84,12 @@ function Register() {
 									placeholder="Masukkan Email anda"
 								/>
 							</FormItem>
-							<FormItem label="Nama" error={getErrorValue(errors.name, errorMessage?.name)} touched={touched.name}>
+							<FormItem label="Nama" error={getErrorValue(errors.nama, errorMessage?.nama)} touched={touched.nama}>
 								<Input
 									onChange={handleChange}
 									onBlur={handleBlur}
-									value={values.name}
-									name="name"
+									value={values.nama}
+									name="nama"
 									placeholder="Masukkan Nama Lengkap anda"
 								/>
 							</FormItem>
@@ -108,7 +134,9 @@ function Register() {
 									placeholder="Masukkan Kode Sekolah anda"
 								/>
 							</FormItem>
-							<SubmitButton className="py-2 my-12">Register</SubmitButton>
+							<SubmitButton className="py-2 my-12" isSubmitting={isSubmitting} isValid={isValid} dirty={dirty}>
+								Register
+							</SubmitButton>
 						</Form>
 					)}
 				</Formik>

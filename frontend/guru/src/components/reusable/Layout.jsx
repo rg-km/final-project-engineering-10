@@ -1,12 +1,15 @@
-import { BarChartOutlined, BookFilled, PieChartFilled, UserOutlined } from '@ant-design/icons';
+import { BarChartOutlined, BookFilled, FilePdfFilled, PieChartFilled, UserOutlined } from '@ant-design/icons';
 import { Layout as AntLayout, Menu } from 'antd';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import useUserStore from '../../store/userStore';
 
 const { Header, Sider, Content, Footer } = AntLayout;
 
 function Layout({ type, children }) {
 	const [collapse, setCollapse] = useState(false);
+	const { userData, loading, status, setUser } = useUserStore();
+
 	if (type === 'front') {
 		return (
 			<AntLayout>
@@ -30,7 +33,7 @@ function Layout({ type, children }) {
 		);
 	} else if (type === 'dashboard') {
 		return (
-			<AntLayout className="h-screen">
+			<AntLayout className="min-h-screen">
 				<Sider collapsible collapsed={collapse} onCollapse={value => setCollapse(value)} width="300">
 					<Menu mode="inline" theme="dark" className="mt-16 text-lg font-bold">
 						<Menu.ItemGroup title={<div className="mx-2 text-2xl">{!collapse && 'Menu'}</div>}>
@@ -71,6 +74,18 @@ function Layout({ type, children }) {
 								</Link>
 							</Menu.Item>
 							<Menu.Item
+								key={'tugas'}
+								icon={
+									<div>
+										<FilePdfFilled style={{ fontSize: '28px' }} className={`ml-4 ${collapse && '-ml-1'}`} />
+									</div>
+								}
+							>
+								<Link to={'/dashboard/tugas'}>
+									<div className="mr-4">Tugas</div>
+								</Link>
+							</Menu.Item>
+							<Menu.Item
 								key={'credit_score'}
 								icon={
 									<div>
@@ -88,7 +103,7 @@ function Layout({ type, children }) {
 				<AntLayout>
 					<Header className="flex justify-between bg-primary">
 						<div className="text-3xl font-bold flex h-full items-center">MACTIV</div>
-						<div className="text-xl font-bold flex h-full items-center">Farhan Abdul Hamid</div>
+						<div className="text-xl font-bold flex h-full items-center">{userData.nama}</div>
 					</Header>
 
 					<Content className="mx-12 my-12 bg-white p-6">{children}</Content>

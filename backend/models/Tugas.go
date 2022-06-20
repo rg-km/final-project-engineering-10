@@ -14,7 +14,6 @@ type Tugas struct {
 	Id_Mapel  int    `json:"id_mata_pelajaran"`
 }
 
-
 func AddTugas(newTugas Tugas) (bool, error) {
 	tx, err := DB.Begin()
 	if err != nil {
@@ -86,7 +85,6 @@ func UpdateTugas(task Tugas,id_tugas int) (bool, error) {
 	defer stmt.Close()
 
 	_, err = stmt.Exec(task.Judul, task.Deskripsi, task.Tipe, id_tugas)
-
 	if err != nil {
 		return false, err
 	}
