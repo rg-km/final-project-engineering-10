@@ -84,3 +84,33 @@ func GetPengumpulanTugasById(id int )(Pengumpulan_tugas ,error){
 
 }
 
+func SetNilai (id_pengumpulan,nilai int ) (bool,error){
+	tx, err := DB.Begin()
+	if err != nil {
+		return false, err
+	}
+
+	stmt, err := tx.Prepare("UPDATE pengumpulan_tugas SET nilai = ?, status = ? WHERE id = ?")
+
+	if err != nil {
+		return false, err
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.Exec(nilai,"selesai",id_pengumpulan)
+
+	if err != nil {
+		return false, err
+	}
+
+	tx.Commit()
+
+	return true, nil
+}
+
+// func GetNilaiTugas(user_id, mata_pelajaran_id int ) {
+// 	sqlstmt:=`SELECT `
+// }
+
+

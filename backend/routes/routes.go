@@ -17,11 +17,11 @@ func Routes(route *gin.Engine) {
 		v1.POST("/enroll/",repository.AddMapel_siswa)
 		v1.DELETE("/enroll/delete/",repository.DeleteMapel_siswa)
 
-		v3 := route.Group("/mapel")
+		v3 := route.Group(":id_siswa/mapel")
 	{
 		v3.GET("/search/", repository.SearchMapel)
 		v3.GET("/list/", repository.GetAllMapel)
-		v3.GET("/:id/")
+		v3.GET("/:id/",repository.GetMapelByID)
 		v4 := route.Group("/:id_mapel/tugas/")
 		{
 			v4.GET("/search/", repository.SearchTugas)
@@ -37,9 +37,10 @@ func Routes(route *gin.Engine) {
 		}	
 	}
 
-
 	}
 
+
+	
 
 	v2 := route.Group("/Guru")
 	{
@@ -47,15 +48,13 @@ func Routes(route *gin.Engine) {
 		v2.POST("/login/", repository.GuruLogin)
 		v2.POST("/register/", repository.RegisterGuru)
 
-		v3 := route.Group("/mapel")
+		v3 := route.Group(":id_Guru/mapel")
 	{
 		v3.POST("/create/", repository.AddMapel)
 		v3.DELETE("/:id/delete/", repository.DeleteMapel)
 		v3.PUT("/:id/update/", repository.UpdateMapel)
 		v3.GET("/search/", repository.SearchMapel)
 		v3.GET("/list/", repository.GetAllMapel)
-
-
 
 		v4 := route.Group(":id_mapel/tugas")
 		{
