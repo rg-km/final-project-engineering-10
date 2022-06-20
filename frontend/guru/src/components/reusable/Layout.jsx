@@ -2,11 +2,14 @@ import { BarChartOutlined, BookFilled, FilePdfFilled, PieChartFilled, UserOutlin
 import { Layout as AntLayout, Menu } from 'antd';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import useUserStore from '../../store/userStore';
 
 const { Header, Sider, Content, Footer } = AntLayout;
 
 function Layout({ type, children }) {
 	const [collapse, setCollapse] = useState(false);
+	const { userData, loading, status, setUser } = useUserStore();
+
 	if (type === 'front') {
 		return (
 			<AntLayout>
@@ -100,7 +103,7 @@ function Layout({ type, children }) {
 				<AntLayout>
 					<Header className="flex justify-between bg-primary">
 						<div className="text-3xl font-bold flex h-full items-center">MACTIV</div>
-						<div className="text-xl font-bold flex h-full items-center">Farhan Abdul Hamid</div>
+						<div className="text-xl font-bold flex h-full items-center">{userData.nama}</div>
 					</Header>
 
 					<Content className="mx-12 my-12 bg-white p-6">{children}</Content>
