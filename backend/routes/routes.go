@@ -23,6 +23,8 @@ func Routes(route *gin.Engine) {
 		// v1.GET("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/",repository.GetTugasById)
 		v1.POST("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/pengumpulan/",repository.SubmitTugas)
 		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/",repository.GetPengumpulanTugasById)
+		v1.PUT("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/",repository.UpdatePengumpulan)
+
 			
 	}
 
@@ -46,7 +48,10 @@ func Routes(route *gin.Engine) {
 		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/search/", repository.SearchTugas)
 		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/", repository.GetAllTugas)
 		// v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/",repository.GetTugasById)
-		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/")
+		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/pengumpulan/",repository.GetPengumpulanTugasById)
+		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/",repository.GetPengumpulanTugasById)
+		v2.PUT("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/",repository.SetNilai)
+		
 
 	}
 
