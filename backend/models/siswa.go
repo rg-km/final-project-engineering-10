@@ -148,7 +148,7 @@ func GetSiswaByEmail(email string) (Siswa, error) {
 	return siswa, nil
 }
 
-func GetSiswaById(id int) (Siswa, error) {
+func GetSiswaById(id string) (Siswa, error) {
 	sqlstmt, err := DB.Prepare(`SELECT * FROM siswa WHERE id = ? `)
 	if err != nil {
 		return Siswa{}, err
