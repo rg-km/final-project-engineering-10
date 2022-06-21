@@ -45,6 +45,10 @@ func Routes(route *gin.Engine) {
 		// v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/",repository.GetTugasById)
 		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/")
 
+		v2.GET("/:id_Guru/minat/:id_siswa/", repository.GetAllMinatSiswa)
+		v2.POST("/:id_Guru/minat/:id_siswa/", repository.AddMinat)
+		v2.DELETE("/:id_Guru/minat/:id_minat/", repository.DeleteMinat)
+
 	}
 
 }
