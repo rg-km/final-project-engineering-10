@@ -116,12 +116,8 @@ func GetAll(c *gin.Context) {
 func GetUserById(c *gin.Context) {
 	var user models.Siswa
 
-	id, Err := strconv.Atoi(c.Param("id_siswa"))
-	CheckErr(Err)
-	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	id:=c.Param("id_siswa")
+	
 	user, err := models.GetSiswaById(id)
 	CheckErr(err)
 	if user.Email == "" {

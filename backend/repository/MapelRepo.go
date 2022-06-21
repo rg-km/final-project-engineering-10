@@ -100,21 +100,16 @@ func DeleteMapel(c *gin.Context) {
 }
 
 func GetMapelByID(c *gin.Context) {
-	var tugas models.Tugas
+	var mapel models.Mata_pelajaran
 
-	temp := c.Param("id_mapel")
-	kode_kelas, err := strconv.Atoi(temp)
-	CheckErr(err)
-	if err := c.ShouldBindJSON(&tugas); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	mata_pelajaran, Err := models.GetMapelByID(kode_kelas)
+	kode_kelas := c.Param("id_mapel")
+
+	mapel, Err := models.GetMapelByID(kode_kelas)
 	CheckErr(Err)
-	if mata_pelajaran.Nama_kelas == "" {
+	if mapel.Kode_sekolah == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
 	} else {
-		c.JSON(http.StatusOK, gin.H{"data": tugas})
+		c.JSON(http.StatusOK, gin.H{"data": mapel})
 	}
 
 }

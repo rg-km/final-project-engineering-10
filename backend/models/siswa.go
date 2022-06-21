@@ -70,12 +70,12 @@ func Register(newSiswa Siswa) (bool, error) {
 
 	newSiswa.Password = string(pwSlice[:])
 
-	sqlstmt, err := tx.Prepare(`INSERT INTO siswa (nama,email,password,credit_score,catatan_minat,kode_sekolah,token)VALUES (?,?,?,?,?,?,?)`)
+	sqlstmt, err := tx.Prepare(`INSERT INTO siswa (nama,email,password,credit_score,kode_sekolah,token)VALUES (?,?,?,?,?,?)`)
 	if err != nil {
 		return false, err
 	}
 	defer sqlstmt.Close()
-	_, Err := sqlstmt.Exec(newSiswa.Nama, newSiswa.Email, newSiswa.Password, 100, "", newSiswa.Kode_sekolah, newSiswa.Token)
+	_, Err := sqlstmt.Exec(newSiswa.Nama, newSiswa.Email, newSiswa.Password, 100, newSiswa.Kode_sekolah, newSiswa.Token)
 	if Err != nil {
 		return false, err
 	}
@@ -147,7 +147,7 @@ func GetSiswaByEmail(email string) (Siswa, error) {
 	return siswa, nil
 }
 
-func GetSiswaById(id int) (Siswa, error) {
+func GetSiswaById(id string) (Siswa, error) {
 	sqlstmt, err := DB.Prepare(`SELECT * FROM siswa WHERE id = ? `)
 	if err != nil {
 		return Siswa{}, err
