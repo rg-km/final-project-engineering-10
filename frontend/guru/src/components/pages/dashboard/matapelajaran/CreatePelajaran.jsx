@@ -3,6 +3,7 @@ import { Formik } from 'formik';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+import useUserStore from '../../../../store/userStore';
 import axiosConfig from '../../../../utils/axiosConfig';
 import BASE_URL from '../../../../utils/config';
 import { getErrorValue } from '../../../../utils/getErrors';
@@ -11,18 +12,20 @@ import Input from '../../../reusable/Input';
 import { Toast } from '../../../reusable/Toast';
 
 const validationSchema = Yup.object().shape({
-	Nama_kelas: Yup.string().required('Nama Pelajaran wajib diisi'),
+	nama_kelas: Yup.string().required('Nama Pelajaran wajib diisi'),
 });
 
 function CreatePelajaran() {
 	const initialState = {
-		Nama_kelas: '',
+		nama_kelas: '',
 	};
+	const { userData, loading: loadingUser, status, setUser } = useUserStore();
+
 
 	const onSubmit = async values => {
 		try {
 			setLoading(true);
-			const response = await axiosConfig.post(`${BASE_URL}/Mapel/create/`, values);
+			const response = await axiosConfig.post(`${BASE_URL}/Guru/${userData.id}/mapel/`, values);
 			Toast.fire({
 				icon: 'success',
 				title: 'Berhasil Membuat Mata Pelajaran',
@@ -63,14 +66,14 @@ function CreatePelajaran() {
 						<Form onFinish={handleSubmit} className="my-16">
 							<FormItem
 								label="Nama Lengkap"
-								error={getErrorValue(errors.Nama_kelas, errorMessage?.Nama_kelas)}
-								touched={touched.Nama_kelas}
+								error={getErrorValue(errors.nama_kelas, errorMessage?.nama_kelas)}
+								touched={touched.nama_kelas}
 							>
 								<Input
 									onChange={handleChange}
 									onBlur={handleBlur}
-									value={values.Nama_kelas}
-									name="Nama_kelas"
+									value={values.nama_kelas}
+									name="nama_kelas"
 									placeholder="Masukkan nama lengkap anda"
 								/>
 							</FormItem>

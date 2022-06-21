@@ -45,7 +45,7 @@ func GetAllTugas(id_mata_pelajaran int) ([]Tugas, error) {
 	defer rows.Close()
 	for rows.Next() {
 		tugas := Tugas{}
-		err := rows.Scan(&tugas.Id_tugas, &tugas.Title, &tugas.Deskripsi, &tugas.Tipe)
+		err := rows.Scan(&tugas.Id_tugas, &tugas.Title, &tugas.Deskripsi, &tugas.Tipe, &tugas.Id_Mapel)
 		if err != nil {
 			return nil, err
 		}
@@ -159,6 +159,25 @@ func DeleteTugas(id int) (bool, error) {
 	tx.Commit()
 
 	return true, nil
+}
+
+func FindTugas(kodeKelas int) (Tugas, error) {
+	sqlstmt, err := DB.Prepare(`SELECT * FROM tugas WHERE id = ?`)
+	if err != nil {
+		return Tugas{}, err
+	}
+
+	tugas := Tugas{}
+
+	rows := sqlstmt.QueryRow(kodeKelas).Scan(&tugas.Id_tugas, &tugas.Title, &tugas.Deskripsi, &tugas.Tipe, &tugas.Id_Mapel)
+	if rows != nil {
+		if rows == sql.ErrNoRows {
+			return Tugas{}, nil
+		}
+		return Tugas{}, rows
+
+	}
+	return tugas, nil
 }
 
 // func GetTugasById(id int) (Tugas, error) {
