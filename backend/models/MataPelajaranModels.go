@@ -32,21 +32,21 @@ func AddMapel(newMapel Mata_pelajaran, kode_sekolah int) (bool, error) {
 }
 
 func GetAllMapel(kode_sekolah int) ([]Mata_pelajaran, error) {
-	sqlstmt:=`SELECT * FROM mata_pelajaran WHERE kode_sekolah =  ?`
-	
-	kelas := make([]Mata_pelajaran,0)
+	sqlstmt := `SELECT * FROM mata_pelajaran WHERE kode_sekolah =  ?`
 
-	rows,err:=DB.Query(sqlstmt,kode_sekolah)
+	kelas := make([]Mata_pelajaran, 0)
+
+	rows, err := DB.Query(sqlstmt, kode_sekolah)
 	if err != nil {
 		return nil, err
 	}
 
 	defer rows.Close()
-	for rows.Next(){
+	for rows.Next() {
 		mata_pelajaran := Mata_pelajaran{}
-		err:=rows.Scan(&mata_pelajaran.Kode_kelas, &mata_pelajaran.Nama_kelas,&kode_sekolah)
-		if err!=nil {
-			return nil,err
+		err := rows.Scan(&mata_pelajaran.Kode_kelas, &mata_pelajaran.Nama_kelas, &kode_sekolah)
+		if err != nil {
+			return nil, err
 		}
 
 		kelas = append(kelas, mata_pelajaran)
@@ -145,4 +145,22 @@ func GetMapelByID(Kode_kelas int) (Mata_pelajaran, error) {
 	}
 	return mata_pelajaran, nil
 
+}
+
+func FindMapel(kodeKelas int) (Mata_pelajaran, error) {
+	sqlstmt, err := DB.Prepare(`SELECT * FROM mata_pelajaran WHERE kode_kelas = ?`)
+	if err != nil {
+		return Mata_pelajaran{}, err
+	}
+	mata_pelajaran := Mata_pelajaran{}
+
+	rows := sqlstmt.QueryRow(kodeKelas).Scan(&mata_pelajaran.Kode_kelas, &mata_pelajaran.Nama_kelas, &mata_pelajaran.Kode_sekolah)
+	if rows != nil {
+		if rows == sql.ErrNoRows {
+			return Mata_pelajaran{}, nil
+		}
+		return Mata_pelajaran{}, rows
+
+	}
+	return mata_pelajaran, nil
 }

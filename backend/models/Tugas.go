@@ -161,6 +161,25 @@ func DeleteTugas(id int) (bool, error) {
 	return true, nil
 }
 
+func FindTugas(kodeKelas int) (Tugas, error) {
+	sqlstmt, err := DB.Prepare(`SELECT * FROM tugas WHERE id = ?`)
+	if err != nil {
+		return Tugas{}, err
+	}
+
+	tugas := Tugas{}
+
+	rows := sqlstmt.QueryRow(kodeKelas).Scan(&tugas.Id_tugas, &tugas.Judul, &tugas.Deskripsi, &tugas.Tipe, &tugas.Id_Mapel)
+	if rows != nil {
+		if rows == sql.ErrNoRows {
+			return Tugas{}, nil
+		}
+		return Tugas{}, rows
+
+	}
+	return tugas, nil
+}
+
 // func GetTugasById(id int) (Tugas, error) {
 // 	sqlstmt, err := DB.Prepare(`SELECT * FROM tugas WHERE id =  ?`)
 // 	if err != nil {

@@ -129,6 +129,20 @@ func DeleteTugas(c *gin.Context) {
 	}
 }
 
+func ShowTugas(c *gin.Context) {
+
+	idTugas, err := strconv.Atoi(c.Param("id_tugas"))
+
+	tugas, err := models.FindTugas(idTugas)
+	CheckErr(err)
+	if tugas.Judul == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": tugas})
+	}
+
+}
+
 // func GetTugasById(c *gin.Context) {
 // 	var tugas models.Tugas
 

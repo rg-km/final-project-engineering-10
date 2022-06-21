@@ -118,3 +118,17 @@ func GetMapelByID(c *gin.Context) {
 	}
 
 }
+
+func ShowMapel(c *gin.Context) {
+
+	kodeKelas, err := strconv.Atoi(c.Param("id"))
+
+	mapel, err := models.FindMapel(kodeKelas)
+	CheckErr(err)
+	if mapel.Nama_kelas == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": mapel})
+	}
+
+}
