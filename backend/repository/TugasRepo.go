@@ -48,7 +48,7 @@ CheckErr(err)
 
 	task, err := models.GetAllTugas(id_mapel)
 	CheckErr(err)
-	if task.Id_tugas == 0 {
+	if task == nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "data tidak ditemukan"})
 		return
 	} else {

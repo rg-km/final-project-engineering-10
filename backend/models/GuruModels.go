@@ -55,21 +55,28 @@ func LoginGuru(email string, password string, id int) (Guru, error) {
 
 
 
-func GetGuru(kode_sekolah int) (Guru, error) {
-	sqlstmt,err:= DB.Prepare(`SELECT * FROM guru WHERE kode_sekolah = ?`)
-	if err!=nil {
-		return Guru{},err
-	}
-	guru:=Guru{}
-	rows:=sqlstmt.QueryRow(kode_sekolah).Scan(&guru.Id, &guru.Nama, &guru.Email, &guru.Kode_sekolah)
-if rows!=nil {
-	if rows==sql.ErrNoRows {
-		return Guru{},nil
-	}
-	return Guru{}, rows
+func GetGuru(kode_sekolah int) ([]Guru, error) {
+	sqlstmt:= `SELECT * FROM guru WHERE kode_sekolah = ?`
+	User:=make([]Guru,0)
 
-}
-return guru,nil
+	rows,err:= DB.Query(sqlstmt,kode_sekolah)
+	if err!=nil {
+		return nil,err
+	}
+	defer rows.Close()
+	for rows.Next(){
+		guru:=Guru{}
+		err:=rows.Scan(&guru.Id, &guru.Nama, &guru.Email, &guru.Kode_sekolah)
+		if err!=nil {
+			return nil,err
+		}
+		User = append(User, guru)
+
+
+	}
+return User,nil
+
+
 }
 
 func GetGuruByEmail(email string) (Guru, error) {

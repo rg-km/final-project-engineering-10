@@ -58,7 +58,7 @@ func GetAllGuru (c *gin.Context){
 	}
 	guru,err:=models.GetGuru(kode_sekolah)
 	CheckErr(err)
-	if guru.Id==0 {
+	if guru==nil {
 		c.JSON(http.StatusBadRequest,gin.H{"message": "data tidak ditemukan"})
 		return
 	} else {

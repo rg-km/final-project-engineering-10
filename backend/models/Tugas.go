@@ -33,22 +33,28 @@ func AddTugas(newTugas Tugas) (bool, error) {
 	return true, nil
 }
 
-func GetAllTugas(id_mata_pelajaran int) (Tugas, error) {
-	sqlstmt, err := DB.Prepare(`SELECT * FROM tugas WHERE id_mata_pelajaran =  ?`)
+func GetAllTugas(id_mata_pelajaran int) ([]Tugas, error) {
+	assignment := make ([]Tugas,0)
+	sqlstmt :=`SELECT * FROM tugas WHERE id_mata_pelajaran =  ?`
+
+	rows,err:= DB.Query(sqlstmt,id_mata_pelajaran)
 	if err != nil {
-		return Tugas{}, err
+		return []Tugas{}, err
 	}
-	tugas := Tugas{}
 
-	rows := sqlstmt.QueryRow(id_mata_pelajaran).Scan(&tugas.Id_tugas, &tugas.Judul, &tugas.Deskripsi, &tugas.Tipe, &tugas.Id_Mapel)
-	if rows != nil {
-		if rows == sql.ErrNoRows {
-			return Tugas{}, nil
+	defer rows.Close()
+	for rows.Next(){
+		tugas:=Tugas{}
+		err:= rows.Scan(&tugas.Id_tugas, &tugas.Judul, &tugas.Deskripsi, &tugas.Tipe, &tugas.Id_Mapel)
+		if err!=nil {
+			return nil,err
 		}
-		return Tugas{}, rows
-
+	
+		assignment = append(assignment, tugas)
+	
 	}
-	return tugas, nil
+	
+	return assignment, nil
 }
 
 func SearchTugas(nama_kelas string) (Tugas, error) {
