@@ -9,13 +9,18 @@ import (
 )
 
 func AddTugas(c *gin.Context) {
+	temp := c.Param("id_mapel")
+
+	id_mapel, err := strconv.Atoi(temp)
+	CheckErr(err)
+
 	var tugas models.Tugas
 
 	if err := c.ShouldBindJSON(&tugas); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	success, err := models.AddTugas(tugas)
+	success, err := models.AddTugas(tugas, id_mapel)
 	if success {
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})
 	} else {
@@ -24,29 +29,55 @@ func AddTugas(c *gin.Context) {
 }
 
 func SearchTugas(c *gin.Context) {
+
+	temp := c.Param("id_mapel")
+
+	id_mapel, err := strconv.Atoi(temp)
+	CheckErr(err)
+
 	var tugas models.Tugas
 
 	if err := c.ShouldBindJSON(&tugas); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	tugas, err := models.SearchTugas(tugas.Judul)
+	task, err := models.SearchTugas(tugas.Judul, id_mapel)
 	CheckErr(err)
-	if tugas.Judul == "" {
+	if task.Judul == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
 	} else {
-		c.JSON(http.StatusOK, gin.H{"data": tugas})
+		c.JSON(http.StatusOK, gin.H{"data": task})
 	}
 
 }
 
 func GetAllTugas(c *gin.Context) {
-	temp:= c.Param("id_mapel")
+	temp := c.Param("id_mapel")
 
-id_mapel,err:=strconv.Atoi(temp)
-CheckErr(err) 
+	id_mapel, err := strconv.Atoi(temp)
+	CheckErr(err)
 
 	task, err := models.GetAllTugas(id_mapel)
+	CheckErr(err)
+	if task == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "data tidak ditemukan"})
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{"message": task})
+
+	}
+}
+
+func GetAllTugasBySiswa(c *gin.Context) {
+	temp1 := c.Param("id_mapel")
+	temp2 := c.Param("id_siswa")
+
+	id_mapel, err := strconv.Atoi(temp1)
+	CheckErr(err)
+	id_siswa, err := strconv.Atoi(temp2)
+	CheckErr(err)
+
+	task, err := models.GetAllTugasBySiswa(id_mapel, id_siswa)
 	CheckErr(err)
 	if task == nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "data tidak ditemukan"})
@@ -60,18 +91,17 @@ CheckErr(err)
 func UpdateTugas(c *gin.Context) {
 
 	var json models.Tugas
-temp:= c.Param("id")
+	temp := c.Param("id_tugas")
 
-id_tugas,err:=strconv.Atoi(temp)
-CheckErr(err) 
-
+	id_tugas, err := strconv.Atoi(temp)
+	CheckErr(err)
 
 	if err := c.ShouldBindJSON(&json); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	success, err := models.UpdateTugas(json,id_tugas)
+	success, err := models.UpdateTugas(json, id_tugas)
 
 	if success {
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})
@@ -99,23 +129,22 @@ func DeleteTugas(c *gin.Context) {
 	}
 }
 
+// func GetTugasById(c *gin.Context) {
+// 	var tugas models.Tugas
 
-func GetTugasById(c *gin.Context) {
-	var tugas models.Tugas
+// 	temp := c.Param("id")
+// 	tugas_id, err := strconv.Atoi(temp)
+// 	CheckErr(err)
+// 	if err := c.ShouldBindJSON(&tugas); err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		return
+// 	}
+// 	tugas, Err := models.GetTugasById(tugas_id)
+// 	CheckErr(Err)
+// 	if tugas.Judul == "" {
+// 		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
+// 	} else {
+// 		c.JSON(http.StatusOK, gin.H{"data": tugas})
+// 	}
 
-	temp:= c.Param("id")
-	tugas_id,err:=strconv.Atoi(temp)
-	CheckErr(err)
-	if err := c.ShouldBindJSON(&tugas); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	tugas, Err := models.GetTugasById(tugas_id)
-	CheckErr(Err)
-	if tugas.Judul == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
-	} else {
-		c.JSON(http.StatusOK, gin.H{"data": tugas})
-	}
-
-}
+// }
