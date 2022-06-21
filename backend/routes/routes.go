@@ -13,21 +13,18 @@ func Routes(route *gin.Engine) {
 		v1.POST("/login/", repository.Login)
 		v1.POST("/register/", repository.Register)
 		v1.GET("/:id_siswa/", repository.GetUserById)
-		v1.POST("/enroll/",repository.AddMapel_siswa)
-		v1.DELETE("/enroll/",repository.DeleteMapel_siswa)
+		v1.POST("/enroll/", repository.AddMapel_siswa)
+		v1.DELETE("/enroll/", repository.DeleteMapel_siswa)
 		v1.GET("/:id_siswa/mapel/search/", repository.SearchMapel)
 		v1.GET("/:id_siswa/mapel/", repository.GetAllMapel)
-		v1.GET("/:id_siswa/mapel/:id_mapel/",repository.GetMapelByID)
+		v1.GET("/:id_siswa/mapel/:id_mapel/", repository.GetMapelByID)
 		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/search/", repository.SearchTugas)
-		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/", repository.GetAllTugas)
+		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/", repository.GetAllTugasBySiswa)
 		// v1.GET("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/",repository.GetTugasById)
-		v1.POST("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/pengumpulan/",repository.SubmitTugas)
-		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/",repository.GetPengumpulanTugasById)
-			
+		v1.POST("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/pengumpulan/", repository.SubmitTugas)
+		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/", repository.GetPengumpulanTugasById)
+
 	}
-
-
-	
 
 	v2 := route.Group("/Guru")
 	{
@@ -49,6 +46,5 @@ func Routes(route *gin.Engine) {
 		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/")
 
 	}
-
 
 }
