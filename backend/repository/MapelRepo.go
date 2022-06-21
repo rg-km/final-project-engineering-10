@@ -102,14 +102,15 @@ func DeleteMapel(c *gin.Context) {
 func GetMapelByID(c *gin.Context) {
 	var mapel models.Mata_pelajaran
 
-	kode_kelas := c.Param("mapel_id")
+	kode_kelas := c.Param("id_mapel")
 
-	mata_pelajaran, Err := models.GetMapelByID(kode_kelas)
+	mapel, Err := models.GetMapelByID(kode_kelas)
 	CheckErr(Err)
-	if mata_pelajaran == nil {
+	if mapel.Kode_sekolah == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
 	} else {
 		c.JSON(http.StatusOK, gin.H{"data": mapel})
 	}
 
 }
+
