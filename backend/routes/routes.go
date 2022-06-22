@@ -17,12 +17,12 @@ func Routes(route *gin.Engine) {
 		v1.DELETE("/enroll/", repository.DeleteMapel_siswa)//vv
 		v1.GET("/:id_siswa/mapel/search/", repository.SearchMapel)
 		v1.GET("/:id_siswa/mapel/", repository.GetAllMapel) //v
-		v1.GET("/:id_siswa/mapel/:id_mapel/", repository.GetMapelByID)
+		v1.GET("/:id_siswa/mapel/:id_mapel/", repository.GetMapelByID)//vv
 		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/search/", repository.SearchTugas)
 		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/", repository.GetAllTugasBySiswa)
 		// v1.GET("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/",repository.GetTugasById)
-		v1.POST("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/pengumpulan/", repository.SubmitTugas)
-		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/", repository.GetPengumpulanTugasById)
+		v1.POST("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/pengumpulan/", repository.SubmitTugas)//VV
+		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/", repository.GetPengumpulanTugasById)//vv
 
 	}
 
@@ -37,13 +37,13 @@ func Routes(route *gin.Engine) {
 		v2.PUT("/:id_Guru/mapel/:id/", repository.UpdateMapel) // vv
 		v2.GET("/:id_Guru/mapel/search/", repository.SearchMapel)
 		v2.GET("/:id_Guru/mapel/", repository.GetAllMapel)//vv
-		v2.POST("/:id_Guru/mapel/list/:id_mapel/tugas/", repository.AddTugas) // bisa sebagian (judul tugas belum masuk)
-		v2.DELETE("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/", repository.DeleteTugas)
-		v2.PUT("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/", repository.UpdateTugas)
+		v2.POST("/:id_Guru/mapel/list/:id_mapel/tugas/", repository.AddTugas) // vv
+		v2.DELETE("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/", repository.DeleteTugas)//vv
+		v2.PUT("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/", repository.UpdateTugas) //vv
 		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/search/", repository.SearchTugas)
-		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/", repository.GetAllTugas)
+		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/", repository.GetAllTugas) //vv
 		// v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/",repository.GetTugasById)
-		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/")
+		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/",repository.GetPengumpulanTugasById)
 
 		v2.GET("/:id_Guru/minat/:id_siswa/", repository.GetAllMinatSiswa)
 		v2.POST("/:id_Guru/minat/:id_siswa/", repository.AddMinat)

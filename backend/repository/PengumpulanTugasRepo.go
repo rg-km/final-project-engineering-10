@@ -11,13 +11,13 @@ import (
 
 func SubmitTugas(c *gin.Context) {
 	var tugas models.Pengumpulan_tugas
-	tugas_id,err:=strconv.Atoi(c.Param("tugas_id"))
+	tugas_id,err:=strconv.Atoi(c.Param("id_tugas"))
 	CheckErr(err)
 	temp_user_id,err:=c.Cookie("user_id")
 	CheckErr(err)
 	user_id,err:=strconv.Atoi(temp_user_id)
 	CheckErr(err)
-	mata_pelajaran_id,err:=strconv.Atoi(c.Param("mata_pelajaran_id"))
+	mata_pelajaran_id,err:=strconv.Atoi(c.Param("id_mapel"))
 	CheckErr(err)
 
 
@@ -35,12 +35,12 @@ func SubmitTugas(c *gin.Context) {
 
 
 func GetPengumpulanTugasById (c *gin.Context){
-pengumpulan_id,err:=strconv.Atoi(c.Param("id_pengumumpulan"))
-CheckErr(err)
+pengumpulan_id:=c.Param("id_pengumpulan")
+
 
 pengumpulan_tugas, Err := models.GetPengumpulanTugasById(pengumpulan_id)
 CheckErr(Err)
-if pengumpulan_tugas.Id == 0 {
+if pengumpulan_tugas.Link_pengumpulan == "" {
 	c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
 } else {
 	c.JSON(http.StatusOK, gin.H{"data": pengumpulan_tugas})
@@ -53,7 +53,7 @@ if pengumpulan_tugas.Id == 0 {
 
 func SetNilai (c *gin.Context){
 	
-	pengumpulan_id,err:=strconv.Atoi(c.Param("id_pengumumpulan"))
+	pengumpulan_id,err:=strconv.Atoi(c.Param("id_pengumpulan"))
 	CheckErr(err)
 	var pengumpulan models.Pengumpulan_tugas
 

@@ -8,7 +8,7 @@ import (
 
 type Tugas struct {
 	Id_tugas  int    `json:"id"`
-	Title     string `json:"judul"`
+	Judul     string `json:"judul"`
 	Deskripsi string `json:"deskripsi"`
 	Tipe      string `json:"tipe"`
 	Id_Mapel  int    `json:"id_mata_pelajaran"`
@@ -26,7 +26,7 @@ func AddTugas(newTugas Tugas, mapel int) (bool, error) {
 		return false, err
 	}
 	defer sqlstmt.Close()
-	_, Err := sqlstmt.Exec(newTugas.Title, newTugas.Deskripsi, newTugas.Tipe, mapel)
+	_, Err := sqlstmt.Exec(newTugas.Judul, newTugas.Deskripsi, newTugas.Tipe, mapel)
 	if Err != nil {
 		return false, err
 	}
@@ -45,7 +45,7 @@ func GetAllTugas(id_mata_pelajaran int) ([]Tugas, error) {
 	defer rows.Close()
 	for rows.Next() {
 		tugas := Tugas{}
-		err := rows.Scan(&tugas.Id_tugas, &tugas.Title, &tugas.Deskripsi, &tugas.Tipe)
+		err := rows.Scan(&tugas.Id_tugas, &tugas.Judul, &tugas.Deskripsi, &tugas.Tipe,&tugas.Id_Mapel)
 		if err != nil {
 			return nil, err
 		}
@@ -74,7 +74,7 @@ func GetAllTugasBySiswa(id_mata_pelajaran int, id_siswa int) ([]Tugas, error) {
 	defer rows.Close()
 	for rows.Next() {
 		tugas := Tugas{}
-		err := rows.Scan(&tugas.Id_tugas, &tugas.Title, &tugas.Deskripsi, &tugas.Tipe, &tugas.Id_Mapel, &tugas.Mapel)
+		err := rows.Scan(&tugas.Id_tugas, &tugas.Judul, &tugas.Deskripsi, &tugas.Tipe, &tugas.Id_Mapel, &tugas.Mapel)
 		if err != nil {
 			return nil, err
 		}
@@ -98,7 +98,7 @@ func SearchTugas(nama_kelas string, mapel int) (Tugas, error) {
 	}
 	tugas := Tugas{}
 
-	rows := sqlstmt.QueryRow(nama_kelas, mapel).Scan(&tugas.Id_tugas, &tugas.Title, &tugas.Deskripsi, &tugas.Tipe, &tugas.Id_Mapel, &tugas.Mapel)
+	rows := sqlstmt.QueryRow(nama_kelas, mapel).Scan(&tugas.Id_tugas, &tugas.Judul, &tugas.Deskripsi, &tugas.Tipe, &tugas.Id_Mapel, &tugas.Mapel)
 	if rows != nil {
 		if rows == sql.ErrNoRows {
 			return Tugas{}, nil
@@ -124,7 +124,7 @@ func UpdateTugas(task Tugas, id_tugas int) (bool, error) {
 
 	defer stmt.Close()
 
-	_, err = stmt.Exec(task.Title, task.Deskripsi, task.Tipe, id_tugas)
+	_, err = stmt.Exec(task.Judul, task.Deskripsi, task.Tipe, id_tugas)
 	if err != nil {
 		return false, err
 	}
@@ -168,7 +168,7 @@ func DeleteTugas(id int) (bool, error) {
 // 	}
 // 	tugas := Tugas{}
 
-// 	rows := sqlstmt.QueryRow(id).Scan(&tugas.Id_tugas, &tugas.Title, &tugas.Deskripsi, &tugas.Tipe, &tugas.Mapel)
+// 	rows := sqlstmt.QueryRow(id).Scan(&tugas.Id_tugas, &tugas.Judul, &tugas.Deskripsi, &tugas.Tipe, &tugas.Mapel)
 // 	if rows != nil {
 // 		if rows == sql.ErrNoRows {
 // 			return Tugas{}, nil

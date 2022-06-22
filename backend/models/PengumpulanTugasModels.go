@@ -13,9 +13,9 @@ type Pengumpulan_tugas struct{
 	Link_pengumpulan     string `json:"link_pengumpulan"`
 	Nilai 				 int  	`json:"nilai"`
 	Status     			 string `json:"status"`
-	Id_Siswa			 int 	`json:"id_siswa"`
-	Id_Mapel  			 int    `json:"id_mata_pelajaran"`
-	Id_tugas  			 int    `json:"id_tugas"`
+	Id_Siswa			 int 	`json:"id_siswa,omitempty"`
+	Id_Mapel  			 int    `json:"id_mata_pelajaran,omitempty"`
+	Id_tugas  			 int    `json:"id_tugas,omitempty"`
 
 
 }
@@ -35,7 +35,7 @@ func SubmitTugas(newPengumpulan Pengumpulan_tugas,tugas_id ,user_id,mata_pelajar
 		return false, err
 	}
 
-	sqlstmt, err := tx.Prepare(`INSERT INTO pengumpulan_tugas (link_pengumpulan,nilai,status,id_siswa,id_tugas,id_mata_pelajaran)VALUES (?,?,?,?)`)
+	sqlstmt, err := tx.Prepare(`INSERT INTO pengumpulan_tugas (link_pengumpulan,nilai,status,id_siswa,id_tugas,id_mata_pelajaran)VALUES (?,?,?,?,?,?)`)
 	if err != nil {
 		return false, err
 	}
@@ -72,22 +72,21 @@ func AddNilai (nilai,id_pengumpulan int, status string ) (bool,error){
 	return true, nil
 }
 
-func GetPengumpulanTugasById(id int )(Pengumpulan_tugas ,error){
-	sqlstmt, err := DB.Prepare(`SELECT * FROM pengumpulan_tugas WHERE id =  ?`)
-	if err != nil {
-		return Pengumpulan_tugas{}, err
+func GetPengumpulanTugasById(id string )(Pengumpulan_tugas ,error){
+	sqlstmt, err := DB.Prepare(`SELECT id,link_pengumpulan,nilai,status FROM pengumpulan_tugas WHERE id =  ?`)
+	if err!=nil {
+		return Pengumpulan_tugas{},err
 	}
-	pengumpulanTugas := Pengumpulan_tugas{}
-
-	rows := sqlstmt.QueryRow(id).Scan(&pengumpulanTugas.Id,&pengumpulanTugas.Link_pengumpulan,&pengumpulanTugas.Nilai)
-	if rows != nil {
-		if rows == sql.ErrNoRows {
-			return Pengumpulan_tugas{}, nil
-		}
-		return Pengumpulan_tugas{}, rows
-
+	user:=Pengumpulan_tugas{}
+	rows:=sqlstmt.QueryRow(id).Scan(&user.Id,&user.Link_pengumpulan,&user.Nilai,&user.Status)
+if rows!=nil {
+	if rows==sql.ErrNoRows {
+		return Pengumpulan_tugas{},nil
 	}
-	return Pengumpulan_tugas{}, nil
+	return Pengumpulan_tugas{}, rows
+
 
 }
+return user,nil
 
+}

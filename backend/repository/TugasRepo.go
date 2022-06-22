@@ -41,9 +41,9 @@ func SearchTugas(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	task, err := models.SearchTugas(tugas.Title, id_mapel)
+	task, err := models.SearchTugas(tugas.Judul, id_mapel)
 	CheckErr(err)
-	if task.Title == "" {
+	if task.Judul == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
 	} else {
 		c.JSON(http.StatusOK, gin.H{"data": task})
