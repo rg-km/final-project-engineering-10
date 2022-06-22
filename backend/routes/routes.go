@@ -15,6 +15,8 @@ func Routes(route *gin.Engine) {
 		v1.GET("/:id_siswa/", repository.GetUserById)
 		v1.POST("/enroll/",repository.AddMapel_siswa)
 		v1.DELETE("/enroll/",repository.DeleteMapel_siswa)
+		v1.GET("/credit_score/",repository.GetCreditScoreByUserId)
+
 		v1.GET("/:id_siswa/mapel/search/", repository.SearchMapel)
 		v1.GET("/:id_siswa/mapel/", repository.GetAllMapel)
 		v1.GET("/:id_siswa/mapel/:id_mapel/",repository.GetMapelByID)
