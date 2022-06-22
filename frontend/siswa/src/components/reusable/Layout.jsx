@@ -80,21 +80,6 @@ function Layout({ type, children }) {
                 </Link>
               </Menu.Item>
               <Menu.Item
-                icon={
-                  <div>
-                    <UserOutlined
-                      style={{ fontSize: "28px" }}
-                      className={`ml-4 ${collapse && "-ml-1"}`}
-                    />
-                  </div>
-                }
-                key={"siswa"}
-              >
-                <Link to={"/dashboard/siswa"}>
-                  <div className="text-white mr-4">List Siswa</div>
-                </Link>
-              </Menu.Item>
-              <Menu.Item
                 key={"tugas"}
                 icon={
                   <div>
