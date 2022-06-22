@@ -15,6 +15,7 @@ import ListMapelSiswa from './components/pages/dashboard/siswa/listMapelSiswa/Li
 import ListSiswa from './components/pages/dashboard/siswa/ListSiswa';
 import ListTugasPelajaran from './components/pages/dashboard/tugas/listTugasPelajaran/ListTugasPelajaran';
 import CreateTugas from './components/pages/dashboard/tugas/listTugasPelajaran/_partials/CreateTugas';
+import EditTugas from './components/pages/dashboard/tugas/listTugasPelajaran/_partials/EditTugas';
 import SelectPelajaran from './components/pages/dashboard/tugas/SelectPelajaran';
 import Login from './components/pages/landing/Login';
 import Register from './components/pages/landing/Register';
@@ -139,7 +140,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/tugas/:mapel"
+						path="/dashboard/tugas/:mapelId"
 						element={
 							<Layout type={'dashboard'}>
 								<ListTugasPelajaran />
@@ -147,10 +148,18 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/tugas/:mapel/create"
+						path="/dashboard/tugas/:mapelId/create"
 						element={
 							<Layout type={'dashboard'}>
 								<CreateTugas />
+							</Layout>
+						}
+					/>
+					<Route
+						path="/dashboard/tugas/:mapelId/edit/:tugasId"
+						element={
+							<Layout type={'dashboard'}>
+								<EditTugas />
 							</Layout>
 						}
 					/>

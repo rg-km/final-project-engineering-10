@@ -114,8 +114,11 @@ func GetAll(c *gin.Context) {
 }
 
 func GetUserById(c *gin.Context) {
+	var user models.Siswa
+
 	id:=c.Param("id_siswa")
-	user,err:=models.GetSiswaById(id)
+	
+	user, err := models.GetSiswaById(id)
 	CheckErr(err)
 	if user.Nama=="" {
 		c.JSON(http.StatusBadRequest,gin.H{"message": "Username tidak ditemukan"})

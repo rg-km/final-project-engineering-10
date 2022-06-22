@@ -20,14 +20,13 @@ func ConnectDB() error {
 }
 
 type Siswa struct {
-	Id            int    `json:"id"`
-	Nama          string `json:"nama"`
-	Email         string `json:"email"`
-	Password      string `json:"password,omitempty"`
-	Credit_score  string `json:"credit_score"`
-	Catatan_minat string `json:"catatan_minat"`
-	Kode_sekolah  string `json:"kode_sekolah"`
-	Token         string `json:"token,omitempty"`
+	Id           int    `json:"id"`
+	Nama         string `json:"nama"`
+	Email        string `json:"email"`
+	Password     string `json:"password,omitempty"`
+	Credit_score string `json:"credit_score"`
+	Kode_sekolah string `json:"kode_sekolah"`
+	Token        string `json:"token,omitempty"`
 }
 
 func Login(email string, password string) (Siswa, error) {
@@ -48,7 +47,7 @@ func Login(email string, password string) (Siswa, error) {
 	if err != nil {
 		return Siswa{}, err
 	}
-	rows := sqlstmt.QueryRow(email, user.Password).Scan(&siswa.Id, &siswa.Nama, &siswa.Email,&siswa.Password, &siswa.Credit_score, &siswa.Catatan_minat, &siswa.Kode_sekolah, &siswa.Token)
+	rows := sqlstmt.QueryRow(email, user.Password).Scan(&siswa.Id, &siswa.Nama, &siswa.Email, &siswa.Password, &siswa.Credit_score, &siswa.Kode_sekolah, &siswa.Token)
 	if rows != nil {
 		if rows == sql.ErrNoRows {
 			return Siswa{}, nil
@@ -71,12 +70,12 @@ func Register(newSiswa Siswa) (bool, error) {
 
 	newSiswa.Password = string(pwSlice[:])
 
-	sqlstmt, err := tx.Prepare(`INSERT INTO siswa (nama,email,password,credit_score,catatan_minat,kode_sekolah,token)VALUES (?,?,?,?,?,?,?)`)
+	sqlstmt, err := tx.Prepare(`INSERT INTO siswa (nama,email,password,credit_score,kode_sekolah,token)VALUES (?,?,?,?,?,?)`)
 	if err != nil {
 		return false, err
 	}
 	defer sqlstmt.Close()
-	_, Err := sqlstmt.Exec(newSiswa.Nama, newSiswa.Email, newSiswa.Password, 100, "", newSiswa.Kode_sekolah, newSiswa.Token)
+	_, Err := sqlstmt.Exec(newSiswa.Nama, newSiswa.Email, newSiswa.Password, 100, newSiswa.Kode_sekolah, newSiswa.Token)
 	if Err != nil {
 		return false, err
 	}
@@ -111,24 +110,24 @@ func UpdateToken(id int) (bool, error) {
 }
 
 func GetUser(kode_sekolah int) ([]Siswa, error) {
-	
-	User:=make([]Siswa,0)
-	sqlstmt:= `SELECT * FROM siswa WHERE kode_sekolah = ? `
-	Rows,err:=DB.Query(sqlstmt,kode_sekolah)
-	if err!=nil {
-		return nil,err
-	}
-defer Rows.Close()
-for Rows.Next(){
-	siswa:=Siswa{}
-	err:=Rows.Scan(&siswa.Id, &siswa.Nama, &siswa.Email, &siswa.Password, &siswa.Credit_score, &siswa.Catatan_minat, &siswa.Kode_sekolah, &siswa.Token)
-	if err!=nil {
-		return nil,err
-	}
-	User = append(User,siswa )
 
-}
-return User,nil
+	User := make([]Siswa, 0)
+	sqlstmt := `SELECT * FROM siswa WHERE kode_sekolah = ? `
+	Rows, err := DB.Query(sqlstmt, kode_sekolah)
+	if err != nil {
+		return nil, err
+	}
+	defer Rows.Close()
+	for Rows.Next() {
+		siswa := Siswa{}
+		err := Rows.Scan(&siswa.Id, &siswa.Nama, &siswa.Email, &siswa.Password, &siswa.Credit_score, &siswa.Kode_sekolah, &siswa.Token)
+		if err != nil {
+			return nil, err
+		}
+		User = append(User, siswa)
+
+	}
+	return User, nil
 }
 
 func GetSiswaByEmail(email string) (Siswa, error) {
@@ -137,7 +136,7 @@ func GetSiswaByEmail(email string) (Siswa, error) {
 		return Siswa{}, err
 	}
 	siswa := Siswa{}
-	rows := sqlstmt.QueryRow(email).Scan(&siswa.Id, &siswa.Nama, &siswa.Email, &siswa.Password, &siswa.Credit_score, &siswa.Catatan_minat, &siswa.Kode_sekolah, &siswa.Token)
+	rows := sqlstmt.QueryRow(email).Scan(&siswa.Id, &siswa.Nama, &siswa.Email, &siswa.Password, &siswa.Credit_score, &siswa.Kode_sekolah, &siswa.Token)
 	if rows != nil {
 		if rows == sql.ErrNoRows {
 			return Siswa{}, nil
@@ -154,7 +153,7 @@ func GetSiswaById(id string) (Siswa, error) {
 		return Siswa{}, err
 	}
 	siswa := Siswa{}
-	rows := sqlstmt.QueryRow(id).Scan(&siswa.Id, &siswa.Nama, &siswa.Email, &siswa.Password, &siswa.Credit_score, &siswa.Catatan_minat, &siswa.Kode_sekolah, &siswa.Token)
+	rows := sqlstmt.QueryRow(id).Scan(&siswa.Id, &siswa.Nama, &siswa.Email, &siswa.Password, &siswa.Credit_score, &siswa.Kode_sekolah, &siswa.Token)
 	if rows != nil {
 		if rows == sql.ErrNoRows {
 			return Siswa{}, nil

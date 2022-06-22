@@ -1,8 +1,9 @@
 import { Form } from 'antd';
 import { Formik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
+import useUserStore from '../../../../store/userStore';
 import axiosConfig from '../../../../utils/axiosConfig';
 import BASE_URL from '../../../../utils/config';
 import { getErrorValue } from '../../../../utils/getErrors';
@@ -22,10 +23,11 @@ function EditPelajaran() {
 
 	const { mapelId } = useParams();
 	const navigate = useNavigate();
+	const { userData, loading: loadingUser, status, setUser } = useUserStore();
 
 	const onSubmit = async values => {
 		try {
-			const response = await axiosConfig.put(`${BASE_URL}/Mapel/${mapelId}/update/`, values);
+			const response = await axiosConfig.put(`${BASE_URL}/Guru/${userData.id}/mapel/${mapelId}/`, values);
 			Toast.fire({
 				icon: 'success',
 				title: 'Berhasil Membuat Mata Pelajaran',
@@ -47,7 +49,7 @@ function EditPelajaran() {
 	const fetchFindPelajaran = async () => {
 		try {
 			setLoading(true);
-			const response = await axiosConfig.get(`${BASE_URL}/Mapel/${mapelId}/show/`);
+			const response = await axiosConfig.get(`${BASE_URL}/Guru/${userData.id}/mapel/${mapelId}/show/`);
 			setData(response.data.data);
 			setInput({ Nama_kelas: response.data.data.nama_kelas });
 		} catch (error) {
@@ -97,7 +99,7 @@ function EditPelajaran() {
 							labelAlign="left"
 						>
 							<FormItem label="Kode Mata Pelajaran">
-								<Input disabled value="JKADUQ" />
+								<Input disabled value={data.kode_kelas} />
 							</FormItem>
 							<FormItem
 								label="Nama Lengkap"
