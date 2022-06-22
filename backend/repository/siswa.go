@@ -43,7 +43,7 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	user, err := models.Login(user.Email, user.Password, user.Id)
+	user, err := models.Login(user.Email, user.Password)
 
 	CheckErr(err)
 	if user.Email == "" {
@@ -59,9 +59,11 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	userId:=strconv.Itoa(int(user.Id))
+	userId := strconv.Itoa(int(user.Id))
+	kodeSekolah := user.Kode_sekolah
 	c.SetCookie("jwt", token, 3600, "/", "localhost", false, true)
-	c.SetCookie("user_id",userId,3600, "/", "localhost", false, true)
+	c.SetCookie("user_id", userId, 3600, "/", "localhost", false, true)
+	c.SetCookie("kode_sekolah", kodeSekolah, 3600, "/", "localhost", false, true)
 }
 
 func UpdateToken(c *gin.Context) {
@@ -90,7 +92,17 @@ func UpdateToken(c *gin.Context) {
 }
 
 func GetAll(c *gin.Context) {
-	guru, err := models.GetUser()
+	temp, err := c.Cookie("kode_sekolah")
+	CheckErr(err)
+
+	kode_sekolah, err := strconv.Atoi(temp)
+	CheckErr(err)
+
+	if err == http.ErrNoCookie {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Silahlkan login ulang"})
+		return
+	}
+	guru, err := models.GetUser(kode_sekolah)
 	CheckErr(err)
 	if guru == nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "data tidak ditemukan"})
@@ -101,20 +113,17 @@ func GetAll(c *gin.Context) {
 	}
 }
 
-func GetUserByUsername(c *gin.Context){
+func GetUserById(c *gin.Context) {
 	var user models.Siswa
 
-	if err:=c.ShouldBindJSON(&user);err!=nil {
-		c.JSON(http.StatusBadRequest,gin.H{"error":err.Error()})
-		return
-	}
-	user,err:=models.GetSiswaByEmail(user.Email)
+	id:=c.Param("id_siswa")
+	
+	user, err := models.GetSiswaById(id)
 	CheckErr(err)
-	if user.Email=="" {
-		c.JSON(http.StatusBadRequest,gin.H{"message": "Username tidak ditemukan"})
-	}else{
-		c.JSON(http.StatusOK,gin.H{"data":user})
+	if user.Email == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Username tidak ditemukan"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": user})
 	}
 
 }
-
