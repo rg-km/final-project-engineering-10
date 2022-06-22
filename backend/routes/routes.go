@@ -20,7 +20,7 @@ func Routes(route *gin.Engine) {
 		v1.GET("/:id_siswa/mapel/:id_mapel/", repository.GetMapelByID)//vv
 		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/search/", repository.SearchTugas)
 		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/", repository.GetAllTugasBySiswa)
-		// v1.GET("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/",repository.GetTugasById)
+		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/",repository.ShowTugas)
 		v1.POST("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/pengumpulan/", repository.SubmitTugas)//VV
 		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/", repository.GetPengumpulanTugasById)//vv
 
@@ -36,6 +36,7 @@ func Routes(route *gin.Engine) {
 		v2.DELETE("/:id_Guru/mapel/:id/", repository.DeleteMapel)//vv
 		v2.PUT("/:id_Guru/mapel/:id/", repository.UpdateMapel) // vv
 		v2.GET("/:id_Guru/mapel/search/", repository.SearchMapel)
+		v2.GET("/:id_Guru/mapel/:id/show/", repository.ShowMapel)
 		v2.GET("/:id_Guru/mapel/", repository.GetAllMapel)//vv
 		v2.POST("/:id_Guru/mapel/list/:id_mapel/tugas/", repository.AddTugas) // vv
 		v2.DELETE("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/", repository.DeleteTugas)//vv

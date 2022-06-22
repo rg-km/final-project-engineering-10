@@ -1,6 +1,6 @@
 import { Form, Select } from 'antd';
 import { Formik } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import useUserStore from '../../../../../../store/userStore';
@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
 
 const { Option } = Select;
 
-function CreateTugas() {
+function EditTugas() {
 	const initialState = {
 		judul: '',
 		deskripsi: '',
@@ -29,15 +29,38 @@ function CreateTugas() {
 
 	const [input, setInput] = useState(initialState);
 	const [errorMessage, setErrorMessage] = useState({});
-	const { mapelId } = useParams();
+	const [data, setData] = useState({});
+	const [loading, setLoading] = useState(false);
+	const { mapelId, tugasId } = useParams();
 	const { userData, loading: loadingUser, status, setUser } = useUserStore();
+
+	const fetchFindTugas = async () => {
+		try {
+			setLoading(true);
+			const response = await axiosConfig.get(`${BASE_URL}/Guru/${userData.id}/mapel/list/${mapelId}/tugas/${tugasId}/`);
+			setData(response.data.data);
+			setInput({
+				judul: response.data.data.judul,
+				deskripsi: response.data.data.deskripsi,
+				tipe: response.data.data.tipe,
+			});
+		} catch (error) {
+			console.log(error);
+			Toast.fire({
+				icon: 'error',
+				title: 'Terdapat Kesalahan',
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	const onSubmit = async values => {
 		try {
 			const response = await axiosConfig.post(`${BASE_URL}/Guru/${userData.id}/mapel/list/${mapelId}/tugas/`, values);
 			Toast.fire({
 				icon: 'success',
-				title: 'Berhasil Membuat Mata Pelajaran',
+				title: 'Berhasil Mengupdate Tugas',
 			});
 			navigate(`/dashboard/tugas/${mapelId}`);
 		} catch (error) {
@@ -48,6 +71,9 @@ function CreateTugas() {
 			});
 		}
 	};
+	useEffect(() => {
+		fetchFindTugas();
+	}, []);
 
 	return (
 		<div>
@@ -105,24 +131,8 @@ function CreateTugas() {
 									type={'textarea'}
 								/>
 							</FormItem>
-							<FormItem label="Tipe" error={getErrorValue(errors.tipe, errorMessage?.tipe)} touched={touched.tipe}>
-								<Select
-									name="tipe"
-									defaultValue={''}
-									style={{ width: '100%' }}
-									onBlur={() => setFieldTouched('tipe')}
-									onChange={value => {
-										setFieldValue('tipe', value);
-									}}
-									size="large"
-								>
-									<Option value="" disabled>
-										Pilih Tipe Tugas
-									</Option>
-									<Option value="PR">PR</Option>
-									<Option value="Ulangan">Ulangan</Option>
-									<Option value="Kuis">Kuis</Option>
-								</Select>
+							<FormItem label="Tipe">
+								<Input className="capitalize" disabled value={values.tipe} name="tipe" />
 							</FormItem>
 							<div className="flex justify-end">
 								<button className="px-12 py-4 bg-blue text-white font-bold rounded-xl text-xl">Kirim</button>
@@ -135,4 +145,4 @@ function CreateTugas() {
 	);
 }
 
-export default CreateTugas;
+export default EditTugas;

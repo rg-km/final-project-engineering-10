@@ -161,14 +161,15 @@ func DeleteTugas(id int) (bool, error) {
 	return true, nil
 }
 
-// func GetTugasById(id int) (Tugas, error) {
-// 	sqlstmt, err := DB.Prepare(`SELECT * FROM tugas WHERE id =  ?`)
+// func FindTugas(kodeKelas int) (Tugas, error) {
+// 	sqlstmt, err := DB.Prepare(`SELECT * FROM tugas WHERE id = ?`)
 // 	if err != nil {
 // 		return Tugas{}, err
 // 	}
+
 // 	tugas := Tugas{}
 
-// 	rows := sqlstmt.QueryRow(id).Scan(&tugas.Id_tugas, &tugas.Judul, &tugas.Deskripsi, &tugas.Tipe, &tugas.Mapel)
+// 	rows := sqlstmt.QueryRow(kodeKelas).Scan(&tugas.Id_tugas, &tugas.Judul, &tugas.Deskripsi, &tugas.Tipe, &tugas.Id_Mapel)
 // 	if rows != nil {
 // 		if rows == sql.ErrNoRows {
 // 			return Tugas{}, nil
@@ -177,5 +178,42 @@ func DeleteTugas(id int) (bool, error) {
 
 // 	}
 // 	return tugas, nil
+// }
+
+func GetTugasById(id string) (Tugas, error) {
+	sqlstmt, err := DB.Prepare(`SELECT * FROM tugas WHERE id =  ?`)
+	if err != nil {
+		return Tugas{}, err
+	}
+	tugas := Tugas{}
+
+	rows := sqlstmt.QueryRow(id).Scan(&tugas.Id_tugas, &tugas.Judul, &tugas.Deskripsi, &tugas.Tipe, &tugas.Mapel)
+	if rows != nil {
+		if rows == sql.ErrNoRows {
+			return Tugas{}, nil
+		}
+		return Tugas{}, rows
+
+	}
+	return tugas, nil
+
+}
+
+
+// func GetSiswaById(id string) (Siswa, error) {
+// 	sqlstmt, err := DB.Prepare(`SELECT * FROM siswa WHERE id = ? `)
 
 // }
+
+// if err != nil {
+// 	return Mata_pelajaran{}, err
+// }
+// siswa := Mata_pelajaran{}
+// rows := sqlstmt.QueryRow(Kode_kelas).Scan(&siswa.Kode_kelas, &siswa.Nama_kelas, &siswa.Kode_sekolah)
+// if rows != nil {
+// 	if rows == sql.ErrNoRows {
+// 		return Mata_pelajaran{}, nil
+// 	}
+// 	return Mata_pelajaran{}, rows
+// }
+// return siswa, nil
