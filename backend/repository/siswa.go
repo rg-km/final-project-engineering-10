@@ -120,10 +120,10 @@ func GetUserById(c *gin.Context) {
 	
 	user, err := models.GetSiswaById(id)
 	CheckErr(err)
-	if user.Email == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Username tidak ditemukan"})
-	} else {
-		c.JSON(http.StatusOK, gin.H{"data": user})
+	if user.Nama=="" {
+		c.JSON(http.StatusBadRequest,gin.H{"message": "Username tidak ditemukan"})
+	}else{
+		c.JSON(http.StatusOK,gin.H{"data":user})
 	}
 
 }
