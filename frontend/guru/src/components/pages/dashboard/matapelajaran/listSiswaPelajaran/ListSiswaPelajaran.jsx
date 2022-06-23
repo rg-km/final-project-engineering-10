@@ -1,6 +1,10 @@
 import { Table } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import useUserStore from '../../../../../store/userStore';
+import axiosConfig from '../../../../../utils/axiosConfig';
+import BASE_URL from '../../../../../utils/config';
+import { Toast } from '../../../../reusable/Toast';
 
 const columns = [
 	{
@@ -56,6 +60,30 @@ const data = [
 
 function ListSiswaPelajaran() {
 	const { mapel } = useParams();
+	const [loading, setLoading] = useState(false);
+	const [data, setData] = useState([]);
+	const { userData, loading: loadingUser, status, setUser } = useUserStore();
+
+	const fetchPelajaran = async () => {
+		try {
+			setLoading(true);
+			const response = await axiosConfig.get(`${BASE_URL}/Guru/${userData.id}/mapel/`);
+			setData(response.data.data);
+		} catch (error) {
+			console.log(error);
+			Toast.fire({
+				icon: 'error',
+				title: 'Terdapat Kesalahan',
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		fetchPelajaran();
+	}, []);
+	
 	return (
 		<div>
 			<div className="text-2xl font-bold mb-4">List Siswa Mapel {mapel}</div>

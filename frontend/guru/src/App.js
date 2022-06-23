@@ -108,7 +108,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/siswa/:nama"
+						path="/dashboard/siswa/:siswaId"
 						element={
 							<Layout type={'dashboard'}>
 								<ListMapelSiswa />
@@ -116,7 +116,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/siswa/:nama/:mapel"
+						path="/dashboard/siswa/:siswaId/:mapelId"
 						element={
 							<Layout type={'dashboard'}>
 								<RekapNilaiSiswa />

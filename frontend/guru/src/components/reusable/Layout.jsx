@@ -1,4 +1,4 @@
-import { BarChartOutlined, BookFilled, FilePdfFilled, PieChartFilled, UserOutlined } from '@ant-design/icons';
+import { AuditOutlined, BarChartOutlined, BookFilled, FilePdfFilled, PieChartFilled, UserOutlined } from '@ant-design/icons';
 import { Layout as AntLayout, Menu } from 'antd';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -95,6 +95,18 @@ function Layout({ type, children }) {
 							>
 								<Link to={'/dashboard/credit-score'}>
 									<div className="mr-4">Credit Score</div>
+								</Link>
+							</Menu.Item>
+							<Menu.Item
+								key={'catatan_minat'}
+								icon={
+									<div>
+										<AuditOutlined style={{ fontSize: '28px' }} className={`ml-4 ${collapse && '-ml-1'}`} />
+									</div>
+								}
+							>
+								<Link to={'/dashboard/catatan-minat'}>
+									<div className="mr-4">Catatan Minat</div>
 								</Link>
 							</Menu.Item>
 						</Menu.ItemGroup>
