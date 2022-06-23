@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -19,6 +20,15 @@ type Pengumpulan_tugas struct{
 
 
 }
+
+type GetPengumpulan struct {
+	Nama_Tugas		string `json:"nama_tugas"`
+	Tipe			string `json:"tipe"`
+	Nilai			int	`json:"nilai"`
+
+}
+
+
 
 type Avg struct{
 	Nilai		int `json:"nilai"`
@@ -89,4 +99,116 @@ if rows!=nil {
 }
 return user,nil
 
+}
+
+
+
+func UpdatePengumpulan (id int, url string) (bool, error){
+	tx, err := DB.Begin()
+	if err != nil {
+		return false, err
+	}
+
+	stmt, err := tx.Prepare("UPDATE pengumpulan_tugas SET link_pengumpulan = ? WHERE id = ?")
+
+	if err != nil {
+		return false, err
+	}
+
+	defer stmt.Close()
+	_, err = stmt.Exec(url,id)
+	if err != nil {
+		return false, err
+	}
+	tx.Commit()
+	return true, nil
+
+}
+
+
+func GetPengumpulanByTugas (id_tugas int)([]GetPengumpulan,error){
+	sqlstmt:= 
+	`SELECT nama_tugas,tipe,nilai 
+	FROM pengumpulan_tugas
+	INNER JOIN tugas ON pengumpulan_tugas.id_tugas=id_tugas
+	WHERE id_tugas = ?`
+
+	pengumpulan:= make([]GetPengumpulan,0)
+	rows,err:= DB.Query(sqlstmt,id_tugas)
+	if err!=nil {
+		return nil,err
+	}
+	defer rows.Close()
+
+	for rows.Next(){
+		Pengumpulan:=GetPengumpulan{}
+		err:= rows.Scan(&Pengumpulan.Nama_Tugas,&Pengumpulan.Tipe,&Pengumpulan.Nilai)
+		if err!=nil {
+			return nil,err
+		}
+		pengumpulan = append(pengumpulan, Pengumpulan)
+	}
+
+return pengumpulan,nil
+}
+
+
+func CheckStatus(status string)(bool){
+	status_str:=strings.ToLower(status)
+
+	if status_str == "selesai" || status_str == "gagal"{
+		return true
+	}
+
+return false
+}
+
+func UpdateValue(id_mata_pelajaran,id_siswa int, tipe string) (Avg,error){
+
+
+	
+sqlstmt,err:= DB.Prepare(`SELECT AVG(nilai)   
+FROM pengumpulan_tugas
+INNER JOIN tugas ON pengumpulan_tugas.id_tugas=id_tugas
+WHERE pengumpulan_tugas.id_mata_pelajaran = ? AND tugas.tipe = ? AND id_siswa =?`)
+
+if err!=nil {
+	return Avg{},err
+}
+Average:=Avg{}
+
+
+rows:=sqlstmt.QueryRow(id_mata_pelajaran,tipe,id_siswa).Scan(&Average.Nilai)
+if rows != nil {
+	if rows == sql.ErrNoRows {
+		return Avg{}, nil
+	}
+	return Avg{}, rows
+
+}
+return Avg{}, nil
+	
+
+}
+
+
+func UpdateAvg(nilai,kode_kelas,id_siswa int)(bool,error){
+	tx, err := DB.Begin()
+	if err != nil {
+		return false, err
+	}
+
+	stmt, err := tx.Prepare("UPDATE mata_pelajaran_siswa SET rata_rata = ? WHERE id_siswa = ? AND kode_kelas=?")
+
+	if err != nil {
+		return false, err
+	}
+
+	defer stmt.Close()
+	_, err = stmt.Exec(nilai,id_siswa,kode_kelas)
+	if err != nil {
+		return false, err
+	}
+	tx.Commit()
+	return true, nil
 }
