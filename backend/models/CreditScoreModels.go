@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"mactiv/service"
 	"strconv"
+	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -59,13 +60,12 @@ func AddCreditScore (credit Credit_score,user_id int) (bool,error) {
 		return false,err
 	}
 	tx.Commit()
+	temp:=credit.Status
+	status:=strings.ToLower(temp)
+	if status=="selesai" {
+		UpdateCreditScore(credit.Point,user_id)
 
-	// if credit.Status=="Telah disetujui" {
-	// 	UpdateCreditScore(credit.Point,user_id)
-
-	// }
-	// masih kurang yakin dengan status nya
-	UpdateCreditScore(credit.Point,user_id)
+	}
 	return true,nil
 }
 
@@ -97,6 +97,9 @@ func UpdateCreditScore(credit,user_id int ) (bool,error){
 	OldCreds,err:=strconv.Atoi(temp.Credit_score)
 
 	NewCreds:= OldCreds+credit
+	if NewCreds>100 {
+		NewCreds= 100
+	}
 
 	tx, err := DB.Begin()
 	if err != nil {

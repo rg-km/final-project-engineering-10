@@ -38,19 +38,19 @@ type Avg struct{
 
 
 
-func SubmitTugas(newPengumpulan Pengumpulan_tugas,tugas_id ,user_id,mata_pelajaran_id int) (bool, error){
+func SubmitTugas(newPengumpulan Pengumpulan_tugas,id int) (bool, error){
 
 	tx, err := DB.Begin()
 	if err != nil {
 		return false, err
 	}
 
-	sqlstmt, err := tx.Prepare(`INSERT INTO pengumpulan_tugas (link_pengumpulan,nilai,status,id_siswa,id_tugas,id_mata_pelajaran)VALUES (?,?,?,?,?,?)`)
+	sqlstmt, err := tx.Prepare(`UPDATE pengumpulan_tugas SET link_pengumpulan=? ,status = ? WHERE id = ?`)
 	if err != nil {
 		return false, err
 	}
 	defer sqlstmt.Close()
-	_, Err := sqlstmt.Exec(newPengumpulan.Link_pengumpulan,0,"review",user_id,tugas_id,mata_pelajaran_id)
+	_, Err := sqlstmt.Exec(newPengumpulan.Link_pengumpulan,"review",id)
 	if Err != nil {
 		return false, err
 	}
@@ -70,7 +70,7 @@ func AddPengumpulan (newPengumpulan Pengumpulan_tugas)(bool,error){
 		return false, err
 	}
 	defer sqlstmt.Close()
-	_, Err := sqlstmt.Exec(newPengumpulan.Link_pengumpulan,0,"review",newPengumpulan.Id_Siswa,newPengumpulan.Id_tugas,newPengumpulan.Id_Mapel)
+	_, Err := sqlstmt.Exec(newPengumpulan.Link_pengumpulan,0,newPengumpulan.Status,newPengumpulan.Id_Siswa,newPengumpulan.Id_tugas,newPengumpulan.Id_Mapel)
 	if Err != nil {
 		return false, err
 	}
@@ -234,4 +234,29 @@ func UpdateAvg(nilai,kode_kelas,id_siswa int)(bool,error){
 	}
 	tx.Commit()
 	return true, nil
+}
+
+
+
+func CreatePengumpulan(newPengumpulan Pengumpulan_tugas)(bool,error){
+
+	tx, err := DB.Begin()
+	if err != nil {
+		return false, err
+	}
+
+	sqlstmt, err := tx.Prepare(`INSERT INTO pengumpulan_tugas (link_pengumpulan,nilai,status,id_siswa,id_tugas,id_mata_pelajaran)VALUES (?,?,?,?,?,?)`)
+	if err != nil {
+		return false, err
+	}
+	defer sqlstmt.Close()
+	_, Err := sqlstmt.Exec(newPengumpulan.Link_pengumpulan,0,"review",newPengumpulan.Id_Siswa,newPengumpulan.Id_tugas,newPengumpulan.Id_Mapel)
+	if Err != nil {
+		return false, err
+	}
+	tx.Commit()
+	return true, nil
+
+
+
 }

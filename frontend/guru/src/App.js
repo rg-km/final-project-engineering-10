@@ -22,13 +22,14 @@ import SelectPelajaran from './components/pages/dashboard/tugas/SelectPelajaran'
 import Login from './components/pages/landing/Login';
 import Register from './components/pages/landing/Register';
 import Layout from './components/reusable/Layout';
+import Landing from "./components/pages/landing/Landing";
 
 function App() {
 	return (
 		<div className="">
 			<BrowserRouter>
 				<Routes>
-					<Route path="/" element={<Layout type={'front'}></Layout>} />
+				<Route path="/Landing" element={<Landing/>} />
 					<Route
 						path="/login"
 						element={
