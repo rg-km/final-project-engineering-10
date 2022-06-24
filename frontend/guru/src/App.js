@@ -1,5 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
+import CatatanMinat from './components/pages/dashboard/catatanMinat/catatanSiswaMinat/CatatanMinat';
+import SelectSiswaCatatanMinat from './components/pages/dashboard/catatanMinat/SelectSiswaCatatanMinat';
 import ListPointCreditScore from './components/pages/dashboard/creditscore/listPointCreditScore/ListPointCreditScore';
 import CreatePoin from './components/pages/dashboard/creditscore/listPointCreditScore/_partials/CreatePoin';
 import EditPoin from './components/pages/dashboard/creditscore/listPointCreditScore/_partials/EditPoin';
@@ -192,6 +194,22 @@ function App() {
 						element={
 							<Layout type={'dashboard'}>
 								<EditPoin />
+							</Layout>
+						}
+					/>
+					<Route
+						path="/dashboard/catatan-minat"
+						element={
+							<Layout type={'dashboard'}>
+								<SelectSiswaCatatanMinat />
+							</Layout>
+						}
+					/>
+					<Route
+						path="/dashboard/catatan-minat/:siswaId"
+						element={
+							<Layout type={'dashboard'}>
+								<CatatanMinat />
 							</Layout>
 						}
 					/>

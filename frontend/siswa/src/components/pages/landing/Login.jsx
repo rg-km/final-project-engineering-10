@@ -1,13 +1,16 @@
 import { Form } from 'antd';
 import { Formik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+import useUserStore from '../../../store/userStore';
 import axiosConfig from '../../../utils/axiosConfig';
 import BASE_URL from '../../../utils/config';
 import { getErrorValue } from '../../../utils/getErrors';
 import FormItem from '../../reusable/FormItem';
 import Input from '../../reusable/Input';
 import SubmitButton from '../../reusable/SubmitButton';
+import { Toast } from '../../reusable/Toast';
 
 const validationSchema = Yup.object().shape({
 	email: Yup.string().email('Masukan alamat email yang valid').required('Email wajib diisi'),
@@ -23,21 +26,31 @@ function Login() {
 	const [input, setInput] = useState(initialState);
 	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState({});
+	const { setUser } = useUserStore();
+	const navigate = useNavigate();
+
 
 	const onSubmit = async values => {
 		try {
 			console.log(values);
 			setLoading(true);
 			const response = await axiosConfig.post(`${BASE_URL}/siswa/login/`, values);
+			Toast.fire({
+				icon: 'success',
+				title: 'Berhasil Login',
+			});
+			setUser();
+			navigate('/dashboard');
 		} catch (error) {
 			console.log(error);
-		} finally {
 			setLoading(false);
-
-			console.log(document.cookie);
+			Toast.fire({
+				icon: 'error',
+				title: 'Terdapat Kesalahan',
+			});
 		}
 	};
-	
+
 	return (
 		<div className="h-full ">
 			<div className="w-144 px-12 py-16 bg-secondary mx-auto my-24 border-blue border-2 rounded-xl">
