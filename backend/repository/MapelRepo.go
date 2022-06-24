@@ -130,7 +130,7 @@ func ShowMapel(c *gin.Context) {
 }
 
 func GetSiswaByMapel (c *gin.Context){
-	id_mapel,err:=strconv.Atoi(c.Param("id_tugas"))
+	id_mapel,err:=strconv.Atoi(c.Param("id_mapel"))
 	CheckErr(err)
 
 	siswa, err := models.GetSiswaByMapel(id_mapel)
