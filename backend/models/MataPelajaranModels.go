@@ -179,7 +179,7 @@ func GetSiswaByMapel(kode_kelas int)([]Siswa,error){
 	defer rows.Close()
 	for rows.Next() {
 		User := Siswa{}
-		err := rows.Scan(&User.Id, &User.Nama,&User.Email,&User.Credit_score, User.Kode_sekolah)
+		err := rows.Scan(&User.Id, &User.Nama,&User.Email,&User.Credit_score, &User.Kode_sekolah)
 		if err != nil {
 			return nil, err
 		}
