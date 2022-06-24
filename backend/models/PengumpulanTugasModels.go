@@ -59,6 +59,29 @@ func SubmitTugas(newPengumpulan Pengumpulan_tugas,tugas_id ,user_id,mata_pelajar
 
 }
 
+func AddPengumpulan (newPengumpulan Pengumpulan_tugas)(bool,error){
+	tx, err := DB.Begin()
+	if err != nil {
+		return false, err
+	}
+
+	sqlstmt, err := tx.Prepare(`INSERT INTO pengumpulan_tugas (link_pengumpulan,nilai,status,id_siswa,id_tugas,id_mata_pelajaran)VALUES (?,?,?,?,?,?)`)
+	if err != nil {
+		return false, err
+	}
+	defer sqlstmt.Close()
+	_, Err := sqlstmt.Exec(newPengumpulan.Link_pengumpulan,0,"review",newPengumpulan.Id_Siswa,newPengumpulan.Id_tugas,newPengumpulan.Id_Mapel)
+	if Err != nil {
+		return false, err
+	}
+	tx.Commit()
+	return true, nil
+
+
+}
+
+
+
 
 func AddNilai (nilai,id_pengumpulan int, status string ) (bool,error){
 
