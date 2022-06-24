@@ -70,7 +70,7 @@ func AddPengumpulan (newPengumpulan Pengumpulan_tugas)(bool,error){
 		return false, err
 	}
 	defer sqlstmt.Close()
-	_, Err := sqlstmt.Exec(newPengumpulan.Link_pengumpulan,0,"review",newPengumpulan.Id_Siswa,newPengumpulan.Id_tugas,newPengumpulan.Id_Mapel)
+	_, Err := sqlstmt.Exec(newPengumpulan.Link_pengumpulan,0,newPengumpulan.Status,newPengumpulan.Id_Siswa,newPengumpulan.Id_tugas,newPengumpulan.Id_Mapel)
 	if Err != nil {
 		return false, err
 	}
