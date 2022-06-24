@@ -44,6 +44,34 @@ func GetAllMinatSiswa(c *gin.Context) {
 	}
 }
 
+func UpdateMinat(c *gin.Context){
+
+	var json models.Peminatan
+
+	if err := c.ShouldBindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	Id_minat, err := strconv.Atoi(c.Param("id_minat"))
+	CheckErr(err)
+
+	success, err := models.UpdateMinat(Id_minat,json)
+	if success {
+		c.JSON(http.StatusOK, gin.H{"message": "Success"})
+		return
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
+}
+
+func GetMinatBySiswa(){}
+
+
+func GetMinatById(){}
+
+
+
 func DeleteMinat(c *gin.Context) {
 
 	id_minat, err := strconv.Atoi(c.Param("id_minat"))

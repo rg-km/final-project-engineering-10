@@ -13,6 +13,11 @@ type Tugas struct {
 	Tipe      string `json:"tipe"`
 	Id_Mapel  int    `json:"id_mata_pelajaran"`
 	Mapel     string `json:"nama_kelas"`
+	Id_pengumpulan string `json:"id_pengumpulan,omitempty"`
+	Nilai		int `json:"nilai,omitempty"`
+	Status 		string `json:"status,omitempty"`
+	Link_pengumpulan string `json:"link_pengumpulan,omitempty"`
+	Id_siswa	int `json:"id_siswa,omitempty"`
 }
 
 func AddTugas(newTugas Tugas, mapel int) (bool, error) {
@@ -35,7 +40,12 @@ func AddTugas(newTugas Tugas, mapel int) (bool, error) {
 }
 func GetAllTugas(id_mata_pelajaran int) ([]Tugas, error) {
 	assignment := make([]Tugas, 0)
-	sqlstmt := `SELECT * FROM TUGAS WHERE id_mata_pelajaran = ?`
+	sqlstmt := `SELECT tugas.id, tugas.judul, tugas.deskripsi, tugas.tipe, tugas.id_mata_pelajaran, pt.id ,pt.link_pengumpulan ,pt.nilai,pt.id_siswa 
+	FROM tugas 
+	JOIN pengumpulan_tugas  pt
+	ON tugas.id = pt.id_tugas 
+	
+	WHERE tugas.id_mata_pelajaran = ?`
 
 	rows, err := DB.Query(sqlstmt, id_mata_pelajaran)
 	if err != nil {
@@ -64,9 +74,15 @@ func GetAllTugas(id_mata_pelajaran int) ([]Tugas, error) {
 
 func GetAllTugasBySiswa(id_mata_pelajaran int, id_siswa int) ([]Tugas, error) {
 	assignment := make([]Tugas, 0)
-	sqlstmt := `SELECT tugas.id, tugas.judul, tugas.deskripsi, tugas.tipe, tugas.id_mata_pelajaran,mata_pelajaran.nama_kelas FROM mata_pelajaran_siswa LEFT JOIN tugas ON mata_pelajaran_siswa.kode_kelas = tugas.id_mata_pelajaran LEFT JOIN mata_pelajaran ON mata_pelajaran_siswa.kode_kelas = mata_pelajaran.kode_kelas  WHERE mata_pelajaran_siswa.id_siswa = ? AND mata_pelajaran_siswa.kode_kelas = ?`
+	sqlstmt := `SELECT pengumpulan_tugas.id,tugas.id,mata_pelajaran.kode_kelas ,pengumpulan_tugas.nilai, pengumpulan_tugas.status ,tugas.judul ,tugas.deskripsi, tugas.tipe ,mata_pelajaran.nama_kelas 
+	FROM pengumpulan_tugas
+	JOIN tugas
+	ON pengumpulan_tugas.id_tugas =tugas.id
+	JOIN mata_pelajaran
+	ON pengumpulan_tugas.id_mata_pelajaran = mata_pelajaran.kode_kelas 
+	WHERE pengumpulan_tugas.id_mata_pelajaran =? AND pengumpulan_tugas.id_siswa =?`
 
-	rows, err := DB.Query(sqlstmt, id_siswa, id_mata_pelajaran)
+	rows, err := DB.Query(sqlstmt, id_mata_pelajaran, id_siswa)
 	if err != nil {
 		return []Tugas{}, err
 	}
@@ -74,7 +90,7 @@ func GetAllTugasBySiswa(id_mata_pelajaran int, id_siswa int) ([]Tugas, error) {
 	defer rows.Close()
 	for rows.Next() {
 		tugas := Tugas{}
-		err := rows.Scan(&tugas.Id_tugas, &tugas.Judul, &tugas.Deskripsi, &tugas.Tipe, &tugas.Id_Mapel, &tugas.Mapel)
+		err := rows.Scan(&tugas.Id_pengumpulan,&tugas.Id_tugas, &tugas.Id_Mapel, &tugas.Nilai, &tugas.Status, &tugas.Judul, &tugas.Deskripsi,&tugas.Tipe,&tugas.Mapel)
 		if err != nil {
 			return nil, err
 		}
