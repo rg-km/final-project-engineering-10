@@ -60,6 +60,37 @@ func GetAllPeminatanSiswa(id_siswa int) ([]Peminatan, error) {
 	return passion, nil
 }
 
+func UpdateMinat(id_minat int, minat Peminatan)(bool,error){
+	tx, err := DB.Begin()
+	if err != nil {
+		return false, err
+	}
+
+	stmt, err := tx.Prepare("UPDATE peminatan SET minat=? deskripsi = ? WHERE id = ?")
+
+	if err != nil {
+		return false, err
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.Exec(&minat.Minat,&minat.Deskripsi,id_minat)
+
+	if err != nil {
+		return false, err
+	}
+
+	tx.Commit()
+
+	return true, nil
+
+
+
+}
+
+
+
+
 func DeletePeminatan(id int) (bool, error) {
 
 	tx, err := DB.Begin()

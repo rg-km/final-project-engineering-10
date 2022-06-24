@@ -162,6 +162,14 @@ func FindMapel(kodeKelas int) (Mata_pelajaran, error) {
 	return mata_pelajaran, nil
 }
 
+func GetSiswaByMapel(kode_kelas int)([]Siswa,error){
+	
+
+
+
+}
+
+
 // func GetSiswaById(id string) (Siswa, error) {
 // 	sqlstmt, err := DB.Prepare(`SELECT * FROM siswa WHERE id = ? `)
 

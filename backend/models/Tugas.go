@@ -16,6 +16,8 @@ type Tugas struct {
 	Id_pengumpulan string `json:"id_pengumpulan,omitempty"`
 	Nilai		int `json:"nilai,omitempty"`
 	Status 		string `json:"status,omitempty"`
+	Link_pengumpulan string `json:"link_pengumpulan,omitempty"`
+	Id_siswa	int `json:"id_siswa,omitempty"`
 }
 
 func AddTugas(newTugas Tugas, mapel int) (bool, error) {
@@ -38,7 +40,12 @@ func AddTugas(newTugas Tugas, mapel int) (bool, error) {
 }
 func GetAllTugas(id_mata_pelajaran int) ([]Tugas, error) {
 	assignment := make([]Tugas, 0)
-	sqlstmt := `SELECT * FROM TUGAS WHERE id_mata_pelajaran = ?`
+	sqlstmt := `SELECT tugas.id, tugas.judul, tugas.deskripsi, tugas.tipe, tugas.id_mata_pelajaran, pt.id ,pt.link_pengumpulan ,pt.nilai,pt.id_siswa 
+	FROM tugas 
+	JOIN pengumpulan_tugas  pt
+	ON tugas.id = pt.id_tugas 
+	
+	WHERE tugas.id_mata_pelajaran = ?`
 
 	rows, err := DB.Query(sqlstmt, id_mata_pelajaran)
 	if err != nil {
