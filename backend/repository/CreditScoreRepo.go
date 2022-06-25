@@ -32,33 +32,33 @@ func AddCreditScore(c *gin.Context) {
 }
 
 
-func GetCreditScoreByUserId(c *gin.Context){
-	var credit models.Credit_score
+// func GetCreditScoreByUserId(c *gin.Context){
+// 	var credit models.Credit_score
 
-	if err:=c.ShouldBindJSON(&credit);err!=nil {
-		c.JSON(http.StatusBadRequest,gin.H{"error":err.Error()})
-		return
-	}
+// 	if err:=c.ShouldBindJSON(&credit);err!=nil {
+// 		c.JSON(http.StatusBadRequest,gin.H{"error":err.Error()})
+// 		return
+// 	}
 
-	temp,err:=c.Cookie("user_id")
-	if err==http.ErrNoCookie {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	}
-	user_id,err:=strconv.Atoi(temp)
-	if err!=nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+// 	temp,err:=c.Cookie("user_id")
+// 	if err==http.ErrNoCookie {
+// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+// 	}
+// 	user_id,err:=strconv.Atoi(temp)
+// 	if err!=nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 
-	}
+// 	}
 
-	user,err:=models.GetCreditScoreByIdSiswa(user_id)
-	CheckErr(err)
-	if user.Id==0 {
-		c.JSON(http.StatusBadRequest,gin.H{"message": "Data Salah, Silahkan Masukkan ulang"})
-	}else{
-		c.JSON(http.StatusOK,gin.H{"data":user})
-	}
+// 	user,err:=models.GetCreditScoreByIdSiswa(user_id)
+// 	CheckErr(err)
+// 	if user.Id==0 {
+// 		c.JSON(http.StatusBadRequest,gin.H{"message": "Data Salah, Silahkan Masukkan ulang"})
+// 	}else{
+// 		c.JSON(http.StatusOK,gin.H{"data":user})
+// 	}
 
-}
+// }
 
 func GetCreditScoreByIdSiswa(c *gin.Context){
 	var credit models.Credit_score

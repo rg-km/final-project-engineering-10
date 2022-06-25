@@ -65,10 +65,23 @@ func UpdateMinat(c *gin.Context){
 	}
 }
 
-func GetMinatBySiswa(){}
+
+func GetMinatById(c *gin.Context){
+	// var json models.Peminatan
+
+	id_minat,err := strconv.Atoi(c.Param("id_minat"))
+	CheckErr(err)
+
+	minat, Err := models.GetMinatById(id_minat)
+	CheckErr(Err)
+	if minat.Id_minat == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": minat})
+	}
 
 
-func GetMinatById(){}
+}
 
 
 
