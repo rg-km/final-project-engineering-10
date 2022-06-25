@@ -14,8 +14,8 @@ type Tugas struct {
 	Id_Mapel  int    `json:"id_mata_pelajaran"`
 	Mapel     string `json:"nama_kelas"`
 	Id_pengumpulan string `json:"id_pengumpulan,omitempty"`
-	Nilai		int `json:"nilai,omitempty"`
-	Status 		string `json:"status,omitempty"`
+	Nilai		int `json:"nilai"`
+	Status 		string `json:"status"`
 	Link_pengumpulan string `json:"link_pengumpulan,omitempty"`
 	Id_siswa	int `json:"id_siswa,omitempty"`
 }
@@ -42,7 +42,7 @@ func GetAllTugas(id_mata_pelajaran int) ([]Tugas, error) {
 	assignment := make([]Tugas, 0)
 	sqlstmt := `SELECT tugas.id, tugas.judul, tugas.deskripsi, tugas.tipe, tugas.id_mata_pelajaran, pt.id ,pt.link_pengumpulan ,pt.nilai,pt.id_siswa 
 	FROM tugas 
-	JOIN pengumpulan_tugas  pt
+	RIGHT JOIN pengumpulan_tugas  pt
 	ON tugas.id = pt.id_tugas 
 	
 	WHERE tugas.id_mata_pelajaran = ?`
@@ -55,7 +55,7 @@ func GetAllTugas(id_mata_pelajaran int) ([]Tugas, error) {
 	defer rows.Close()
 	for rows.Next() {
 		tugas := Tugas{}
-		err := rows.Scan(&tugas.Id_tugas, &tugas.Judul, &tugas.Deskripsi, &tugas.Tipe,&tugas.Id_Mapel)
+		err := rows.Scan(&tugas.Id_tugas, &tugas.Judul, &tugas.Deskripsi, &tugas.Tipe, &tugas.Id_Mapel, &tugas.Id_pengumpulan, &tugas.Link_pengumpulan, &tugas.Nilai, &tugas.Id_siswa)
 		if err != nil {
 			return nil, err
 		}

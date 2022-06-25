@@ -41,7 +41,7 @@ const columns = [
 function ListPelajaran() {
 	const [loading, setLoading] = useState(false);
 	const [data, setData] = useState([]);
-	const { userData, loading: loadingUser, status, setUser } = useUserStore();
+	const { userData } = useUserStore();
 
 	const fetchPelajaran = async () => {
 		try {

@@ -1,5 +1,5 @@
 import { Table } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import useUserStore from '../../../../../store/userStore';
 import axiosConfig from '../../../../../utils/axiosConfig';
@@ -40,24 +40,6 @@ const columns = [
 	},
 ];
 
-const data = [
-	{
-		key: '1',
-		nama_siswa: 'Frisca',
-		rata_rata: 80,
-	},
-	{
-		key: '2',
-		nama_siswa: 'Farhan',
-		rata_rata: 85,
-	},
-	{
-		key: '3',
-		nama_siswa: 'Hesi',
-		rata_rata: 86,
-	},
-];
-
 function ListSiswaPelajaran() {
 	const { mapel } = useParams();
 	const [loading, setLoading] = useState(false);
@@ -83,7 +65,7 @@ function ListSiswaPelajaran() {
 	useEffect(() => {
 		fetchPelajaran();
 	}, []);
-	
+
 	return (
 		<div>
 			<div className="text-2xl font-bold mb-4">List Siswa Mapel {mapel}</div>

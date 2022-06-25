@@ -29,7 +29,7 @@ function App() {
 		<div className="">
 			<BrowserRouter>
 				<Routes>
-				<Route path="/Landing" element={<Landing/>} />
+				<Route path="/" element={<Landing/>} />
 					<Route
 						path="/login"
 						element={
@@ -127,7 +127,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/siswa/:mapel/:nama/edit/:tugas"
+						path="/dashboard/siswa/:mapelId/:nama/edit/:tugasId/:pengumpulanId"
 						element={
 							<Layout type={'dashboard'}>
 								<EditNilaiTugas />

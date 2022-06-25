@@ -33,7 +33,7 @@ const columns = [
 		key: 'action',
 		render: (_, record) => (
 			<div className="flex gap-4 items-center justify-center">
-				<Link to={`edit/${record.nama_tugas}`}>
+				<Link to={`edit/${record.id}/${record.id_pengumpulan}`}>
 					<img src="/image/dashboard/edit.svg" alt="edit" />
 				</Link>
 				<img src="/image/dashboard/trash.svg" alt="edit" />
