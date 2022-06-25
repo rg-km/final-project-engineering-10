@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"strconv"
 	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -186,33 +187,74 @@ func CheckStatus(status string)(bool){
 return false
 }
 
-func UpdateValue(id_mata_pelajaran,id_siswa int, tipe string) (Avg,error){
+// func UpdateValue(id_mata_pelajaran,id_siswa int, tipe string) (int){
 
 
 	
-sqlstmt,err:= DB.Prepare(`SELECT AVG(nilai)   
+// sqlstmt,err:= DB.Prepare(`SELECT AVG(nilai)   
+// FROM pengumpulan_tugas
+// INNER JOIN tugas ON pengumpulan_tugas.id_tugas= tugas.id 
+// WHERE pengumpulan_tugas.id_mata_pelajaran = ? AND tugas.tipe = ? AND id_siswa =?`)
+
+// if err!=nil {
+// 	return Avg{},err
+// }
+// Average:=Avg{}
+
+
+// rows:=sqlstmt.QueryRow(id_mata_pelajaran,tipe,id_siswa).Scan(&Average.Nilai)
+
+// if rows != nil {
+// 	if rows == sql.ErrNoRows {
+// 		return Avg{}, nil
+// 	}
+// 	return Avg{}, rows
+
+// }
+// return Avg{}, nil
+	
+
+// }
+
+
+func UpdateValue(id_mata_pelajaran,id_siswa int, tipe string) (float64){
+
+var avg sql.NullString
+	
+err:= DB.QueryRow(`SELECT AVG(nilai)   
 FROM pengumpulan_tugas
 INNER JOIN tugas ON pengumpulan_tugas.id_tugas= tugas.id 
-WHERE pengumpulan_tugas.id_mata_pelajaran = ? AND tugas.tipe = ? AND id_siswa =?`)
-
-if err!=nil {
-	return Avg{},err
-}
-Average:=Avg{}
-
-
-rows:=sqlstmt.QueryRow(id_mata_pelajaran,tipe,id_siswa).Scan(&Average.Nilai)
-if rows != nil {
-	if rows == sql.ErrNoRows {
-		return Avg{}, nil
+WHERE pengumpulan_tugas.id_mata_pelajaran = ? AND tugas.tipe = ? AND id_siswa =?`,id_mata_pelajaran,tipe,id_siswa).Scan(&avg)
+	if err!=nil {
+		panic(err)
 	}
-	return Avg{}, rows
 
+	avgInt,err:=strconv.ParseFloat(avg.String,32)
+return avgInt
 }
-return Avg{}, nil
-	
 
-}
+
+
+
+
+// func GetLastTugasId()int{
+//     var id int
+
+//     err := DB.QueryRow("select ifnull(max(id), 0) as id from tugas").Scan(&id)
+//     if err != nil {
+//       panic(err)
+//     }
+//     return id
+
+// }
+
+
+
+
+
+
+
+
 
 
 func UpdateAvg(nilai,kode_kelas,id_siswa int)(bool,error){
