@@ -62,7 +62,7 @@ func AddCreditScore (credit Credit_score,user_id int) (bool,error) {
 	tx.Commit()
 	temp:=credit.Status
 	status:=strings.ToLower(temp)
-	if status=="selesai" {
+	if status=="berhasil" {
 		UpdateCreditScore(credit.Point,user_id)
 
 	}
@@ -125,5 +125,95 @@ func UpdateCreditScore(credit,user_id int ) (bool,error){
 	return true, nil
 }
 
+func UpdateStatusCredit (newCredit Credit_score,id int )(bool,error){
+	tx, err := DB.Begin()
+	if err != nil {
+		return false, err
+	}
+
+	stmt, err := tx.Prepare("UPDATE siswa SET status = ? WHERE id = ?")
+
+	if err != nil {
+		return false, err
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.Exec(newCredit.Status,id)
+
+	if err != nil {
+		return false, err
+	}
+
+	tx.Commit()
+
+	return true, nil
+
+}
+
+func GetCreditScoreById(id int)(Credit_score,error){
+
+	sqlstmt, err := DB.Prepare(`SELECT * FROM siswa WHERE id = ? `)
+	if err != nil {
+		return Credit_score{}, err
+	}
+	credit := Credit_score{}
+	rows := sqlstmt.QueryRow(id).Scan(&credit.Id,&credit.Goals,&credit.Deskripsi,&credit.Bukti,&credit.Status,&credit.Point,&credit.Id_siswa)
+	if rows != nil {
+		if rows == sql.ErrNoRows {
+			return Credit_score{}, nil
+		}
+		return Credit_score{}, rows
+	}
+	return credit, nil
+	
+}
 
 
+func DeleteCredit(id int)(bool,error){
+	
+	tx, err := DB.Begin()
+
+	if err != nil {
+		return false, err
+	}
+	
+	
+	credit,err:= GetCreditScoreById(id)
+	if err!=nil {
+		return false,err
+	}
+	if strings.ToLower(credit.Status)=="berhasil" {
+		id_siswa,err:=strconv.Atoi(credit.Id_siswa)
+		if err!=nil {
+			return false,err
+		}
+		update,err:=UpdateCreditScore(-credit.Point,id_siswa)
+		if !update {
+			return false,err
+		}
+	}
+	
+	
+
+	stmt, err := DB.Prepare("DELETE from siswa_credit_score where id = ?")
+
+	if err != nil {
+		return false, err
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.Exec(id)
+
+	if err != nil {
+		return false, err
+	}
+
+	tx.Commit()
+
+	return true, nil
+
+
+
+}
