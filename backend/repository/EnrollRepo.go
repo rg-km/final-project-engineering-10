@@ -29,7 +29,29 @@ func AddMapel_siswa(c *gin.Context) {
 	success, err := models.AddMapel_siswa(mapel,id)
 	CheckErr(err)
 	if success {
+		temp,err:=models.GetAllTugas(mapel.Kode_kelas)
+		CheckErr(err)
+		for _, v := range temp {
+			newPengumpulan:=models.Pengumpulan_tugas{
+				Link_pengumpulan: "",
+				Nilai: 0,
+				Status: "Belum",
+				Id_Mapel: mapel.Kode_kelas,
+				Id_Siswa: id,
+				Id_tugas: v.Id_tugas,
+			}
+			data,err:=models.AddPengumpulan(newPengumpulan)
+			CheckErr(err)
+			if !data {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err})
+
+			}
+
+		}
+
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})
+			
+
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": errMessage})
 	}

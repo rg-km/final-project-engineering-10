@@ -72,8 +72,8 @@ func GetCreditScoreByIdSiswa(c *gin.Context){
 	CheckErr(err)
 	user,err:=models.GetCreditScoreByIdSiswa(credits)
 	CheckErr(err)
-	if user.Id==0 {
-		c.JSON(http.StatusBadRequest,gin.H{"message": "Data Salah, Silahkan Masukkan ulang"})
+	if user== nil {
+		c.JSON(http.StatusOK,gin.H{"message": "Data Credit Score Kosong"})
 	}else{
 		c.JSON(http.StatusOK,gin.H{"data":user})
 	}

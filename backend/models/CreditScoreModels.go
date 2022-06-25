@@ -22,24 +22,33 @@ type Credit_score struct{
 
 
 
-func GetCreditScoreByIdSiswa (user_id int)(Credit_score,error){
+func GetCreditScoreByIdSiswa (user_id int)([]Credit_score,error){
 	service.AuthJwt()
-	sqlstmt, err := DB.Prepare(`SELECT * FROM siswa_credit_score WHERE id_siswa = ? `)
-	if err != nil {
-		return Credit_score{}, err
-	}
+	credits:=make([]Credit_score,0)
 
-	credit_score := Credit_score{}
-	rows := sqlstmt.QueryRow(user_id).Scan(&credit_score.Id, &credit_score.Goals, &credit_score.Deskripsi,&credit_score.Bukti,&credit_score.Status,&credit_score.Point,&credit_score.Id_siswa,)
-	if rows != nil {
-		if rows == sql.ErrNoRows {
-			return Credit_score{}, nil
+
+	sqlstmt := `SELECT * FROM siswa_credit_score WHERE id_siswa = ? `
+	rows,err:=DB.Query(sqlstmt,user_id)
+	if err!=nil {
+		return []Credit_score{},err
+	}
+	defer rows.Close()
+	for rows.Next(){
+		credit:=Credit_score{}
+		err:=rows.Scan(&credit.Id,&credit.Goals,&credit.Deskripsi,&credit.Bukti,&credit.Status,&credit.Point,&credit.Id_siswa)
+		if err!=nil {
+			return nil,err
 		}
-		return Credit_score{}, rows
+		credits= append(credits, credit)
+
 
 	}
-	return Credit_score{}, err
+	err = rows.Err()
 
+	if err != nil {
+		return nil, err
+	}
+	return credits,nil
 }
 
 
