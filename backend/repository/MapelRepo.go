@@ -116,7 +116,7 @@ func GetMapelByID(c *gin.Context) {
 
 func ShowMapel(c *gin.Context) {
 
-	kodeKelas, err := strconv.Atoi(c.Param("id"))
+	kodeKelas, err := strconv.Atoi(c.Param("id_mapel"))
 	CheckErr(err)
 
 	mapel, err := models.FindMapel(kodeKelas)
