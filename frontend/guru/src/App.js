@@ -177,7 +177,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/credit-score/:nama"
+						path="/dashboard/credit-score/:siswaId"
 						element={
 							<Layout type={'dashboard'}>
 								<ListPointCreditScore />
@@ -185,7 +185,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/credit-score/:nama/create"
+						path="/dashboard/credit-score/:siswaId/create"
 						element={
 							<Layout type={'dashboard'}>
 								<CreatePoin />
@@ -193,7 +193,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/credit-score/:nama/edit"
+						path="/dashboard/credit-score/:siswaId/edit"
 						element={
 							<Layout type={'dashboard'}>
 								<EditPoin />
