@@ -61,16 +61,11 @@ func AddCreditScore(c *gin.Context) {
 // }
 
 func GetCreditScoreByIdSiswa(c *gin.Context){
-	var credit models.Credit_score
 
-	if err:=c.ShouldBindJSON(&credit);err!=nil {
-		c.JSON(http.StatusBadRequest,gin.H{"error":err.Error()})
-		return
-	}
+	siswaId, err := strconv.Atoi(c.Param("id_siswa"))
 
-	credits,err:=strconv.Atoi(credit.Id_siswa)
 	CheckErr(err)
-	user,err:=models.GetCreditScoreByIdSiswa(credits)
+	user,err:=models.GetCreditScoreByIdSiswa(siswaId)
 	CheckErr(err)
 	if user== nil {
 		c.JSON(http.StatusOK,gin.H{"message": "Data Credit Score Kosong"})

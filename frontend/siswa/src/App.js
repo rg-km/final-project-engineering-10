@@ -14,7 +14,7 @@ function App() {
     <div className="">
       <BrowserRouter>
         <Routes>
-          <Route path="/Landing" element={<Landing/>} />
+          <Route path="/" element={<Landing/>} />
           <Route
             path="/login"
             element={

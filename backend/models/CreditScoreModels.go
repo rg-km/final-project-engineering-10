@@ -64,7 +64,7 @@ func AddCreditScore (credit Credit_score,user_id int) (bool,error) {
 		return false,err
 	}
 	defer sqlstmt.Close()
-	_,Err:= sqlstmt.Exec(credit.Goals,credit.Deskripsi,credit.Bukti,credit.Status,credit.Point,credit.Id_siswa)
+	_,Err:= sqlstmt.Exec(credit.Goals,credit.Deskripsi,credit.Bukti,credit.Status,credit.Point,user_id)
 	if Err!=nil {
 		return false,err
 	}

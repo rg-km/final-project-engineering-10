@@ -54,6 +54,11 @@ func SetNilai (c *gin.Context){
 	pengumpulan_id,err:=strconv.Atoi(c.Param("id_pengumpulan"))
 	CheckErr(err)
 	var pengumpulan models.Pengumpulan_tugas
+	
+	if err := c.ShouldBindJSON(&pengumpulan); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	pengumpulan_tugas,Err:=models.AddNilai(pengumpulan.Nilai,pengumpulan_id,pengumpulan.Status) 
 	CheckErr(Err)

@@ -19,7 +19,7 @@ const columns = [
 		dataIndex: 'nama_kelas',
 		key: 'nama_kelas',
 		render: (_, record) => (
-			<Link to={`/dashboard/pelajaran/${record.nama_kelas}`} className="h-full uppercase">
+			<Link to={`/dashboard/pelajaran/${record.kode_kelas}`} className="h-full uppercase">
 				<p className="text-black">{record.nama_kelas}</p>
 			</Link>
 		),
@@ -41,7 +41,7 @@ const columns = [
 function ListPelajaran() {
 	const [loading, setLoading] = useState(false);
 	const [data, setData] = useState([]);
-	const { userData, loading: loadingUser, status, setUser } = useUserStore();
+	const { userData } = useUserStore();
 
 	const fetchPelajaran = async () => {
 		try {
