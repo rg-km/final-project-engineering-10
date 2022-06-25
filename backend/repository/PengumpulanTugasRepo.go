@@ -70,7 +70,7 @@ func SetNilai (c *gin.Context){
 		if temp {
 			nilaiUlangan,err:=models.UpdateValue(mapel_id,data.Id_Siswa,"ulangan")
 			CheckErr(err)
-			nilaiTugas,err:=models.UpdateValue(mapel_id,data.Id_Siswa,"ulangan")
+			nilaiTugas,err:=models.UpdateValue(mapel_id,data.Id_Siswa,"tugas")
 			CheckErr(err)
 			nilaiKuis,err:=models.UpdateValue(mapel_id,data.Id_Siswa,"kuis")
 			CheckErr(err)
@@ -88,4 +88,25 @@ func SetNilai (c *gin.Context){
 
 	}
 
+}
+
+func UpdatePengumpulan (c *gin.Context){
+	var json models.Pengumpulan_tugas
+
+	if err := c.ShouldBindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	id_pengumpulan, err := strconv.Atoi(c.Param("id_pengumpulan"))
+	CheckErr(err)
+
+	success, err := models.UpdatePengumpulan(id_pengumpulan,json.Link_pengumpulan)
+
+	if success {
+		c.JSON(http.StatusOK, gin.H{"message": "Success"})
+		return
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
 }

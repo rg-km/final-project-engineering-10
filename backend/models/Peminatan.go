@@ -1,6 +1,8 @@
 package models
 
 import (
+	"database/sql"
+
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -9,7 +11,7 @@ type Peminatan struct {
 	Minat      string `json:"minat"`
 	Deskripsi  string `json:"deskripsi"`
 	Id_Siswa   int    `json:"id_siswa"`
-	Nama_Siswa string `json:"nama_siswa"`
+	Nama_Siswa string `json:"nama_siswa,omitempty"`
 }
 
 func AddPeminatan(newPeminatan Peminatan, id_siswa int) (bool, error) {
@@ -116,4 +118,24 @@ func DeletePeminatan(id int) (bool, error) {
 	tx.Commit()
 
 	return true, nil
+}
+
+
+func GetMinatById (id int)(Peminatan,error){
+
+	sqlstmt, err := DB.Prepare(`SELECT * FROM peminatan WHERE id =  ?`)
+	if err != nil {
+		return Peminatan{}, err
+	}
+	user := Peminatan{}
+	rows := sqlstmt.QueryRow(id).Scan(&user.Id_minat,&user.Minat,&user.Deskripsi,&user.Id_Siswa)
+	if rows != nil {
+		if rows == sql.ErrNoRows {
+			return Peminatan{}, nil
+		}
+		return Peminatan{}, rows
+
+	}
+	return user, nil
+
 }
