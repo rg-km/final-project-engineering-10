@@ -2,9 +2,9 @@ import IconMactiv from "../../../assets/logo_mactiv_2.png";
 import GambarHome from "../../../assets/gambar_home_4.png";
 import GambarFitur from "../../../assets/gambar_fitur_1.png";
 import Check from "../../../assets/Check.gif";
-import Whatsapp from "../../../assets/sosmed/whatsapp.png";
-import Instagram from "../../../assets/sosmed/Instagram.png";
-import Gmail from "../../../assets/sosmed/gmail.png";
+import Whatsapp from "../../../assets/sosmed/whatsappp.png";
+import Instagram from "../../../assets/sosmed/Instagramm.png";
+import Gmail from "../../../assets/sosmed/gmaill.png";
 import PricingPlan from "./_partials/PricingPlan";
 import Testimoni from "./_partials/Testimoni";
 import DeskripsiJudul from "./_partials/DeskripsiJudul";
@@ -58,7 +58,7 @@ function Landing() {
       price: "Rp 5.499.000",
     },
   ];
-
+  //
   return (
     <div className="bg-white">
       <header className="container max-w-5xl mx-auto flex flex-row pt-12 items-center space-x-36">
