@@ -1,6 +1,10 @@
 import { Table } from 'antd';
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import useUserStore from '../../../../store/userStore';
+import axiosConfig from '../../../../utils/axiosConfig';
+import BASE_URL from '../../../../utils/config';
+import { Toast } from '../../../reusable/Toast';
 
 const columns = [
 	{
@@ -11,13 +15,9 @@ const columns = [
 	},
 	{
 		title: 'Nama Siswa',
-		dataIndex: 'nama_siswa',
-		key: 'nama_siswa',
-		render: (_, record) => (
-			<Link to={record.nama_siswa}>
-				<p>{record.nama_siswa}</p>
-			</Link>
-		),
+		dataIndex: 'nama',
+		key: 'nama',
+		render: (_, record) => <p>{record.nama}</p>,
 	},
 	{
 		title: 'Credit Score',
@@ -28,32 +28,39 @@ const columns = [
 		title: 'Action',
 		key: 'action',
 		render: (_, record) => (
-			<div className="flex gap-4 items-center justify-center">
-				<img src="/image/dashboard/edit.svg" alt="edit" />
-			</div>
+			<Link
+				to={`${record.id}`}
+				className="px-8 py-4 bg-primary text-black cursor-pointer font-bold rounded-xl hover:text-white"
+			>
+				Pilih
+			</Link>
 		),
 	},
 ];
 
-const data = [
-	{
-		key: '1',
-		nama_siswa: 'Farhan',
-		credit_score: 80,
-	},
-	{
-		key: '2',
-		nama_siswa: 'Hesi',
-		credit_score: 85,
-	},
-	{
-		key: '3',
-		nama_siswa: 'Saifulloh',
-		credit_score: 86,
-	},
-];
-
 function ListSiswaCreditScore() {
+	const [loading, setLoading] = useState(false);
+	const [data, setData] = useState([]);
+	const { userData, loading: loadingUser } = useUserStore();
+
+	const fetchSiswa = async () => {
+		try {
+			setLoading(true);
+			const response = await axiosConfig.get(`${BASE_URL}/siswa/`);
+			setData(response.data.message);
+		} catch (error) {
+			console.log(error);
+			Toast.fire({
+				icon: 'error',
+				title: 'Terdapat Kesalahan',
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
+	useEffect(() => {
+		fetchSiswa();
+	}, []);
 	return (
 		<div>
 			<div className="text-2xl font-bold mb-4">List Credit Score Siswa</div>

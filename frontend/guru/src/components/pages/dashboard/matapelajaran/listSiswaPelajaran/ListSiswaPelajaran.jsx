@@ -15,11 +15,11 @@ const columns = [
 	},
 	{
 		title: 'Nama Siswa',
-		dataIndex: 'nama_siswa',
-		key: 'nama_siswa',
+		dataIndex: 'nama',
+		key: 'nama',
 		render: (_, record) => (
-			<Link to={`${record.nama_siswa}`} className="h-full">
-				<p className="text-black">{record.nama_siswa}</p>
+			<Link to={`${record.id}`} className="h-full">
+				<p className="text-black">{record.nama}</p>
 			</Link>
 		),
 	},
@@ -41,7 +41,7 @@ const columns = [
 ];
 
 function ListSiswaPelajaran() {
-	const { mapel } = useParams();
+	const { mapelId } = useParams();
 	const [loading, setLoading] = useState(false);
 	const [data, setData] = useState([]);
 	const { userData, loading: loadingUser, status, setUser } = useUserStore();
@@ -49,7 +49,7 @@ function ListSiswaPelajaran() {
 	const fetchPelajaran = async () => {
 		try {
 			setLoading(true);
-			const response = await axiosConfig.get(`${BASE_URL}/Guru/${userData.id}/mapel/`);
+			const response = await axiosConfig.get(`${BASE_URL}/Guru/${userData.id}/mapel/list/${mapelId}/tugas/siswa/`);
 			setData(response.data.data);
 		} catch (error) {
 			console.log(error);
@@ -68,7 +68,7 @@ function ListSiswaPelajaran() {
 
 	return (
 		<div>
-			<div className="text-2xl font-bold mb-4">List Siswa Mapel {mapel}</div>
+			<div className="text-2xl font-bold mb-4">List Siswa Mapel {mapelId}</div>
 			<Table pagination={false} columns={columns} dataSource={data} />
 		</div>
 	);

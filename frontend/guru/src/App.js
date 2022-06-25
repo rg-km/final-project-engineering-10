@@ -1,6 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import CatatanMinat from './components/pages/dashboard/catatanMinat/catatanSiswaMinat/CatatanMinat';
+import CreateCatatanMinat from './components/pages/dashboard/catatanMinat/catatanSiswaMinat/_partials/CreateCatatanMinat';
+import EditCatatanMinat from './components/pages/dashboard/catatanMinat/catatanSiswaMinat/_partials/EditCatatanMinat';
 import SelectSiswaCatatanMinat from './components/pages/dashboard/catatanMinat/SelectSiswaCatatanMinat';
 import ListPointCreditScore from './components/pages/dashboard/creditscore/listPointCreditScore/ListPointCreditScore';
 import CreatePoin from './components/pages/dashboard/creditscore/listPointCreditScore/_partials/CreatePoin';
@@ -19,17 +21,17 @@ import ListTugasPelajaran from './components/pages/dashboard/tugas/listTugasPela
 import CreateTugas from './components/pages/dashboard/tugas/listTugasPelajaran/_partials/CreateTugas';
 import EditTugas from './components/pages/dashboard/tugas/listTugasPelajaran/_partials/EditTugas';
 import SelectPelajaran from './components/pages/dashboard/tugas/SelectPelajaran';
+import Landing from './components/pages/landing/Landing';
 import Login from './components/pages/landing/Login';
 import Register from './components/pages/landing/Register';
 import Layout from './components/reusable/Layout';
-import Landing from "./components/pages/landing/Landing";
 
 function App() {
 	return (
 		<div className="">
 			<BrowserRouter>
 				<Routes>
-				<Route path="/" element={<Landing/>} />
+					<Route path="/" element={<Landing />} />
 					<Route
 						path="/login"
 						element={
@@ -79,7 +81,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/pelajaran/:mapel"
+						path="/dashboard/pelajaran/:mapelId"
 						element={
 							<Layout type={'dashboard'}>
 								<ListSiswaPelajaran />
@@ -87,7 +89,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/pelajaran/:mapel/:nama"
+						path="/dashboard/pelajaran/:mapelId/:siswaId"
 						element={
 							<Layout type={'dashboard'}>
 								<RekapNilaiSiswa />
@@ -95,7 +97,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/pelajaran/:mapel/:nama/edit/:tugas"
+						path="/dashboard/pelajaran/:mapelId/:nama/edit/:tugasId/:pengumpulanId"
 						element={
 							<Layout type={'dashboard'}>
 								<EditNilaiTugas />
@@ -211,6 +213,22 @@ function App() {
 						element={
 							<Layout type={'dashboard'}>
 								<CatatanMinat />
+							</Layout>
+						}
+					/>
+					<Route
+						path="/dashboard/catatan-minat/:siswaId/create"
+						element={
+							<Layout type={'dashboard'}>
+								<CreateCatatanMinat />
+							</Layout>
+						}
+					/>
+					<Route
+						path="/dashboard/catatan-minat/:siswaId/edit/:minatId"
+						element={
+							<Layout type={'dashboard'}>
+								<EditCatatanMinat />
 							</Layout>
 						}
 					/>

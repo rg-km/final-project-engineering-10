@@ -54,6 +54,7 @@ function EditNilaiTugas() {
 	const onSubmit = async values => {
 		try {
 			setLoading(true);
+			values.nilai = parseInt(values.nilai);
 			const response = await axiosConfig.put(
 				`${BASE_URL}/Guru/${userData.id}/mapel/list/${mapelId}/tugas/${tugasId}/pengumpulan/${pengumpulanId}/`,
 				values
