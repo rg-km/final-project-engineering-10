@@ -2,13 +2,14 @@ import IconMactiv from "../../../assets/logo_mactiv_2.png";
 import GambarHome from "../../../assets/gambar_home_4.png";
 import GambarFitur from "../../../assets/gambar_fitur_1.png";
 import Check from "../../../assets/Check.gif";
-import Facebook from "../../../assets/sosmed/Facebook.png";
+import Whatsapp from "../../../assets/sosmed/whatsapp.png";
 import Instagram from "../../../assets/sosmed/Instagram.png";
-import Twitter from "../../../assets/sosmed/Twitter.png";
+import Gmail from "../../../assets/sosmed/gmail.png";
 import PricingPlan from "./_partials/PricingPlan";
 import Testimoni from "./_partials/Testimoni";
 import DeskripsiJudul from "./_partials/DeskripsiJudul";
 import SubsribeNow from "./_partials/SubsribeNow";
+import GambarAboutUs from "../../../assets/logo_mactiv.png";
 
 function Landing() {
   const menu = ["Home", "Features", "Pricing", "Testimonials", "About Us"];
@@ -77,7 +78,7 @@ function Landing() {
         </div>
       </header>
       <main>
-        <div className="container max-w-5xl mx-auto  grid grid-cols-2 py-24">
+        <div className="container max-w-5xl mx-auto grid grid-cols-2 py-24 items-center">
           <div>
             <h1 className="font-bold text-4xl pb-5">
               Memantau performa siswa lebih mudah
@@ -144,7 +145,32 @@ function Landing() {
 
           <Testimoni />
         </div>
-        <div className="bg-gray-200">
+        <div className="bg-[#defff7]">
+          <div className="container max-w-5xl mx-auto grid grid-cols-2 py-20 items-center">
+            <div>
+              <h1 className="font-bold text-4xl pb-5">About Us</h1>
+              <div className="font-medium text-justify text-md pb-12">
+                MACTIV atau Measured Activities merupakan sebuah platform
+                pemantau aktivitas dan performa yang melibatkan guru dan siswa
+                untuk membuat dan memantau nilai, credit score, softskill,
+                rata-rata nilah, hingga pengumpulan tugas secara efektif dan
+                efisien. <br />
+                MACTIV dapat membuat siswa bisa memantau rata-rata nilai sebelum
+                penerimaan rapor, sehingga siswa dapat memperbaiki nilai agar
+                rata-rata nilai naik dan membantu siswa menentukan jurusan yang
+                sesuai dengan nilai dan minat bakat mereka berdasarkan soft
+                skill dan catatan minat yang diberikan oleh guru.
+                <br /> MACTIV juga membantu guru dalam memantau performa siswa,
+                memantau tugas siswa, serta membantu dalam perhitungan nilai
+                dengan cepat, akurat, dan tepat.
+              </div>
+            </div>
+            <div>
+              <img src={GambarAboutUs} alt="ilustration-mactiv" />
+            </div>
+          </div>
+        </div>
+        <div className="bg-gray-100">
           <SubsribeNow />
         </div>
       </main>
@@ -157,39 +183,37 @@ function Landing() {
               dengan perhitungan yang akurat dan <br />
               keamanan yang tinggi.
             </div>
-            <div className="flex flex-row">
-              <img src={Facebook} alt="facebook icon" className="w-16 h-16" />
-              <img src={Twitter} alt="twitter icon" className="w-16 h-16" />
-              <img src={Instagram} alt="IG icon" className="w-16 h-16" />
-            </div>
+
             <div>©2022mactiv</div>
           </div>
           <div className="">
-            <div className="text-lg font-semibold mb-6">Product</div>
+            <div className="text-lg  text-black font-semibold mb-6">
+              Mactiv Menu
+            </div>
             <ul className="space-y-6 text-sm text-gray-500">
               <li>Pricing</li>
-              <li>Locations</li>
-              <li>Server</li>
-              <li>Countries</li>
-              <li>Blog</li>
+              <li>Features</li>
+              <li>About Us</li>
             </ul>
           </div>
           <div>
-            <div className="text-lg font-semibold mb-6">Engage</div>
+            <div className="text-lg text-black font-semibold mb-6">
+              Location
+            </div>
             <ul className="space-y-6  text-sm text-gray-500">
-              <li>mactiv ? </li>
-              <li>FAQ</li>
-              <li>Tutorials</li>
-              <li>Privacy Policy</li>
-              <li>Terms of Service</li>
+              <li>Jl. Bangau Ujung No 63, Pekanbaru, Riau </li>
+              <li className="text-lg text-black font-semibold mb-6">
+                Contact Us
+              </li>
+              <li>+62 812 7576 2056 - Whatsapp Only</li>
+              <li>+62 812 9133 5215 - Whatsapp Only</li>
+              <li>Gmail: frisca.veronica08@gmail.com</li>
             </ul>
           </div>
-          <div>
-            <div className="text-lg font-semibold mb-6">Earn Money</div>
-            <ul className="space-y-6  text-sm text-gray-500">
-              <li>Affiliate</li>
-              <li>Become Partner</li>
-            </ul>
+          <div className="flex flex-row space-x-5">
+            <img src={Whatsapp} alt="facebook icon" className="w-14 h-14" />
+            <img src={Gmail} alt="Gmail icon" className="w-14 h-14" />
+            <img src={Instagram} alt="IG icon" className="w-14 h-14" />
           </div>
         </div>
       </footer>
