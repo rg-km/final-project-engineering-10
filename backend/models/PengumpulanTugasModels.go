@@ -31,7 +31,7 @@ type GetPengumpulan struct {
 
 
 type Avg struct{
-	Nilai		int `json:"nilai"`
+	Nilai		int `json:"nilai,omitempty"`
 
 }
 
@@ -192,7 +192,7 @@ func UpdateValue(id_mata_pelajaran,id_siswa int, tipe string) (Avg,error){
 	
 sqlstmt,err:= DB.Prepare(`SELECT AVG(nilai)   
 FROM pengumpulan_tugas
-INNER JOIN tugas ON pengumpulan_tugas.id_tugas=id_tugas
+INNER JOIN tugas ON pengumpulan_tugas.id_tugas= tugas.id 
 WHERE pengumpulan_tugas.id_mata_pelajaran = ? AND tugas.tipe = ? AND id_siswa =?`)
 
 if err!=nil {

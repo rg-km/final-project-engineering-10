@@ -69,7 +69,17 @@ func SetNilai (c *gin.Context){
 		data,err:=models.GetPengumpulanTugasById(id_kumpul)
 		CheckErr(err)
 
+// temp:=models.CheckStatus(pengumpulan.Status)
+// 		if temp {
 
+
+
+// 		temp,err:=models.UpdateAvg(72,mapel_id,data.Id_Siswa)
+// 			CheckErr(err)
+// 			if temp {
+// 				c.JSON(http.StatusOK, gin.H{"data": pengumpulan_tugas})
+// 			}
+// 		}
 
 		temp:=models.CheckStatus(pengumpulan.Status)
 		if temp {

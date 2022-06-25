@@ -54,8 +54,8 @@ func Routes(route *gin.Engine) {
 		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/siswa/", repository.GetSiswaByMapel)
 		v2.GET("/:id_Guru/mapel/:id_mapel/tugas/:id_siswa/", repository.GetAllTugasBySiswa)
 		// v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/",repository.GetTugasById)
-		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/pengumpulan/", repository.GetPengumpulanTugasById)
-		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/", repository.GetPengumpulanTugasById)
+		// v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/pengumpulan/", repository.GetPengumpulanTugasById)
+		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/", repository.GetPengumpulanTugasById)//
 		v2.PUT("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/", repository.SetNilai)
 	
 		v2.PUT("/:id_Guru/credit/:id_credit/", repository.UpdateStatusCredit)
