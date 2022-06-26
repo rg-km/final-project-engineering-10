@@ -1,5 +1,9 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
+import CatatanMinat from './components/pages/dashboard/catatanMinat/catatanSiswaMinat/CatatanMinat';
+import CreateCatatanMinat from './components/pages/dashboard/catatanMinat/catatanSiswaMinat/_partials/CreateCatatanMinat';
+import EditCatatanMinat from './components/pages/dashboard/catatanMinat/catatanSiswaMinat/_partials/EditCatatanMinat';
+import SelectSiswaCatatanMinat from './components/pages/dashboard/catatanMinat/SelectSiswaCatatanMinat';
 import ListPointCreditScore from './components/pages/dashboard/creditscore/listPointCreditScore/ListPointCreditScore';
 import CreatePoin from './components/pages/dashboard/creditscore/listPointCreditScore/_partials/CreatePoin';
 import EditPoin from './components/pages/dashboard/creditscore/listPointCreditScore/_partials/EditPoin';
@@ -15,7 +19,9 @@ import ListMapelSiswa from './components/pages/dashboard/siswa/listMapelSiswa/Li
 import ListSiswa from './components/pages/dashboard/siswa/ListSiswa';
 import ListTugasPelajaran from './components/pages/dashboard/tugas/listTugasPelajaran/ListTugasPelajaran';
 import CreateTugas from './components/pages/dashboard/tugas/listTugasPelajaran/_partials/CreateTugas';
+import EditTugas from './components/pages/dashboard/tugas/listTugasPelajaran/_partials/EditTugas';
 import SelectPelajaran from './components/pages/dashboard/tugas/SelectPelajaran';
+import Landing from './components/pages/landing/Landing';
 import Login from './components/pages/landing/Login';
 import Register from './components/pages/landing/Register';
 import Layout from './components/reusable/Layout';
@@ -25,7 +31,7 @@ function App() {
 		<div className="">
 			<BrowserRouter>
 				<Routes>
-					<Route path="/" element={<Layout type={'front'}></Layout>} />
+					<Route path="/" element={<Landing />} />
 					<Route
 						path="/login"
 						element={
@@ -75,7 +81,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/pelajaran/:mapel"
+						path="/dashboard/pelajaran/:mapelId"
 						element={
 							<Layout type={'dashboard'}>
 								<ListSiswaPelajaran />
@@ -83,7 +89,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/pelajaran/:mapel/:nama"
+						path="/dashboard/pelajaran/:mapelId/:siswaId"
 						element={
 							<Layout type={'dashboard'}>
 								<RekapNilaiSiswa />
@@ -91,7 +97,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/pelajaran/:mapel/:nama/edit/:tugas"
+						path="/dashboard/pelajaran/:mapelId/:nama/edit/:tugasId/:pengumpulanId"
 						element={
 							<Layout type={'dashboard'}>
 								<EditNilaiTugas />
@@ -107,7 +113,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/siswa/:nama"
+						path="/dashboard/siswa/:siswaId"
 						element={
 							<Layout type={'dashboard'}>
 								<ListMapelSiswa />
@@ -115,7 +121,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/siswa/:nama/:mapel"
+						path="/dashboard/siswa/:siswaId/:mapelId"
 						element={
 							<Layout type={'dashboard'}>
 								<RekapNilaiSiswa />
@@ -123,7 +129,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/siswa/:mapel/:nama/edit/:tugas"
+						path="/dashboard/siswa/:mapelId/:nama/edit/:tugasId/:pengumpulanId"
 						element={
 							<Layout type={'dashboard'}>
 								<EditNilaiTugas />
@@ -139,7 +145,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/tugas/:mapel"
+						path="/dashboard/tugas/:mapelId"
 						element={
 							<Layout type={'dashboard'}>
 								<ListTugasPelajaran />
@@ -147,10 +153,18 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/tugas/:mapel/create"
+						path="/dashboard/tugas/:mapelId/create"
 						element={
 							<Layout type={'dashboard'}>
 								<CreateTugas />
+							</Layout>
+						}
+					/>
+					<Route
+						path="/dashboard/tugas/:mapelId/edit/:tugasId"
+						element={
+							<Layout type={'dashboard'}>
+								<EditTugas />
 							</Layout>
 						}
 					/>
@@ -163,7 +177,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/credit-score/:nama"
+						path="/dashboard/credit-score/:siswaId"
 						element={
 							<Layout type={'dashboard'}>
 								<ListPointCreditScore />
@@ -171,7 +185,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/credit-score/:nama/create"
+						path="/dashboard/credit-score/:siswaId/create"
 						element={
 							<Layout type={'dashboard'}>
 								<CreatePoin />
@@ -179,10 +193,42 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/credit-score/:nama/edit"
+						path="/dashboard/credit-score/:siswaId/edit"
 						element={
 							<Layout type={'dashboard'}>
 								<EditPoin />
+							</Layout>
+						}
+					/>
+					<Route
+						path="/dashboard/catatan-minat"
+						element={
+							<Layout type={'dashboard'}>
+								<SelectSiswaCatatanMinat />
+							</Layout>
+						}
+					/>
+					<Route
+						path="/dashboard/catatan-minat/:siswaId"
+						element={
+							<Layout type={'dashboard'}>
+								<CatatanMinat />
+							</Layout>
+						}
+					/>
+					<Route
+						path="/dashboard/catatan-minat/:siswaId/create"
+						element={
+							<Layout type={'dashboard'}>
+								<CreateCatatanMinat />
+							</Layout>
+						}
+					/>
+					<Route
+						path="/dashboard/catatan-minat/:siswaId/edit/:minatId"
+						element={
+							<Layout type={'dashboard'}>
+								<EditCatatanMinat />
 							</Layout>
 						}
 					/>

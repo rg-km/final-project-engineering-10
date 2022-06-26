@@ -1,6 +1,7 @@
 import { Table } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import useUserStore from '../../../../store/userStore';
 import axiosConfig from '../../../../utils/axiosConfig';
 import BASE_URL from '../../../../utils/config';
 import Loading from '../../../reusable/Loading';
@@ -18,7 +19,7 @@ const columns = [
 		dataIndex: 'nama_kelas',
 		key: 'nama_kelas',
 		render: (_, record) => (
-			<Link to={`/dashboard/pelajaran/${record.nama_kelas}`} className="h-full uppercase">
+			<Link to={`/dashboard/pelajaran/${record.kode_kelas}`} className="h-full uppercase">
 				<p className="text-black">{record.nama_kelas}</p>
 			</Link>
 		),
@@ -40,12 +41,13 @@ const columns = [
 function ListPelajaran() {
 	const [loading, setLoading] = useState(false);
 	const [data, setData] = useState([]);
+	const { userData } = useUserStore();
 
 	const fetchPelajaran = async () => {
 		try {
 			setLoading(true);
-			const response = await axiosConfig.get(`${BASE_URL}/Mapel/list/`);
-			setData(response.data.message);
+			const response = await axiosConfig.get(`${BASE_URL}/Guru/${userData.id}/mapel/`);
+			setData(response.data.data);
 		} catch (error) {
 			console.log(error);
 			Toast.fire({

@@ -1,6 +1,10 @@
 import { Table } from 'antd';
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import useUserStore from '../../../../store/userStore';
+import axiosConfig from '../../../../utils/axiosConfig';
+import BASE_URL from '../../../../utils/config';
+import { Toast } from '../../../reusable/Toast';
 
 const columns = [
 	{
@@ -11,8 +15,8 @@ const columns = [
 	},
 	{
 		title: 'Nama Tugas',
-		dataIndex: 'nama_tugas',
-		key: 'nama_tugas',
+		dataIndex: 'judul',
+		key: 'judul',
 	},
 	{
 		title: 'Tipe',
@@ -29,7 +33,7 @@ const columns = [
 		key: 'action',
 		render: (_, record) => (
 			<div className="flex gap-4 items-center justify-center">
-				<Link to={`edit/${record.nama_tugas}`}>
+				<Link to={`edit/${record.id}/${record.id_pengumpulan}`}>
 					<img src="/image/dashboard/edit.svg" alt="edit" />
 				</Link>
 				<img src="/image/dashboard/trash.svg" alt="edit" />
@@ -38,33 +42,36 @@ const columns = [
 	},
 ];
 
-const data = [
-	{
-		key: '1',
-		nama_tugas: 'Aljabar',
-		tipe: 'Ulangan',
-		nilai: 80,
-	},
-	{
-		key: '2',
-		nama_tugas: 'Integral',
-		tipe: 'Tufas',
-		nilai: 85,
-	},
-	{
-		key: '3',
-		nama_tugas: 'L Hopital',
-		tipe: 'Kuis',
-		nilai: 86,
-	},
-];
 
 function RekapNilaiSiswa() {
-	const { mapel, nama } = useParams();
+	const { mapelId, siswaId } = useParams();
+	const [loading, setLoading] = useState(false);
+	const [data, setData] = useState([]);
+	const { userData, loading: loadingUser } = useUserStore();
+
+	const fetchRekap = async () => {
+		try {
+			setLoading(true);
+			const response = await axiosConfig.get(`${BASE_URL}/siswa/${siswaId}/mapel/${mapelId}/tugas/`);
+			setData(response.data.message);
+		} catch (error) {
+			console.log(error);
+			Toast.fire({
+				icon: 'error',
+				title: 'Terdapat Kesalahan',
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
+	useEffect(() => {
+		fetchRekap();
+	}, []);
+
 	return (
 		<div>
 			<div className="text-2xl font-bold mb-4">
-				Rekap {nama} Mapel {mapel}
+				Rekap {siswaId} Mapel {mapelId}
 			</div>
 			<Table pagination={false} columns={columns} dataSource={data} />
 		</div>

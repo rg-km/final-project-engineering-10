@@ -22,6 +22,27 @@ func AddTugas(c *gin.Context) {
 	}
 	success, err := models.AddTugas(tugas, id_mapel)
 	if success {
+		temp,err:=models.GetSiswaByMapel(id_mapel)
+		CheckErr(err)
+		for _, v := range temp {
+			id_tugas:=models.GetLastTugasId()
+			newPengumpulan:=models.Pengumpulan_tugas{
+				Link_pengumpulan: "",
+				Nilai: 0,
+				Status: "Belum",
+				Id_Mapel: id_mapel,
+				Id_Siswa: v.Id,
+				Id_tugas: id_tugas,
+			}
+			data,err:=models.AddPengumpulan(newPengumpulan)
+			CheckErr(err)
+			if !data {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err})
+
+			}
+
+		}
+
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
@@ -129,22 +150,36 @@ func DeleteTugas(c *gin.Context) {
 	}
 }
 
-// func GetTugasById(c *gin.Context) {
-// 	var tugas models.Tugas
+func ShowTugas(c *gin.Context) {
 
-// 	temp := c.Param("id")
-// 	tugas_id, err := strconv.Atoi(temp)
-// 	CheckErr(err)
-// 	if err := c.ShouldBindJSON(&tugas); err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
-// 	tugas, Err := models.GetTugasById(tugas_id)
-// 	CheckErr(Err)
-// 	if tugas.Judul == "" {
-// 		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
-// 	} else {
-// 		c.JSON(http.StatusOK, gin.H{"data": tugas})
-// 	}
+	idTugas := c.Param("id_tugas")
 
-// }
+	tugas, err := models.GetTugasById(idTugas)
+	CheckErr(err)
+	if tugas.Judul == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": idTugas})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": tugas})
+	}
+
+}
+
+func GetTugasById(c *gin.Context) {
+	var tugas models.Tugas
+
+	tugas_id := c.Param("id_tugas")
+	
+
+	if err := c.ShouldBindJSON(&tugas); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	tugas, Err := models.GetTugasById(tugas_id)
+	CheckErr(Err)
+	if tugas.Judul == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": tugas})
+	}
+
+}

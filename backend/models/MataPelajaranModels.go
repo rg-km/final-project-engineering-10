@@ -18,12 +18,12 @@ func AddMapel(newMapel Mata_pelajaran, kode_sekolah int) (bool, error) {
 		return false, err
 	}
 
-	sqlstmt, err := tx.Prepare(`INSERT INTO mata_pelajaran (kode_kelas,nama_kelas,kode_sekolah)VALUES (?,?,?)`)
+	sqlstmt, err := tx.Prepare(`INSERT INTO mata_pelajaran (nama_kelas,kode_sekolah)VALUES (?,?)`)
 	if err != nil {
 		return false, err
 	}
 	defer sqlstmt.Close()
-	_, Err := sqlstmt.Exec(newMapel.Kode_kelas, newMapel.Nama_kelas, kode_sekolah)
+	_, Err := sqlstmt.Exec(newMapel.Nama_kelas, kode_sekolah)
 	if Err != nil {
 		return false, err
 	}
@@ -32,21 +32,21 @@ func AddMapel(newMapel Mata_pelajaran, kode_sekolah int) (bool, error) {
 }
 
 func GetAllMapel(kode_sekolah int) ([]Mata_pelajaran, error) {
-	sqlstmt:=`SELECT * FROM mata_pelajaran WHERE kode_sekolah =  ?`
-	
-	kelas := make([]Mata_pelajaran,0)
+	sqlstmt := `SELECT * FROM mata_pelajaran WHERE kode_sekolah =  ?`
 
-	rows,err:=DB.Query(sqlstmt,kode_sekolah)
+	kelas := make([]Mata_pelajaran, 0)
+
+	rows, err := DB.Query(sqlstmt, kode_sekolah)
 	if err != nil {
 		return nil, err
 	}
 
 	defer rows.Close()
-	for rows.Next(){
+	for rows.Next() {
 		mata_pelajaran := Mata_pelajaran{}
-		err:=rows.Scan(&mata_pelajaran.Kode_kelas, &mata_pelajaran.Nama_kelas,&kode_sekolah)
-		if err!=nil {
-			return nil,err
+		err := rows.Scan(&mata_pelajaran.Kode_kelas, &mata_pelajaran.Nama_kelas, &kode_sekolah)
+		if err != nil {
+			return nil, err
 		}
 
 		kelas = append(kelas, mata_pelajaran)
@@ -127,15 +127,31 @@ func DeleteMapel(kode_kelas int) (bool, error) {
 	return true, nil
 }
 
-func GetMapelByID(Kode_kelas int) (Mata_pelajaran, error) {
-	sqlstmt, err := DB.Prepare(`SELECT * FROM nama_kelas WHERE kode_kelas =  ?`)
+func GetMapelByID(Kode_kelas string) (Mata_pelajaran, error) {
+	sqlstmt, err := DB.Prepare(`SELECT * FROM mata_pelajaran WHERE kode_kelas =  ?`)
 	if err != nil {
 		return Mata_pelajaran{}, err
 	}
-	// tugas := Tugas{}
+	user := Mata_pelajaran{}
+	rows := sqlstmt.QueryRow(Kode_kelas).Scan(&user.Kode_kelas, &user.Nama_kelas, &user.Kode_sekolah)
+	if rows != nil {
+		if rows == sql.ErrNoRows {
+			return Mata_pelajaran{}, nil
+		}
+		return Mata_pelajaran{}, rows
+
+	}
+	return user, nil
+}
+
+func FindMapel(kodeKelas int) (Mata_pelajaran, error) {
+	sqlstmt, err := DB.Prepare(`SELECT * FROM mata_pelajaran WHERE kode_kelas = ?`)
+	if err != nil {
+		return Mata_pelajaran{}, err
+	}
 	mata_pelajaran := Mata_pelajaran{}
 
-	rows := sqlstmt.QueryRow(Kode_kelas).Scan(&mata_pelajaran.Kode_kelas, &mata_pelajaran.Nama_kelas, &mata_pelajaran.Kode_sekolah)
+	rows := sqlstmt.QueryRow(kodeKelas).Scan(&mata_pelajaran.Kode_kelas, &mata_pelajaran.Nama_kelas, &mata_pelajaran.Kode_sekolah)
 	if rows != nil {
 		if rows == sql.ErrNoRows {
 			return Mata_pelajaran{}, nil
@@ -144,5 +160,55 @@ func GetMapelByID(Kode_kelas int) (Mata_pelajaran, error) {
 
 	}
 	return mata_pelajaran, nil
+}
+
+func GetSiswaByMapel(kode_kelas int)([]Siswa,error){
+	sqlstmt := `SELECT mps.id_siswa ,s.nama ,s.email ,s.credit_score ,s.kode_sekolah 
+	FROM mata_pelajaran_siswa mps 
+	JOIN siswa s 
+	ON mps.id_siswa =s.id  
+	WHERE mps.kode_kelas =? `
+
+	user := make([]Siswa, 0)
+
+	rows, err := DB.Query(sqlstmt,kode_kelas)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		User := Siswa{}
+		err := rows.Scan(&User.Id, &User.Nama,&User.Email,&User.Credit_score, &User.Kode_sekolah)
+		if err != nil {
+			return nil, err
+		}
+
+		user = append(user, User)
+
+	}
+
+	return user, nil
+
+
 
 }
+
+
+// func GetSiswaById(id string) (Siswa, error) {
+// 	sqlstmt, err := DB.Prepare(`SELECT * FROM siswa WHERE id = ? `)
+
+// }
+
+// if err != nil {
+// 	return Mata_pelajaran{}, err
+// }
+// siswa := Mata_pelajaran{}
+// rows := sqlstmt.QueryRow(Kode_kelas).Scan(&siswa.Kode_kelas, &siswa.Nama_kelas, &siswa.Kode_sekolah)
+// if rows != nil {
+// 	if rows == sql.ErrNoRows {
+// 		return Mata_pelajaran{}, nil
+// 	}
+// 	return Mata_pelajaran{}, rows
+// }
+// return siswa, nil

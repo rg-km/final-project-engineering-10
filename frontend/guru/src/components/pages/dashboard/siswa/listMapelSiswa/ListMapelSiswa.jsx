@@ -1,6 +1,10 @@
 import { Table } from 'antd';
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import useUserStore from '../../../../../store/userStore';
+import axiosConfig from '../../../../../utils/axiosConfig';
+import BASE_URL from '../../../../../utils/config';
+import { Toast } from '../../../../reusable/Toast';
 
 const columns = [
 	{
@@ -11,11 +15,11 @@ const columns = [
 	},
 	{
 		title: 'Nama Pelajaran',
-		dataIndex: 'nama_pelajaran',
-		key: 'nama_pelajaran',
+		dataIndex: 'nama_kelas',
+		key: 'nama_kelas',
 		render: (_, record) => (
-			<Link to={`${record.nama_pelajaran}`} className="h-full">
-				<p className="text-black">{record.nama_pelajaran}</p>
+			<Link to={`${record.kode_kelas}`} className="h-full">
+				<p className="text-black">{record.nama_kelas}</p>
 			</Link>
 		),
 	},
@@ -30,27 +34,34 @@ const columns = [
 	},
 ];
 
-const data = [
-	{
-		key: '1',
-		nama_pelajaran: 'Matematika',
-	},
-	{
-		key: '2',
-		nama_pelajaran: 'Agama',
-	},
-	{
-		key: '3',
-		nama_pelajaran: 'PKWN',
-	},
-];
-
 function ListMapelSiswa() {
-	const { nama } = useParams();
+	const { siswaId } = useParams();
+	const [loading, setLoading] = useState(false);
+	const [data, setData] = useState([]);
+	const { userData, loading: loadingUser, status, setUser } = useUserStore();
+
+	const fetchSiswaMapel = async () => {
+		try {
+			setLoading(true);
+			const response = await axiosConfig.get(`${BASE_URL}/siswa/${siswaId}/mapel/`);
+			setData(response.data.data);
+		} catch (error) {
+			console.log(error);
+			Toast.fire({
+				icon: 'error',
+				title: 'Terdapat Kesalahan',
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
+	useEffect(() => {
+		fetchSiswaMapel();
+	}, []);
 
 	return (
 		<div>
-			<div className="text-2xl font-bold mb-4">List Mata Pelajaran {nama}</div>
+			<div className="text-2xl font-bold mb-4">List Mata Pelajaran yang diambil {siswaId}</div>
 			<div className="flex justify-end my-4">
 				<Link
 					to="/dashboard/pelajaran/create"

@@ -53,7 +53,7 @@ func GetAllMapel(c *gin.Context) {
 
 	mapel, err := models.GetAllMapel(kode_sekolah)
 	CheckErr(err)
-	if mapel ==nil {
+	if mapel == nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Kelas tidak ada"})
 	} else {
 		c.JSON(http.StatusOK, gin.H{"data": mapel})
@@ -100,21 +100,45 @@ func DeleteMapel(c *gin.Context) {
 }
 
 func GetMapelByID(c *gin.Context) {
-	var tugas models.Tugas
+	var mapel models.Mata_pelajaran
 
-	temp := c.Param("id_mapel")
-	kode_kelas, err := strconv.Atoi(temp)
-	CheckErr(err)
-	if err := c.ShouldBindJSON(&tugas); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	mata_pelajaran, Err := models.GetMapelByID(kode_kelas)
+	kode_kelas := c.Param("id_mapel")
+
+	mapel, Err := models.GetMapelByID(kode_kelas)
 	CheckErr(Err)
-	if mata_pelajaran.Nama_kelas == "" {
+	if mapel.Kode_sekolah == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
 	} else {
-		c.JSON(http.StatusOK, gin.H{"data": tugas})
+		c.JSON(http.StatusOK, gin.H{"data": mapel})
+	}
+
+}
+
+func ShowMapel(c *gin.Context) {
+
+	kodeKelas, err := strconv.Atoi(c.Param("id_mapel"))
+	CheckErr(err)
+
+	mapel, err := models.FindMapel(kodeKelas)
+	CheckErr(err)
+	if mapel.Nama_kelas == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": mapel})
+	}
+
+}
+
+func GetSiswaByMapel(c *gin.Context) {
+	id_mapel, err := strconv.Atoi(c.Param("id_mapel"))
+	CheckErr(err)
+
+	siswa, err := models.GetSiswaByMapel(id_mapel)
+	CheckErr(err)
+	if siswa == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Kelas tidak ada"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": siswa})
 	}
 
 }
