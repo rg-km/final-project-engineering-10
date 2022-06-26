@@ -42,13 +42,12 @@ FOREIGN KEY (kode_sekolah) REFERENCES sekolah(kode_sekolah)
 
 CREATE TABLE siswa_credit_score (
 id INTEGER PRIMARY KEY AUTOINCREMENT,
-goals VARCHAR (50) NOT NULL,
+tipe VARCHAR (50) NOT NULL,
 deskripsi VARCHAR (250) NOT NULL,
-password VARCHAR (50) NOT NULL,
-bukti varchar(50) NOT NULL,
+bukti varchar(50),
 status VARCHAR (50),
 point INTEGER NOT NULL,
-id_siswa INTEGER(10) NOT NULL,
+id_siswa INTEGER NOT NULL,
 
 FOREIGN KEY (id_siswa) REFERENCES siswa(id)
 );
