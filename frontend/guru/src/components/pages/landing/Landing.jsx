@@ -10,6 +10,12 @@ import Testimoni from "./_partials/Testimoni";
 import DeskripsiJudul from "./_partials/DeskripsiJudul";
 import SubsribeNow from "./_partials/SubsribeNow";
 import GambarAboutUs from "../../../assets/logo_mactiv.png";
+import Farhan from "../../../assets/team/Farhan.png";
+import Frisca from "../../../assets/team/Frisca.png";
+import Saifulloh from "../../../assets/team/Saifulloh.png";
+import Hesi from "../../../assets/team/Hesi.png";
+import Fadhil from "../../../assets/team/Fadhil.png";
+import Yusuf from "../../../assets/team/Yusuf.png";
 
 function Landing() {
   const menu = ["Home", "Features", "Pricing", "Testimonials", "About Us"];
@@ -58,7 +64,6 @@ function Landing() {
       price: "Rp 5.499.000",
     },
   ];
-  //
   return (
     <div className="bg-white">
       <header className="container max-w-5xl mx-auto flex flex-row pt-12 items-center space-x-36">
@@ -170,6 +175,51 @@ function Landing() {
             </div>
           </div>
         </div>
+        <div className="py-10 bg-gray-50">
+          <h1 className="font-bold text-4xl text-center pb-2">Our Team</h1>
+          <div className="flex flex-row justify-center space-x-1">
+            <div className="font-normal text-sm text-center text-md pb-12">
+              <img src={Farhan} alt="farhan" className="w-21 h-21" />
+              Farhan Dewanta Syahputra <br />
+              Frontend Developer
+            </div>
+            <div className="flex flex-row justify-center space-x-1">
+              <div className="font-normal text-sm text-center text-md pb-12">
+                <img src={Frisca} alt="frisca" className="w-21 h-21" />
+                Frisca Martha Veronica <br />
+                Frontend Developer
+              </div>
+              <div className="flex flex-row justify-center space-x-1">
+                <div className="font-normal text-sm text-center text-md pb-12">
+                  <img src={Saifulloh} alt="saifulloh" className="w-21 h-21" />
+                  Saifulloh Achmad Fajr <br />
+                  Backend Developer
+                </div>
+                <div className="flex flex-row justify-center space-x-1">
+                  <div className="font-normal text-sm text-center text-md pb-12">
+                    <img src={Hesi} alt="hesi" className="w-21 h-21" />
+                    Hesi Taka Maulana <br />
+                    Backend Developer
+                  </div>
+                </div>
+                <div className="flex flex-row justify-center space-x-1">
+                  <div className="font-normal text-sm text-center text-md pb-12">
+                    <img src={Fadhil} alt="fadhil" className="w-21 h-21" />
+                    Fadhil Rausyanfikr <br />
+                    Backend Developer
+                  </div>
+                  <div className="flex flex-row justify-center space-x-1">
+                    <div className="font-normal text-sm text-center text-md pb-12">
+                      <img src={Yusuf} alt="yusuf" className="w-21 h-21" />
+                      Yusuf Farhan Nurrahman <br />
+                      Backend Developer
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="bg-gray-100">
           <SubsribeNow />
         </div>
@@ -194,6 +244,7 @@ function Landing() {
               <li>Pricing</li>
               <li>Features</li>
               <li>About Us</li>
+              <li>Our Team</li>
             </ul>
           </div>
           <div>
