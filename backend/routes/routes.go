@@ -66,9 +66,9 @@ func Routes(route *gin.Engine) {
 		v2.PUT("/:id_Guru/credit/:id_credit/", repository.UpdateStatusCredit)
 		v2.GET(":id_Guru/credit/:id_credit/", repository.GetCreditScoreById)
 		v2.DELETE(":id_Guru/credit/:id_credit/", repository.DeleteCredit)
-		v2.POST("/:id_Guru/siswa/:id_siswa/credit/", repository.AddCreditScore)
-		v2.GET("/:id_Guru/siswa/:id_siswa/credit/", repository.GetCreditScoreByIdSiswa)
-		v1.PUT("/:id_Guru/siswa/:id_siswa/bukti", repository.SetBukti)
+		v2.POST("/:id_Guru/credit/:id_credit/:id_siswa", repository.AddCreditScore)
+		v2.GET("/:id_Guru/credit/:id_credit/:id_siswa", repository.GetCreditScoreByIdSiswa)
+		v2.PUT("/:id_Guru/credit/:id_credit/:id_siswa/bukti", repository.SetBukti)
 
 		v2.GET("/:id_Guru/minat/siswa/:id_siswa/", repository.GetAllMinatSiswa)
 		v2.POST("/:id_Guru/minat/siswa/:id_siswa/", repository.AddMinat)
