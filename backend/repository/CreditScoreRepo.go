@@ -8,8 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
-
 func AddCreditScore(c *gin.Context) {
 	var credit models.Credit_score
 
@@ -17,20 +15,19 @@ func AddCreditScore(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	temp:=c.Param("id_siswa")
-	user_id,err:=strconv.Atoi(temp)
-	if err!=nil {
+	temp := c.Param("id_siswa")
+	user_id, err := strconv.Atoi(temp)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 
 	}
-	success, err := models.AddCreditScore(credit,user_id)
+	success, err := models.AddCreditScore(credit, user_id)
 	if success {
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 	}
 }
-
 
 // func GetCreditScoreByUserId(c *gin.Context){
 // 	var credit models.Credit_score
@@ -60,62 +57,52 @@ func AddCreditScore(c *gin.Context) {
 
 // }
 
-func GetCreditScoreByIdSiswa(c *gin.Context){
-	var credit models.Credit_score
+func GetCreditScoreByIdSiswa(c *gin.Context) {
 
-	if err:=c.ShouldBindJSON(&credit);err!=nil {
-		c.JSON(http.StatusBadRequest,gin.H{"error":err.Error()})
-		return
-	}
+	siswaId, err := strconv.Atoi(c.Param("id_siswa"))
 
-	credits,err:=strconv.Atoi(credit.Id_siswa)
 	CheckErr(err)
-	user,err:=models.GetCreditScoreByIdSiswa(credits)
+	user, err := models.GetCreditScoreByIdSiswa(siswaId)
 	CheckErr(err)
-	if user.Id==0 {
-		c.JSON(http.StatusBadRequest,gin.H{"message": "Data Salah, Silahkan Masukkan ulang"})
-	}else{
-		c.JSON(http.StatusOK,gin.H{"data":user})
+	if user == nil {
+		c.JSON(http.StatusOK, gin.H{"message": "Data Credit Score Kosong"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": user})
 	}
 
 }
 
-func GetCreditScoreById(c *gin.Context){
-	
+func GetCreditScoreById(c *gin.Context) {
+
 	var credit models.Credit_score
 
-	if err:=c.ShouldBindJSON(&credit);err!=nil {
-		c.JSON(http.StatusBadRequest,gin.H{"error":err.Error()})
+	if err := c.ShouldBindJSON(&credit); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	// credits,err:=strconv.Atoi(credit.Id_siswa)
 	// CheckErr(err)
-	credits,err:= strconv.Atoi(c.Param("id_credit"))
+	credits, err := strconv.Atoi(c.Param("id_credit"))
 
-	user,err:=models.GetCreditScoreById(credits)
+	user, err := models.GetCreditScoreById(credits)
 	CheckErr(err)
-	if user.Id==0 {
-		c.JSON(http.StatusBadRequest,gin.H{"message": "Data Salah, Silahkan Masukkan ulang"})
-	}else{
-		c.JSON(http.StatusOK,gin.H{"data":user})
+	if user.Id == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Data Salah, Silahkan Masukkan ulang"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": user})
 	}
 
 }
 
-
-
-
-func UpdateStatusCredit(c *gin.Context){
+func UpdateStatusCredit(c *gin.Context) {
 	var json models.Credit_score
-	id,err:=strconv.Atoi(c.Param("id_credit"))
-
+	id, err := strconv.Atoi(c.Param("id_credit"))
 
 	if err := c.ShouldBindJSON(&json); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 
 	success, err := models.UpdateStatusCredit(json, id)
 
@@ -129,7 +116,27 @@ func UpdateStatusCredit(c *gin.Context){
 
 }
 
-func DeleteCredit (c *gin.Context){
+func SetBukti(c *gin.Context) {
+
+	var json models.Credit_score
+
+	if err := c.ShouldBindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	Id_siswa, err := strconv.Atoi(c.Param("id_siswa"))
+	CheckErr(err)
+	success, err := models.SetBukti(json.Bukti, Id_siswa)
+	if success {
+		c.JSON(http.StatusOK, gin.H{"message": "Success"})
+		return
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
+}
+
+func DeleteCredit(c *gin.Context) {
 	credits, err := strconv.Atoi(c.Param("id_credit"))
 
 	if err != nil {
@@ -142,7 +149,6 @@ func DeleteCredit (c *gin.Context){
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
-	}	
-
+	}
 
 }

@@ -25,13 +25,14 @@ func AddTugas(c *gin.Context) {
 		temp,err:=models.GetSiswaByMapel(id_mapel)
 		CheckErr(err)
 		for _, v := range temp {
+			id_tugas:=models.GetLastTugasId()
 			newPengumpulan:=models.Pengumpulan_tugas{
 				Link_pengumpulan: "",
 				Nilai: 0,
 				Status: "Belum",
 				Id_Mapel: id_mapel,
 				Id_Siswa: v.Id,
-				Id_tugas: tugas.Id_tugas,
+				Id_tugas: id_tugas,
 			}
 			data,err:=models.AddPengumpulan(newPengumpulan)
 			CheckErr(err)
@@ -163,22 +164,22 @@ func ShowTugas(c *gin.Context) {
 
 }
 
-// func GetTugasById(c *gin.Context) {
-// 	var tugas models.Tugas
+func GetTugasById(c *gin.Context) {
+	var tugas models.Tugas
 
-// 	temp := c.Param("id")
-// 	tugas_id, err := strconv.Atoi(temp)
-// 	CheckErr(err)
-// 	if err := c.ShouldBindJSON(&tugas); err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
-// 	tugas, Err := models.GetTugasById(tugas_id)
-// 	CheckErr(Err)
-// 	if tugas.Judul == "" {
-// 		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
-// 	} else {
-// 		c.JSON(http.StatusOK, gin.H{"data": tugas})
-// 	}
+	tugas_id := c.Param("id_tugas")
+	
 
-// }
+	if err := c.ShouldBindJSON(&tugas); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	tugas, Err := models.GetTugasById(tugas_id)
+	CheckErr(Err)
+	if tugas.Judul == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "test error"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": tugas})
+	}
+
+}

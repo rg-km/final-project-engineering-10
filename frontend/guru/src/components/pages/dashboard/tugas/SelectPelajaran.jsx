@@ -69,7 +69,7 @@ function SelectPelajaran() {
 		<div>
 			<div className="text-2xl font-bold mb-4">Pilih Mata Pelajaran</div>
 
-			<Table pagination={false} columns={columns} dataSource={data} />
+			<Table rowKey="kode_kelas" pagination={false} columns={columns} dataSource={data} />
 		</div>
 	);
 }

@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"strconv"
 	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -31,7 +32,7 @@ type GetPengumpulan struct {
 
 
 type Avg struct{
-	Nilai		int `json:"nilai"`
+	Nilai		int `json:"nilai,omitempty"`
 
 }
 
@@ -186,33 +187,120 @@ func CheckStatus(status string)(bool){
 return false
 }
 
-func UpdateValue(id_mata_pelajaran,id_siswa int, tipe string) (Avg,error){
+// func UpdateValue(id_mata_pelajaran,id_siswa int, tipe string) (int){
 
 
 	
-sqlstmt,err:= DB.Prepare(`SELECT AVG(nilai)   
+// sqlstmt,err:= DB.Prepare(`SELECT AVG(nilai)   
+// FROM pengumpulan_tugas
+// INNER JOIN tugas ON pengumpulan_tugas.id_tugas= tugas.id 
+// WHERE pengumpulan_tugas.id_mata_pelajaran = ? AND tugas.tipe = ? AND id_siswa =?`)
+
+// if err!=nil {
+// 	return Avg{},err
+// }
+// Average:=Avg{}
+
+
+// rows:=sqlstmt.QueryRow(id_mata_pelajaran,tipe,id_siswa).Scan(&Average.Nilai)
+
+// if rows != nil {
+// 	if rows == sql.ErrNoRows {
+// 		return Avg{}, nil
+// 	}
+// 	return Avg{}, rows
+
+// }
+// return Avg{}, nil
+	
+
+// }
+
+
+func UpdateValue(id_mata_pelajaran,id_siswa int, tipe string) (float64){
+
+var avg sql.NullString
+	
+err:= DB.QueryRow(`SELECT AVG(nilai)   
 FROM pengumpulan_tugas
-INNER JOIN tugas ON pengumpulan_tugas.id_tugas=id_tugas
-WHERE pengumpulan_tugas.id_mata_pelajaran = ? AND tugas.tipe = ? AND id_siswa =?`)
-
-if err!=nil {
-	return Avg{},err
-}
-Average:=Avg{}
-
-
-rows:=sqlstmt.QueryRow(id_mata_pelajaran,tipe,id_siswa).Scan(&Average.Nilai)
-if rows != nil {
-	if rows == sql.ErrNoRows {
-		return Avg{}, nil
+INNER JOIN tugas ON pengumpulan_tugas.id_tugas= tugas.id 
+WHERE pengumpulan_tugas.id_mata_pelajaran = ? AND tugas.tipe = ? AND id_siswa =?`,id_mata_pelajaran,tipe,id_siswa).Scan(&avg)
+	if err!=nil {
+		panic(err)
 	}
-	return Avg{}, rows
 
+	avgInt,err:=strconv.ParseFloat(avg.String,32)
+return avgInt
 }
-return Avg{}, nil
+
+
+
+func AvgSekolah(kode_sekolah int)(float64){
+	var avg sql.NullString
 	
+	err:= DB.QueryRow(`
+	SELECT AVG(mps.rata_rata )
+	FROM mata_pelajaran_siswa mps 
+	JOIN mata_pelajaran mp 
+	ON mps.kode_kelas = mp.kode_kelas 
+	WHERE mp.kode_sekolah =?`,kode_sekolah).Scan(&avg)
+		if err!=nil {
+			panic(err)
+		}
+	
+		avgInt,err:=strconv.ParseFloat(avg.String,32)
+	return avgInt
+}
+
+func AvgByIdSiswa(id_siswa int)(float64){
+	var avg sql.NullString
+	
+	err:= DB.QueryRow(`
+	SELECT AVG(rata_rata)  
+	FROM mata_pelajaran_siswa mps
+	WHERE id_siswa = ?`,id_siswa).Scan(&avg)
+		if err!=nil {
+			panic(err)
+		}
+	
+		avgInt,err:=strconv.ParseFloat(avg.String,32)
+	return avgInt
 
 }
+
+func AvgByMapel(id_mapel int)(float64){
+	var avg sql.NullString
+	
+	err:= DB.QueryRow(`
+	SELECT AVG(rata_rata)  
+	FROM mata_pelajaran_siswa mps
+	WHERE kode_kelas  = ?`,id_mapel).Scan(&avg)
+		if err!=nil {
+			panic(err)
+		}
+	
+		avgInt,err:=strconv.ParseFloat(avg.String,32)
+	return avgInt
+}
+
+func AvgByMapelAndSiswa(id_mapel,id_siswa int)(float64){
+	var avg sql.NullString
+	
+	err:= DB.QueryRow(`
+	
+	SELECT AVG(rata_rata)  
+	FROM mata_pelajaran_siswa mps
+	WHERE kode_kelas  = ? AND id_siswa =?`,id_mapel,id_siswa).Scan(&avg)
+		if err!=nil {
+			panic(err)
+		}
+	
+		avgInt,err:=strconv.ParseFloat(avg.String,32)
+	return avgInt
+}
+
+
+
 
 
 func UpdateAvg(nilai,kode_kelas,id_siswa int)(bool,error){

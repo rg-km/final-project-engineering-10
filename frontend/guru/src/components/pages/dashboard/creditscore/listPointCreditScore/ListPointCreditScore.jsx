@@ -1,6 +1,10 @@
 import { Progress, Table, Tag } from 'antd';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import useUserStore from '../../../../../store/userStore';
+import axiosConfig from '../../../../../utils/axiosConfig';
+import BASE_URL from '../../../../../utils/config';
+import { Toast } from '../../../../reusable/Toast';
 
 const columns = [
 	{
@@ -83,7 +87,7 @@ const columns = [
 	},
 ];
 
-const data = [
+const list = [
 	{
 		key: '1',
 		deskripsi_poin: 'Nyontek',
@@ -115,9 +119,52 @@ const data = [
 ];
 
 function ListPointCreditScore() {
+	const { siswaId } = useParams();
+	const [loading, setLoading] = useState(0);
+	const [data, setData] = useState({});
+	const [listPoin, setListPoin] = useState([]);
+	const { userData, loading: loadingUser } = useUserStore();
+
+	const fetchSiswa = async () => {
+		try {
+			setLoading(loading + 1);
+			const response = await axiosConfig.get(`${BASE_URL}/siswa/${siswaId}/`);
+			setData(response.data.data);
+		} catch (error) {
+			console.log(error);
+			Toast.fire({
+				icon: 'error',
+				title: 'Terdapat Kesalahan',
+			});
+		} finally {
+			setLoading(loading - 1);
+		}
+	};
+
+	const fetchPoin = async () => {
+		try {
+			setLoading(loading + 1);
+			const response = await axiosConfig.get(`${BASE_URL}/Guru/${userData.id}/siswa/${siswaId}/credit/`);
+			setListPoin(response.data.data);
+		} catch (error) {
+			console.log(error);
+			Toast.fire({
+				icon: 'error',
+				title: 'Terdapat Kesalahan',
+			});
+		} finally {
+			setLoading(loading - 1);
+		}
+	};
+
+	useEffect(() => {
+		fetchSiswa();
+		fetchPoin();
+	}, []);
+
 	return (
 		<div>
-			<div className="text-2xl font-bold mb-4">TotalCredit Score Siswa</div>
+			<div className="text-2xl font-bold mb-4">Total Credit Score Siswa</div>
 			<div className="flex justify-center my-8">
 				<Progress
 					type="circle"
@@ -126,7 +173,7 @@ function ListPointCreditScore() {
 						'70%': '#A1FF80',
 					}}
 					format={percent => `${percent}.0`}
-					percent={90}
+					percent={data.credit_score}
 					width={200}
 				/>
 			</div>
@@ -142,7 +189,7 @@ function ListPointCreditScore() {
 					<label>Tambah Poin</label>
 				</Link>
 			</div>
-			<Table pagination={false} columns={columns} dataSource={data} />
+			<Table pagination={false} columns={columns} dataSource={list} />
 		</div>
 	);
 }

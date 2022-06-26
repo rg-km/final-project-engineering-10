@@ -1,6 +1,10 @@
 import { Table } from 'antd';
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import useUserStore from '../../../../../store/userStore';
+import axiosConfig from '../../../../../utils/axiosConfig';
+import BASE_URL from '../../../../../utils/config';
+import { Toast } from '../../../../reusable/Toast';
 
 const columns = [
 	{
@@ -11,11 +15,11 @@ const columns = [
 	},
 	{
 		title: 'Nama Siswa',
-		dataIndex: 'nama_siswa',
-		key: 'nama_siswa',
+		dataIndex: 'nama',
+		key: 'nama',
 		render: (_, record) => (
-			<Link to={`${record.nama_siswa}`} className="h-full">
-				<p className="text-black">{record.nama_siswa}</p>
+			<Link to={`${record.id}`} className="h-full">
+				<p className="text-black">{record.nama}</p>
 			</Link>
 		),
 	},
@@ -36,29 +40,35 @@ const columns = [
 	},
 ];
 
-const data = [
-	{
-		key: '1',
-		nama_siswa: 'Frisca',
-		rata_rata: 80,
-	},
-	{
-		key: '2',
-		nama_siswa: 'Farhan',
-		rata_rata: 85,
-	},
-	{
-		key: '3',
-		nama_siswa: 'Hesi',
-		rata_rata: 86,
-	},
-];
-
 function ListSiswaPelajaran() {
-	const { mapel } = useParams();
+	const { mapelId } = useParams();
+	const [loading, setLoading] = useState(false);
+	const [data, setData] = useState([]);
+	const { userData, loading: loadingUser, status, setUser } = useUserStore();
+
+	const fetchPelajaran = async () => {
+		try {
+			setLoading(true);
+			const response = await axiosConfig.get(`${BASE_URL}/Guru/${userData.id}/mapel/list/${mapelId}/tugas/siswa/`);
+			setData(response.data.data);
+		} catch (error) {
+			console.log(error);
+			Toast.fire({
+				icon: 'error',
+				title: 'Terdapat Kesalahan',
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		fetchPelajaran();
+	}, []);
+
 	return (
 		<div>
-			<div className="text-2xl font-bold mb-4">List Siswa Mapel {mapel}</div>
+			<div className="text-2xl font-bold mb-4">List Siswa Mapel {mapelId}</div>
 			<Table pagination={false} columns={columns} dataSource={data} />
 		</div>
 	);

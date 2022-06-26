@@ -54,7 +54,6 @@ func UpdateMinat(c *gin.Context){
 	}
 	Id_minat, err := strconv.Atoi(c.Param("id_minat"))
 	CheckErr(err)
-
 	success, err := models.UpdateMinat(Id_minat,json)
 	if success {
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})

@@ -1,6 +1,6 @@
 import { Table } from 'antd';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import useUserStore from '../../../../store/userStore';
 import axiosConfig from '../../../../utils/axiosConfig';
 import BASE_URL from '../../../../utils/config';
@@ -14,45 +14,38 @@ const columns = [
 		render: (item, record, index) => <>{index + 1}</>,
 	},
 	{
-		title: 'Nama Tugas',
-		dataIndex: 'judul',
-		key: 'judul',
-	},
-	{
-		title: 'Tipe',
-		dataIndex: 'tipe',
-		key: 'tipe',
-	},
-	{
-		title: 'Nilai',
-		dataIndex: 'nilai',
-		key: 'nilai',
+		title: 'Nama Siswa',
+		dataIndex: 'nama',
+		key: 'nama',
+		render: (_, record) => (
+			<Link to={`${record.id}`}>
+				<p className="text-black">{record.nama}</p>
+			</Link>
+		),
 	},
 	{
 		title: 'Action',
 		key: 'action',
 		render: (_, record) => (
-			<div className="flex gap-4 items-center justify-center">
-				<Link to={`edit/${record.id}/${record.id_pengumpulan}`}>
-					<img src="/image/dashboard/edit.svg" alt="edit" />
-				</Link>
-				<img src="/image/dashboard/trash.svg" alt="edit" />
-			</div>
+			<Link
+				to={`${record.id}`}
+				className="px-8 py-4 bg-primary text-black cursor-pointer font-bold rounded-xl hover:text-white"
+			>
+				Pilih
+			</Link>
 		),
 	},
 ];
 
-
-function RekapNilaiSiswa() {
-	const { mapelId, siswaId } = useParams();
+function SelectSiswaCatatanMinat() {
 	const [loading, setLoading] = useState(false);
 	const [data, setData] = useState([]);
 	const { userData, loading: loadingUser } = useUserStore();
 
-	const fetchRekap = async () => {
+	const fetchSiswa = async () => {
 		try {
 			setLoading(true);
-			const response = await axiosConfig.get(`${BASE_URL}/siswa/${siswaId}/mapel/${mapelId}/tugas/`);
+			const response = await axiosConfig.get(`${BASE_URL}/siswa/`);
 			setData(response.data.message);
 		} catch (error) {
 			console.log(error);
@@ -65,17 +58,14 @@ function RekapNilaiSiswa() {
 		}
 	};
 	useEffect(() => {
-		fetchRekap();
+		fetchSiswa();
 	}, []);
-
 	return (
 		<div>
-			<div className="text-2xl font-bold mb-4">
-				Rekap {siswaId} Mapel {mapelId}
-			</div>
-			<Table pagination={false} columns={columns} dataSource={data} />
+			<div className="text-2xl font-bold mb-4">List Siswa Pada Sekolah</div>
+			<Table pagination={false} rowKey="id" columns={columns} dataSource={data} />
 		</div>
 	);
 }
 
-export default RekapNilaiSiswa;
+export default SelectSiswaCatatanMinat;

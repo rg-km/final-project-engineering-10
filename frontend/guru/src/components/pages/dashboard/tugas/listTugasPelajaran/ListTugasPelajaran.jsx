@@ -36,7 +36,7 @@ const columns = [
 				<Link to={`edit/${record.id}`}>
 					<img src="/image/dashboard/edit.svg" alt="edit" />
 				</Link>
-				<img src="/image/dashboard/trash.svg" alt="edit" />
+				<img src="/image/dashboard/trash.svg" alt="trash" />
 			</div>
 		),
 	},
