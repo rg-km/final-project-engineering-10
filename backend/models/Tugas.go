@@ -20,6 +20,14 @@ type Tugas struct {
 	Id_siswa	int `json:"id_siswa,omitempty"`
 }
 
+type ListTugas struct {
+	Id_tugas  int    `json:"id"`
+	Judul     string `json:"judul"`
+	Deskripsi string `json:"deskripsi"`
+	Tipe      string `json:"tipe"`
+	Id_Mapel  int    `json:"id_mata_pelajaran"`
+}
+
 func AddTugas(newTugas Tugas, mapel int) (bool, error) {
 	tx, err := DB.Begin()
 	if err != nil {
@@ -38,29 +46,26 @@ func AddTugas(newTugas Tugas, mapel int) (bool, error) {
 	tx.Commit()
 	return true, nil
 }
-func GetAllTugas(id_mata_pelajaran int) ([]Tugas, error) {
-	assignment := make([]Tugas, 0)
-	sqlstmt := `	SELECT tugas.id, tugas.judul, tugas.deskripsi, tugas.tipe, tugas.id_mata_pelajaran, pt.id ,pt.link_pengumpulan ,pt.nilai,pt.status ,pt.id_siswa 
-	FROM tugas 
-	 JOIN pengumpulan_tugas  pt
-	ON tugas.id = pt.id_tugas 
-	
-	WHERE tugas.id_mata_pelajaran = ?`
+func GetAllTugas(id_mata_pelajaran int) ([]ListTugas, error) {
+	assignment := make([]ListTugas, 0)
+	sqlstmt := `SELECT id, judul, deskripsi, tipe, id_mata_pelajaran
+	FROM tugas
+	WHERE id_mata_pelajaran = ?`
 
 	rows, err := DB.Query(sqlstmt, id_mata_pelajaran)
 	if err != nil {
-		return []Tugas{}, err
+		return []ListTugas{}, err
 	}
 
 	defer rows.Close()
 	for rows.Next() {
-		tugas := Tugas{}
-		err := rows.Scan(&tugas.Id_tugas, &tugas.Judul, &tugas.Deskripsi, &tugas.Tipe, &tugas.Id_Mapel, &tugas.Id_pengumpulan, &tugas.Link_pengumpulan, &tugas.Nilai,&tugas.Status, &tugas.Id_siswa)
+		listTugas := ListTugas{}
+		err := rows.Scan(&listTugas.Id_tugas, &listTugas.Judul, &listTugas.Deskripsi, &listTugas.Tipe, &listTugas.Id_Mapel)
 		if err != nil {
 			return nil, err
 		}
 
-		assignment = append(assignment, tugas)
+		assignment = append(assignment, listTugas)
 
 	}
 	err = rows.Err()
