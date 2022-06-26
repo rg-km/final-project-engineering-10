@@ -125,3 +125,41 @@ func UpdatePengumpulan (c *gin.Context){
 		return
 	}
 }
+
+
+func AvgSekolah(c *gin.Context){
+	temp,err:=c.Cookie("kode_sekolah")
+	CheckErr(err)
+	kode_sekolah,err:=strconv.Atoi(temp)
+	CheckErr(err)
+	avg:=models.AvgSekolah(kode_sekolah)
+	c.JSON(http.StatusOK,gin.H{"rata rata": avg})
+
+}
+
+func AvgByIdSiswa(c *gin.Context){
+	temp:=c.Param("id_siswa")
+	id_siswa,err:=strconv.Atoi(temp)
+	CheckErr(err)
+	avg:=models.AvgByIdSiswa(id_siswa)
+	c.JSON(http.StatusOK,gin.H{"rata rata": avg})
+}
+
+func AvgByMapel(c * gin.Context){
+	temp:=c.Param("id_mapel")
+	id_mapel,err:=strconv.Atoi(temp)
+	CheckErr(err)
+	avg:=models.AvgByMapel(id_mapel)
+	c.JSON(http.StatusOK,gin.H{"rata rata": avg})
+}
+
+func AvgByMapelAndSiswa(c *gin.Context){
+	temp:=c.Param("id_mapel")
+	id_mapel,err:=strconv.Atoi(temp)
+	CheckErr(err)
+	temp1:=c.Param("id_siswa")
+	id_siswa,err:=strconv.Atoi(temp1)
+
+	avg:=models.AvgByMapelAndSiswa(id_mapel,id_siswa)
+	c.JSON(http.StatusOK,gin.H{"rata rata": avg})
+}

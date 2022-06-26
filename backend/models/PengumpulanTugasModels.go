@@ -235,23 +235,69 @@ return avgInt
 
 
 
+func AvgSekolah(kode_sekolah int)(float64){
+	var avg sql.NullString
+	
+	err:= DB.QueryRow(`
+	SELECT AVG(mps.rata_rata )
+	FROM mata_pelajaran_siswa mps 
+	JOIN mata_pelajaran mp 
+	ON mps.kode_kelas = mp.kode_kelas 
+	WHERE mp.kode_sekolah =?`,kode_sekolah).Scan(&avg)
+		if err!=nil {
+			panic(err)
+		}
+	
+		avgInt,err:=strconv.ParseFloat(avg.String,32)
+	return avgInt
+}
 
+func AvgByIdSiswa(id_siswa int)(float64){
+	var avg sql.NullString
+	
+	err:= DB.QueryRow(`
+	SELECT AVG(rata_rata)  
+	FROM mata_pelajaran_siswa mps
+	WHERE id_siswa = ?`,id_siswa).Scan(&avg)
+		if err!=nil {
+			panic(err)
+		}
+	
+		avgInt,err:=strconv.ParseFloat(avg.String,32)
+	return avgInt
 
-// func GetLastTugasId()int{
-//     var id int
+}
 
-//     err := DB.QueryRow("select ifnull(max(id), 0) as id from tugas").Scan(&id)
-//     if err != nil {
-//       panic(err)
-//     }
-//     return id
+func AvgByMapel(id_mapel int)(float64){
+	var avg sql.NullString
+	
+	err:= DB.QueryRow(`
+	SELECT AVG(rata_rata)  
+	FROM mata_pelajaran_siswa mps
+	WHERE kode_kelas  = ?`,id_mapel).Scan(&avg)
+		if err!=nil {
+			panic(err)
+		}
+	
+		avgInt,err:=strconv.ParseFloat(avg.String,32)
+	return avgInt
+}
 
-// }
-
-
-
-
-
+func AvgByMapelAndSiswa(id_mapel,id_siswa int)(float64){
+	var avg sql.NullString
+	
+	err:= DB.QueryRow(`
+	
+	SELECT AVG(rata_rata)  
+	FROM mata_pelajaran_siswa mps
+	WHERE kode_kelas  = ? AND id_siswa =?`,id_mapel,id_siswa).Scan(&avg)
+		if err!=nil {
+			panic(err)
+		}
+	
+		avgInt,err:=strconv.ParseFloat(avg.String,32)
+	return avgInt
+}
 
 
 
