@@ -22,7 +22,7 @@ func Routes(route *gin.Engine) {
 		v1.GET("/:id_siswa/credit/",repository.GetCreditScoreByIdSiswa)
 		v1.GET("/:id_siswa/credit/:id_credit",repository.GetCreditScoreById)
 		v1.GET("/:id_siswa/mapel/search/", repository.SearchMapel)
-		v1.GET("/:id_siswa/mapel/", repository.GetAllMapel)            //v
+		v1.GET("/:id_siswa/mapel/", repository.GetMapelBySiswa)            //v
 		v1.GET("/:id_siswa/mapel/:id_mapel/", repository.GetMapelByID) //vv
 		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/search/", repository.SearchTugas)
 		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/", repository.GetAllTugasBySiswa)

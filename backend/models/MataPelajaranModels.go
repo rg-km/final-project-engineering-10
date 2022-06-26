@@ -12,6 +12,13 @@ type Mata_pelajaran struct {
 	Kode_sekolah int    `json:"kode_sekolah"`
 }
 
+type Mata_pelajaran_Siswa struct {
+	Kode_kelas   int    `json:"kode_kelas"`
+	Nama_kelas   string `json:"nama_kelas"`
+	Kode_sekolah int    `json:"kode_sekolah"`
+	Rata_rata    int    `json:"rata_rata"`
+}
+
 func AddMapel(newMapel Mata_pelajaran, kode_sekolah int) (bool, error) {
 	tx, err := DB.Begin()
 	if err != nil {
@@ -50,6 +57,31 @@ func GetAllMapel(kode_sekolah int) ([]Mata_pelajaran, error) {
 		}
 
 		kelas = append(kelas, mata_pelajaran)
+
+	}
+
+	return kelas, nil
+}
+
+func GetAllMapelBySiswa(id_siswa int) ([]Mata_pelajaran_Siswa, error) {
+	sqlstmt := `SELECT mp.kode_kelas, mp.nama_kelas, mp.kode_sekolah, mps.rata_rata FROM mata_pelajaran mp JOIN mata_pelajaran_siswa mps ON mps.kode_kelas=mp.kode_kelas  WHERE mps.id_siswa =  ? `
+
+	kelas := make([]Mata_pelajaran_Siswa, 0)
+
+	rows, err := DB.Query(sqlstmt, id_siswa)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		mata_pelajaran_siswa := Mata_pelajaran_Siswa{}
+		err := rows.Scan(&mata_pelajaran_siswa.Kode_kelas, &mata_pelajaran_siswa.Nama_kelas, &mata_pelajaran_siswa.Kode_sekolah, &mata_pelajaran_siswa.Rata_rata)
+		if err != nil {
+			return nil, err
+		}
+
+		kelas = append(kelas, mata_pelajaran_siswa)
 
 	}
 
@@ -162,7 +194,7 @@ func FindMapel(kodeKelas int) (Mata_pelajaran, error) {
 	return mata_pelajaran, nil
 }
 
-func GetSiswaByMapel(kode_kelas int)([]Siswa,error){
+func GetSiswaByMapel(kode_kelas int) ([]Siswa, error) {
 	sqlstmt := `SELECT mps.id_siswa ,s.nama ,s.email ,s.credit_score ,s.kode_sekolah 
 	FROM mata_pelajaran_siswa mps 
 	JOIN siswa s 
@@ -171,7 +203,7 @@ func GetSiswaByMapel(kode_kelas int)([]Siswa,error){
 
 	user := make([]Siswa, 0)
 
-	rows, err := DB.Query(sqlstmt,kode_kelas)
+	rows, err := DB.Query(sqlstmt, kode_kelas)
 	if err != nil {
 		return nil, err
 	}
@@ -179,7 +211,7 @@ func GetSiswaByMapel(kode_kelas int)([]Siswa,error){
 	defer rows.Close()
 	for rows.Next() {
 		User := Siswa{}
-		err := rows.Scan(&User.Id, &User.Nama,&User.Email,&User.Credit_score, &User.Kode_sekolah)
+		err := rows.Scan(&User.Id, &User.Nama, &User.Email, &User.Credit_score, &User.Kode_sekolah)
 		if err != nil {
 			return nil, err
 		}
@@ -190,10 +222,7 @@ func GetSiswaByMapel(kode_kelas int)([]Siswa,error){
 
 	return user, nil
 
-
-
 }
-
 
 // func GetSiswaById(id string) (Siswa, error) {
 // 	sqlstmt, err := DB.Prepare(`SELECT * FROM siswa WHERE id = ? `)
