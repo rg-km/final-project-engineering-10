@@ -124,9 +124,9 @@ func SetBukti(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	Id_siswa, err := strconv.Atoi(c.Param("id_siswa"))
+	id_credit, err := strconv.Atoi(c.Param("id_credit"))
 	CheckErr(err)
-	success, err := models.SetBukti(json.Bukti, Id_siswa)
+	success, err := models.SetBukti(json.Bukti, id_credit)
 	if success {
 		c.JSON(http.StatusOK, gin.H{"message": "Success"})
 		return
