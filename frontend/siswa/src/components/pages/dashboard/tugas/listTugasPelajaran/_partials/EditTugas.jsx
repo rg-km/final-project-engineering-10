@@ -12,17 +12,14 @@ import Input from '../../../../../reusable/Input';
 import { Toast } from '../../../../../reusable/Toast';
 
 const validationSchema = Yup.object().shape({
-	judul: Yup.string().required('Nama Tugas wajib diisi'),
-	deskripsi: Yup.string().required('Deskripsi wajib diisi'),
+	link_pengumpulan: Yup.string().required('Link Pengumpulan Tugas wajib diisi'),
 });
 
 const { Option } = Select;
 
 function EditTugas() {
 	const initialState = {
-		judul: '',
-		deskripsi: '',
-		tipe: '',
+		link_pengumpulan: '',
 	};
 
 	const navigate = useNavigate();
@@ -31,18 +28,18 @@ function EditTugas() {
 	const [errorMessage, setErrorMessage] = useState({});
 	const [data, setData] = useState({});
 	const [loading, setLoading] = useState(false);
-	const { mapelId, tugasId } = useParams();
+	const { mapelId, tugasId, linkId } = useParams();
 	const { userData, loading: loadingUser, status, setUser } = useUserStore();
 
-	const fetchFindTugas = async () => {
+	const fetchFindPengumpulan = async () => {
 		try {
 			setLoading(true);
-			const response = await axiosConfig.get(`${BASE_URL}/Guru/${userData.id}/mapel/list/${mapelId}/tugas/${tugasId}/`);
+			const response = await axiosConfig.get(
+				`${BASE_URL}/siswa/${userData.id}/mapel/${mapelId}/tugas/${tugasId}/pengumpulan/${linkId}/`
+			);
 			setData(response.data.data);
 			setInput({
-				judul: response.data.data.judul,
-				deskripsi: response.data.data.deskripsi,
-				tipe: response.data.data.tipe,
+				link_pengumpulan: response.data.data.link_pengumpulan,
 			});
 		} catch (error) {
 			console.log(error);
@@ -57,7 +54,10 @@ function EditTugas() {
 
 	const onSubmit = async values => {
 		try {
-			const response = await axiosConfig.post(`${BASE_URL}/Guru/${userData.id}/mapel/list/${mapelId}/tugas/`, values);
+			const response = await axiosConfig.put(
+				`${BASE_URL}/siswa/${userData.id}/mapel/${mapelId}/tugas/${tugasId}/pengumpulan/${linkId}/`,
+				values
+			);
 			Toast.fire({
 				icon: 'success',
 				title: 'Berhasil Mengupdate Tugas',
@@ -72,7 +72,7 @@ function EditTugas() {
 		}
 	};
 	useEffect(() => {
-		fetchFindTugas();
+		fetchFindPengumpulan();
 	}, []);
 
 	return (
@@ -105,34 +105,18 @@ function EditTugas() {
 							labelAlign="left"
 						>
 							<FormItem
-								label="Nama Tugas"
-								error={getErrorValue(errors.judul, errorMessage?.judul)}
-								touched={touched.judul}
+								label="Link Pengumpulan"
+								error={getErrorValue(errors.link_pengumpulan, errorMessage?.link_pengumpulan)}
+								touched={touched.link_pengumpulan}
 							>
 								<Input
 									onChange={handleChange}
 									onBlur={handleBlur}
-									value={values.judul}
-									name="judul"
-									placeholder="Masukkan nama tugas"
-								/>
-							</FormItem>
-							<FormItem
-								label="Deskripsi"
-								error={getErrorValue(errors.deskripsi, errorMessage?.deskripsi)}
-								touched={touched.deskripsi}
-							>
-								<Input
-									onChange={handleChange}
-									onBlur={handleBlur}
-									value={values.deskripsi}
-									name="deskripsi"
-									placeholder="Masukkan Deskripsi"
+									value={values.link_pengumpulan}
+									name="link_pengumpulan"
+									placeholder="Masukkan Link Pengumpulan"
 									type={'textarea'}
 								/>
-							</FormItem>
-							<FormItem label="Tipe">
-								<Input className="capitalize" disabled value={values.tipe} name="tipe" />
 							</FormItem>
 							<div className="flex justify-end">
 								<button className="px-12 py-4 bg-blue text-white font-bold rounded-xl text-xl">Kirim</button>

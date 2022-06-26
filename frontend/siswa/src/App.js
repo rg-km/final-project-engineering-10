@@ -6,6 +6,7 @@ import Dashboard from './components/pages/dashboard/Dashboard';
 import ListPelajaran from './components/pages/dashboard/mataPelajaran/ListPelajaran';
 import EnrollPelajaran from './components/pages/dashboard/mataPelajaran/_partials/EnrollPelajaran';
 import ListTugasPelajaran from './components/pages/dashboard/tugas/listTugasPelajaran/ListTugasPelajaran';
+import EditTugas from './components/pages/dashboard/tugas/listTugasPelajaran/_partials/EditTugas';
 import SelectPelajaran from './components/pages/dashboard/tugas/SelectPelajaran';
 import Landing from './components/pages/landing/Landing';
 import Login from './components/pages/landing/Login';
@@ -73,6 +74,14 @@ function App() {
 						element={
 							<Layout type={'dashboard'}>
 								<ListTugasPelajaran />
+							</Layout>
+						}
+					/>
+					<Route
+						path="/dashboard/tugas/:mapelId/edit/:tugasId/:linkId"
+						element={
+							<Layout type={'dashboard'}>
+								<EditTugas />
 							</Layout>
 						}
 					/>

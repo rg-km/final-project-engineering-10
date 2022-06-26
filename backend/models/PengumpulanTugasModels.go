@@ -133,7 +133,7 @@ func UpdatePengumpulan (id int, url string) (bool, error){
 		return false, err
 	}
 
-	stmt, err := tx.Prepare("UPDATE pengumpulan_tugas SET link_pengumpulan = ? WHERE id = ?")
+	stmt, err := tx.Prepare("UPDATE pengumpulan_tugas SET link_pengumpulan = ?, status='dikirim' WHERE id = ?")
 
 	if err != nil {
 		return false, err

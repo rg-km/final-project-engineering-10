@@ -84,7 +84,7 @@ func RegisterGuru(c *gin.Context) {
 
 }
 
-func GetProfile(c *gin.Context) {
+func GetProfileGuru(c *gin.Context) {
 	service.AuthJwt()
 
 	temp, err := c.Cookie("user_id")
@@ -94,7 +94,7 @@ func GetProfile(c *gin.Context) {
 	}
 
 	id, _ := strconv.Atoi(temp)
-	guru, err := models.GetProfile(id)
+	guru, err := models.GetProfileGuru(id)
 
 	CheckErr(err)
 

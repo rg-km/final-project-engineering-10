@@ -1,4 +1,5 @@
 import { Table } from 'antd';
+import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import useUserStore from '../../../../../store/userStore';
@@ -38,7 +39,7 @@ const columns = [
 		key: 'action',
 		render: (_, record) => (
 			<div className="flex gap-4 items-center justify-center">
-				<Link to={`edit/${record.id}`}>
+				<Link to={`edit/${record.id}/${record.id_pengumpulan}`}>
 					<img src="/image/dashboard/edit.svg" alt="edit" />
 				</Link>
 			</div>
@@ -55,7 +56,7 @@ function ListTugasPelajaran() {
 	const fetchTugasPelajaran = async () => {
 		try {
 			setLoading(true);
-			const response = await axiosConfig.get(`${BASE_URL}/Guru/${userData.id}/mapel/list/${mapelId}/tugas/`);
+			const response = await axiosConfig.get(`${BASE_URL}/siswa/${userData.id}/mapel/${mapelId}/tugas/`);
 			setData(response.data.message);
 		} catch (error) {
 			console.log(error);
@@ -68,19 +69,13 @@ function ListTugasPelajaran() {
 		}
 	};
 	useEffect(() => {
-		// fetchTugasPelajaran();
-	}, []);
+		if (!isEmpty(userData)) {
+			fetchTugasPelajaran();
+		}
+	}, [userData]);
 	return (
 		<div>
 			<div className="text-2xl font-bold mb-4">List Tugas Mapel {mapelId}</div>
-			<div className="flex justify-end my-4">
-				<Link to="create" className="p-4 bg-blue flex items-center gap-2 font-bold text-lg text-white rounded-2xl">
-					<div>
-						<img src="/image/dashboard/plus.svg" className="w-5" alt="" />
-					</div>
-					<label>Tambah Tugas</label>
-				</Link>
-			</div>
 			<Table pagination={false} columns={columns} dataSource={data} />
 		</div>
 	);

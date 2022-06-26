@@ -1,6 +1,6 @@
 import { Progress, Table, Tag } from 'antd';
-import React from 'react';
 import { Link } from 'react-router-dom';
+import useUserStore from '../../../../store/userStore';
 
 const columns = [
 	{
@@ -115,6 +115,8 @@ const data = [
 ];
 
 function ListPointCreditScore() {
+	const { userData, loading: loadingUser, status } = useUserStore();
+
 	return (
 		<div>
 			<div className="text-2xl font-bold mb-4">TotalCredit Score Siswa</div>
@@ -126,7 +128,7 @@ function ListPointCreditScore() {
 						'70%': '#A1FF80',
 					}}
 					format={percent => `${percent}.0`}
-					percent={90}
+					percent={userData.credit_score}
 					width={200}
 				/>
 			</div>

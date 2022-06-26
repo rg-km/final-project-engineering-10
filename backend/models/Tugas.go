@@ -95,7 +95,7 @@ func GetAllTugasBySiswa(id_mata_pelajaran int, id_siswa int) ([]Tugas, error) {
 	defer rows.Close()
 	for rows.Next() {
 		tugas := Tugas{}
-		err := rows.Scan(&tugas.Id_pengumpulan,&tugas.Id_Mapel,&tugas.Nilai,&tugas.Status,&tugas.Status,&tugas.Judul,&tugas.Deskripsi,&tugas.Tipe,&tugas.Mapel)
+		err := rows.Scan(&tugas.Id_pengumpulan,&tugas.Id_tugas,&tugas.Nilai,&tugas.Status,&tugas.Status,&tugas.Judul,&tugas.Deskripsi,&tugas.Tipe,&tugas.Mapel)
 		if err != nil {
 			return nil, err
 		}
