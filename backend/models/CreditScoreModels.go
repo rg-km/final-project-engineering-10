@@ -164,20 +164,20 @@ func UpdateStatusCredit(newCredit Credit_score, id int) (bool, error) {
 
 }
 
-func SetBukti(bukti string, user_id int) (bool, error) {
+func SetBukti(bukti string, id int) (bool, error) {
 	tx, err := DB.Begin()
 	if err != nil {
 		return false, err
 	}
 
-	stmt, err := tx.Prepare("UPDATE siswa_credit_score SET bukti=? WHERE id_siswa=?")
+	stmt, err := tx.Prepare("UPDATE siswa_credit_score SET bukti=? WHERE id=?")
 	if err != nil {
 		return false, err
 	}
 
 	defer stmt.Close()
 
-	_, err = stmt.Exec(bukti, user_id)
+	_, err = stmt.Exec(bukti, id)
 
 	if err != nil {
 		return false, err
