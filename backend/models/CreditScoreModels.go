@@ -73,7 +73,7 @@ func AddCreditScore(credit Credit_score, user_id int) (bool, error) {
 }
 
 func GetCreditScore(user_id int) (Siswa, error) {
-	sqlstmt, err := DB.Prepare(`SELECT credit_score FROM siswa WHERE id_siswa = ? `)
+	sqlstmt, err := DB.Prepare(`SELECT credit_score FROM siswa WHERE id = ? `)
 	if err != nil {
 		return Siswa{}, err
 	}
@@ -131,7 +131,7 @@ func UpdateStatusCredit(newCredit Credit_score, id int) (bool, error) {
 		return false, err
 	}
 
-	stmt, err := tx.Prepare("UPDATE siswa SET status = ? WHERE id = ?")
+	stmt, err := tx.Prepare("UPDATE siswa_credit_score SET status = ? WHERE id = ?")
 
 	if err != nil {
 		return false, err
@@ -146,7 +146,20 @@ func UpdateStatusCredit(newCredit Credit_score, id int) (bool, error) {
 	}
 
 	tx.Commit()
+	temp := newCredit.Status
+	status := strings.ToLower(temp)
+	if status == "berhasil" {
 
+		creds,err:=GetCreditScoreById(id)
+		if err!=nil {
+			return false,err
+		}
+
+		id_siswa,err:=strconv.Atoi(creds.Id_siswa)
+
+		UpdateCreditScore(creds.Point, id_siswa)
+
+	}
 	return true, nil
 
 }
@@ -178,7 +191,7 @@ func SetBukti(bukti string, user_id int) (bool, error) {
 
 func GetCreditScoreById(id int) (Credit_score, error) {
 
-	sqlstmt, err := DB.Prepare(`SELECT * FROM siswa WHERE id = ? `)
+	sqlstmt, err := DB.Prepare(`SELECT * FROM siswa_credit_score WHERE id = ? `)
 	if err != nil {
 		return Credit_score{}, err
 	}
