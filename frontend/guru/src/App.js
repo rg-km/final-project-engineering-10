@@ -1,5 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
+import AuthenticatedRoute from './components/HOC/AuthenticatedRoute';
+import UnauthenticatedRoute from './components/HOC/UnauthenticatedRoute';
 import CatatanMinat from './components/pages/dashboard/catatanMinat/catatanSiswaMinat/CatatanMinat';
 import CreateCatatanMinat from './components/pages/dashboard/catatanMinat/catatanSiswaMinat/_partials/CreateCatatanMinat';
 import EditCatatanMinat from './components/pages/dashboard/catatanMinat/catatanSiswaMinat/_partials/EditCatatanMinat';
@@ -31,207 +33,276 @@ function App() {
 		<div className="">
 			<BrowserRouter>
 				<Routes>
-					<Route path="/" element={<Landing />} />
+					<Route
+						path="/"
+						element={
+							<Layout type={'front'}>
+								<Landing />
+							</Layout>
+						}
+					/>
 					<Route
 						path="/login"
 						element={
-							<Layout type={'front'}>
-								<Login />
-							</Layout>
+							<UnauthenticatedRoute>
+								<Layout type={'front'}>
+									<Login />
+								</Layout>
+							</UnauthenticatedRoute>
 						}
 					/>
 					<Route
 						path="/register"
 						element={
-							<Layout type={'front'}>
-								<Register />
-							</Layout>
+							<UnauthenticatedRoute>
+								<Layout type={'front'}>
+									<Register />
+								</Layout>
+							</UnauthenticatedRoute>
 						}
 					/>
-					<Route
-						path="/dashboard"
-						element={
-							<Layout type={'dashboard'}>
-								<Dashboard />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/pelajaran"
-						element={
-							<Layout type={'dashboard'}>
-								<ListPelajaran />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/pelajaran/create"
-						element={
-							<Layout type={'dashboard'}>
-								<CreatePelajaran />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/pelajaran/:mapelId/edit"
-						element={
-							<Layout type={'dashboard'}>
-								<EditPelajaran />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/pelajaran/:mapelId"
-						element={
-							<Layout type={'dashboard'}>
-								<ListSiswaPelajaran />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/pelajaran/:mapelId/:siswaId"
-						element={
-							<Layout type={'dashboard'}>
-								<RekapNilaiSiswa />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/pelajaran/:mapelId/:siswaId/edit/:tugasId/:pengumpulanId"
-						element={
-							<Layout type={'dashboard'}>
-								<EditNilaiTugas />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/siswa"
-						element={
-							<Layout type={'dashboard'}>
-								<ListSiswa />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/siswa/:siswaId"
-						element={
-							<Layout type={'dashboard'}>
-								<ListMapelSiswa />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/siswa/:siswaId/:mapelId"
-						element={
-							<Layout type={'dashboard'}>
-								<RekapNilaiSiswa />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/siswa/:mapelId/:siswaId/edit/:tugasId/:pengumpulanId"
-						element={
-							<Layout type={'dashboard'}>
-								<EditNilaiTugas />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/tugas"
-						element={
-							<Layout type={'dashboard'}>
-								<SelectPelajaran />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/tugas/:mapelId"
-						element={
-							<Layout type={'dashboard'}>
-								<ListTugasPelajaran />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/tugas/:mapelId/create"
-						element={
-							<Layout type={'dashboard'}>
-								<CreateTugas />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/tugas/:mapelId/edit/:tugasId"
-						element={
-							<Layout type={'dashboard'}>
-								<EditTugas />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/credit-score"
-						element={
-							<Layout type={'dashboard'}>
-								<ListSiswaCreditScore />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/credit-score/:siswaId"
-						element={
-							<Layout type={'dashboard'}>
-								<ListPointCreditScore />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/credit-score/:siswaId/create"
-						element={
-							<Layout type={'dashboard'}>
-								<CreatePoin />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/credit-score/:siswaId/edit/:creditscoreId"
-						element={
-							<Layout type={'dashboard'}>
-								<EditPoin />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/catatan-minat"
-						element={
-							<Layout type={'dashboard'}>
-								<SelectSiswaCatatanMinat />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/catatan-minat/:siswaId"
-						element={
-							<Layout type={'dashboard'}>
-								<CatatanMinat />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/catatan-minat/:siswaId/create"
-						element={
-							<Layout type={'dashboard'}>
-								<CreateCatatanMinat />
-							</Layout>
-						}
-					/>
-					<Route
-						path="/dashboard/catatan-minat/:siswaId/edit/:minatId"
-						element={
-							<Layout type={'dashboard'}>
-								<EditCatatanMinat />
-							</Layout>
-						}
-					/>
+					<Route path="/dashboard">
+						<Route
+							path=""
+							element={
+								<AuthenticatedRoute>
+									<Layout type={'dashboard'}>
+										<Dashboard />
+									</Layout>
+								</AuthenticatedRoute>
+							}
+						/>
+						<Route path="pelajaran">
+							<Route
+								path=""
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<ListPelajaran />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+							<Route
+								path="create"
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<CreatePelajaran />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+							<Route
+								path=":mapelId/edit"
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<EditPelajaran />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+							<Route
+								path=":mapelId"
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<ListSiswaPelajaran />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+							<Route
+								path=":mapelId/:siswaId"
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<RekapNilaiSiswa />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+							<Route
+								path=":mapelId/:siswaId/edit/:tugasId/:pengumpulanId"
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<EditNilaiTugas />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+						</Route>
+						<Route path="siswa">
+							<Route
+								path=""
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<ListSiswa />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+							<Route
+								path=":siswaId"
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<ListMapelSiswa />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+							<Route
+								path=":siswaId/:mapelId"
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<RekapNilaiSiswa />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+							<Route
+								path=":mapelId/:siswaId/edit/:tugasId/:pengumpulanId"
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<EditNilaiTugas />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+						</Route>
+						<Route path="tugas">
+							<Route
+								path=""
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<SelectPelajaran />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+							<Route
+								path=":mapelId"
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<ListTugasPelajaran />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+							<Route
+								path=":mapelId/create"
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<CreateTugas />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+							<Route
+								path=":mapelId/edit/:tugasId"
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<EditTugas />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+						</Route>
+						<Route path="credit-score">
+							<Route
+								path=""
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<ListSiswaCreditScore />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+							<Route
+								path=":siswaId"
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<ListPointCreditScore />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+							<Route
+								path=":siswaId/create"
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<CreatePoin />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+							<Route
+								path=":siswaId/edit/:creditscoreId"
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<EditPoin />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+						</Route>
+						<Route path="catatan-minat">
+							<Route
+								path=""
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<SelectSiswaCatatanMinat />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+							<Route
+								path=":siswaId"
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<CatatanMinat />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+							<Route
+								path=":siswaId/create"
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<CreateCatatanMinat />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+							<Route
+								path=":siswaId/edit/:minatId"
+								element={
+									<AuthenticatedRoute>
+										<Layout type={'dashboard'}>
+											<EditCatatanMinat />
+										</Layout>
+									</AuthenticatedRoute>
+								}
+							/>
+						</Route>
+					</Route>
 				</Routes>
 			</BrowserRouter>
 		</div>
