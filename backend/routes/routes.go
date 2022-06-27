@@ -12,6 +12,7 @@ func Routes(route *gin.Engine) {
 		v1.GET("/", repository.GetAll)                      //v
 		v1.POST("/login/", repository.Login)                //v
 		v1.POST("/register/", repository.Register)          //v
+		v1.GET("/get-profile/", repository.GetProfileSiswa)            //vv
 		v1.GET("/:id_siswa/", repository.GetUserById)       //v
 		v1.POST("/enroll/", repository.AddMapel_siswa)      //v
 		v1.DELETE("/enroll/", repository.DeleteMapel_siswa) //vv
@@ -20,9 +21,9 @@ func Routes(route *gin.Engine) {
 		v1.GET("/:id_siswa/avg/:id_mapel/", repository.AvgByMapel)
 		v1.GET("/:id_siswa/avg/:id_mapel/me", repository.AvgByMapelAndSiswa)
 		v1.GET("/:id_siswa/credit/", repository.GetCreditScoreByIdSiswa)
-		v1.GET("/:id_siswa/credit/:id_credit", repository.GetCreditScoreById)
+		v1.GET("/:id_siswa/credit/:id_credit/", repository.GetCreditScoreById)
 		v1.GET("/:id_siswa/mapel/search/", repository.SearchMapel)
-		v1.GET("/:id_siswa/mapel/", repository.GetAllMapel)            //v
+		v1.GET("/:id_siswa/mapel/", repository.GetMapelBySiswa)            //v
 		v1.GET("/:id_siswa/mapel/:id_mapel/", repository.GetMapelByID) //vv
 		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/search/", repository.SearchTugas)
 		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/", repository.GetAllTugasBySiswa)
@@ -40,7 +41,7 @@ func Routes(route *gin.Engine) {
 	v2 := route.Group("/Guru")
 	{
 		v2.GET("/", repository.GetAllGuru)                        //vv
-		v2.GET("/get-profile/", repository.GetProfile)            //vv
+		v2.GET("/get-profile/", repository.GetProfileGuru)            //vv
 		v2.POST("/login/", repository.GuruLogin)                  //vv
 		v2.POST("/register/", repository.RegisterGuru)            //vv
 		v2.POST("/:id_Guru/mapel/", repository.AddMapel)          //v
@@ -57,17 +58,18 @@ func Routes(route *gin.Engine) {
 		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/search/", repository.SearchTugas)
 		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/", repository.GetAllTugas) //vv
 		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/siswa/", repository.GetSiswaByMapel)
+		v2.GET("/:id_Guru/mapel/siswa/:id_siswa/", repository.GetMapelBySiswaId)
 		v2.GET("/:id_Guru/mapel/:id_mapel/tugas/:id_siswa/", repository.GetAllTugasBySiswa)
 		// v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/",repository.GetTugasById)
 		// v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/pengumpulan/", repository.GetPengumpulanTugasById)
 		v2.GET("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/", repository.GetPengumpulanTugasById) //vv
-		v2.PUT("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/:id_siswa", repository.SetNilai)       //vv
+		v2.PUT("/:id_Guru/mapel/list/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/:id_siswa/", repository.SetNilai)       //vv
 
+		v2.POST("/:id_Guru/credit/siswa/:id_siswa/", repository.AddCreditScore)
+		v2.GET("/:id_Guru/credit/siswa/:id_siswa/", repository.GetCreditScoreByIdSiswa)
 		v2.PUT("/:id_Guru/credit/:id_credit/", repository.UpdateStatusCredit)
 		v2.GET(":id_Guru/credit/:id_credit/", repository.GetCreditScoreById)
 		v2.DELETE(":id_Guru/credit/:id_credit/", repository.DeleteCredit)
-		v2.POST("/:id_Guru/credit/:id_credit/:id_siswa/", repository.AddCreditScore)
-		v2.GET("/:id_Guru/credit/:id_credit/:id_siswa/", repository.GetCreditScoreByIdSiswa)
 		v2.PUT("/:id_Guru/credit/:id_credit/:id_siswa/bukti/", repository.SetBukti)
 
 		v2.GET("/:id_Guru/minat/siswa/:id_siswa/", repository.GetAllMinatSiswa)

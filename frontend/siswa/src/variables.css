@@ -16704,7 +16704,7 @@ textarea.ant-mentions {
 .ant-menu.ant-menu-dark,
 .ant-menu-dark .ant-menu-sub,
 .ant-menu.ant-menu-dark .ant-menu-sub {
-  color: #000000;
+  color: #f1f9f9;
   background: #2226a1;
 }
 .ant-menu.ant-menu-dark .ant-menu-submenu-title .ant-menu-submenu-arrow,
@@ -16748,7 +16748,7 @@ textarea.ant-mentions {
 .ant-menu-dark .ant-menu-item-group-title,
 .ant-menu-dark .ant-menu-item > a,
 .ant-menu-dark .ant-menu-item > span > a {
-  color: #000000;
+  color: #f1f9f9;
 }
 .ant-menu-dark.ant-menu-inline,
 .ant-menu-dark.ant-menu-vertical,

@@ -15,8 +15,8 @@ const columns = [
 	},
 	{
 		title: 'Deskripsi Poin',
-		dataIndex: 'deskripsi_poin',
-		key: 'deskripsi_poin',
+		dataIndex: 'deskripsi',
+		key: 'deskripsi',
 	},
 	{
 		title: 'Tipe',
@@ -73,14 +73,15 @@ const columns = [
 	},
 	{
 		title: 'Poin',
-		dataIndex: 'poin',
-		key: 'poin',
+		dataIndex: 'point',
+		key: 'point',
+		render: (_, record) => <p>{record.tipe === 'tugas' ? record.point : -1 * record.point}</p>,
 	},
 	{
 		title: 'Action',
 		key: 'action',
 		render: (_, record) => (
-			<Link to="edit" className="flex gap-4 items-center justify-center">
+			<Link to={`edit/${record.id}`} className="flex gap-4 items-center justify-center">
 				<img src="/image/dashboard/edit.svg" alt="edit" />
 			</Link>
 		),
@@ -144,7 +145,7 @@ function ListPointCreditScore() {
 	const fetchPoin = async () => {
 		try {
 			setLoading(loading + 1);
-			const response = await axiosConfig.get(`${BASE_URL}/Guru/${userData.id}/siswa/${siswaId}/credit/`);
+			const response = await axiosConfig.get(`${BASE_URL}/Guru/${userData.id}/credit/siswa/${siswaId}/`);
 			setListPoin(response.data.data);
 		} catch (error) {
 			console.log(error);
@@ -189,7 +190,7 @@ function ListPointCreditScore() {
 					<label>Tambah Poin</label>
 				</Link>
 			</div>
-			<Table pagination={false} columns={columns} dataSource={list} />
+			<Table pagination={false} columns={columns} dataSource={listPoin} />
 		</div>
 	);
 }

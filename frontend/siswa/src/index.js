@@ -1,4 +1,5 @@
 import React from 'react';
+import './variables.css';
 import ReactDOM from 'react-dom/client';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
@@ -6,7 +7,6 @@ import App from './App';
 import Prerequest from './components/HOC/Prerequest';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import './variables.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

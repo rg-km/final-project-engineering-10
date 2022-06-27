@@ -43,7 +43,7 @@ function ListMapelSiswa() {
 	const fetchSiswaMapel = async () => {
 		try {
 			setLoading(true);
-			const response = await axiosConfig.get(`${BASE_URL}/siswa/${siswaId}/mapel/`);
+			const response = await axiosConfig.get(`${BASE_URL}/Guru/${userData.id}/mapel/siswa/${siswaId}/`);
 			setData(response.data.data);
 		} catch (error) {
 			console.log(error);

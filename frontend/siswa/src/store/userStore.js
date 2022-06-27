@@ -10,7 +10,7 @@ const useUserStore = create((set, get) => ({
 	setUser: async () => {
 		try {
 			set(state => ({ ...state, loading: true }));
-			const response = await axiosConfig.get(`${BASE_URL}/Guru/get-profile/`);
+			const response = await axiosConfig.get(`${BASE_URL}/siswa/get-profile/`);
 			set(state => ({ ...state, userData: response.data.message, status: response.status }));
 		} catch (error) {
 			if (error.response.status !== 400) {

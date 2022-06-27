@@ -1,8 +1,5 @@
-import { Tag } from 'antd';
-import React from 'react';
-
 function Dashboard() {
-	return <div></div>;
+	return <div className="h-full"></div>;
 }
 
 export default Dashboard;
