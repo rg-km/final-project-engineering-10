@@ -16,10 +16,10 @@ func Routes(route *gin.Engine) {
 		v1.GET("/:id_siswa/", repository.GetUserById)       //v
 		v1.POST("/enroll/", repository.AddMapel_siswa)      //v
 		v1.DELETE("/enroll/", repository.DeleteMapel_siswa) //vv
-		v1.GET("/avg", repository.AvgSekolah)
+		v1.GET("/avg/", repository.AvgSekolah)
 		v1.GET("/:id_siswa/avg/", repository.AvgByIdSiswa)
-		v1.GET("/:id_siswa/avg/:id_mapel/", repository.AvgByMapel)
-		v1.GET("/:id_siswa/avg/:id_mapel/me", repository.AvgByMapelAndSiswa)
+		v1.GET("/avg/mapel/:id_mapel/", repository.AvgByMapel)
+		v1.GET("/:id_siswa/avg/:id_mapel/me/", repository.AvgByMapelAndSiswa)
 		v1.GET("/:id_siswa/credit/", repository.GetCreditScoreByIdSiswa)
 		v1.GET("/:id_siswa/credit/:id_credit/", repository.GetCreditScoreById)
 		v1.GET("/:id_siswa/mapel/search/", repository.SearchMapel)
@@ -77,7 +77,6 @@ func Routes(route *gin.Engine) {
 		v2.GET("/:id_Guru/minat/:id_minat/", repository.GetMinatById)
 		v2.PUT("/:id_Guru/minat/:id_minat/", repository.UpdateMinat)
 		v2.DELETE("/:id_Guru/minat/:id_minat/", repository.DeleteMinat)
-
 	}
 
 }
