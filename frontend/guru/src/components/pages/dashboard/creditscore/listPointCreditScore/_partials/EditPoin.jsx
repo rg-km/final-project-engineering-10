@@ -15,9 +15,7 @@ import { Toast } from '../../../../../reusable/Toast';
 
 const validationSchema = Yup.object().shape({
 	deskripsi: Yup.string().required('Nama Task wajib diisi'),
-	tipe: Yup.string().required('Tipe Task wajib dipilih'),
 	status: Yup.string().required('Status wajib dipilih'),
-	point: Yup.number().typeError('Masukan Angka yang Valid').required('Poin Task wajib diisi'),
 });
 
 const { Option } = Select;
@@ -29,7 +27,7 @@ function EditPoin() {
 		status: '',
 	};
 
-	const { creditscoreId } = useParams();
+	const { creditscoreId, siswaId } = useParams();
 	const { userData, loading: loadingUser } = useUserStore();
 	const [input, setInput] = useState(initialState);
 	const [loading, setLoading] = useState(false);
@@ -60,12 +58,12 @@ function EditPoin() {
 
 	const onSubmit = async values => {
 		try {
-			const response = await axiosConfig.put(`${BASE_URL}/siswa/${userData.id}/credit/${creditscoreId}/`, values);
+			const response = await axiosConfig.put(`${BASE_URL}/Guru/${userData.id}/credit/${creditscoreId}/`, values);
 			Toast.fire({
 				icon: 'success',
 				title: 'Berhasil Mengupdate Tugas',
 			});
-			navigate(`/dashboard/credit-score`);
+			navigate(`/dashboard/credit-score/${siswaId}`);
 		} catch (error) {
 			console.log(error);
 			Toast.fire({
@@ -182,7 +180,9 @@ function EditPoin() {
 							)}
 
 							<div className="flex justify-end">
-								<button className="px-12 py-4 bg-blue text-white font-bold rounded-xl text-xl">Simpan</button>
+								<button type="submit" className="px-12 py-4 bg-blue text-white font-bold rounded-xl text-xl">
+									Simpan
+								</button>
 							</div>
 						</Form>
 					)}

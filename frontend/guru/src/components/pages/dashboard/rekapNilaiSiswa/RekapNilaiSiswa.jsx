@@ -41,6 +41,10 @@ const columns = [
 			} else if (record.status === 'selesai') {
 				color = '#A1FF80';
 				caption = 'Selesai';
+			}else{
+				color = '#DC5944';
+				caption = 'Gagal';
+
 			}
 
 			return (

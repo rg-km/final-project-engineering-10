@@ -57,7 +57,10 @@ function EditTugas() {
 
 	const onSubmit = async values => {
 		try {
-			const response = await axiosConfig.post(`${BASE_URL}/Guru/${userData.id}/mapel/list/${mapelId}/tugas/`, values);
+			const response = await axiosConfig.put(
+				`${BASE_URL}/Guru/${userData.id}/mapel/list/${mapelId}/tugas/${tugasId}/`,
+				values
+			);
 			Toast.fire({
 				icon: 'success',
 				title: 'Berhasil Mengupdate Tugas',

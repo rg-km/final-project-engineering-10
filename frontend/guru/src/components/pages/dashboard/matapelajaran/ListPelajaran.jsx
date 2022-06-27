@@ -7,38 +7,39 @@ import BASE_URL from '../../../../utils/config';
 import Loading from '../../../reusable/Loading';
 import { Toast } from '../../../reusable/Toast';
 
-const columns = [
-	{
-		title: 'No',
-		dataIndex: 'no',
-		key: 'no',
-		render: (item, record, index) => <>{index + 1}</>,
-	},
-	{
-		title: 'Nama Pelajaran',
-		dataIndex: 'nama_kelas',
-		key: 'nama_kelas',
-		render: (_, record) => (
-			<Link to={`/dashboard/pelajaran/${record.kode_kelas}`} className="h-full uppercase">
-				<p className="text-black">{record.nama_kelas}</p>
-			</Link>
-		),
-	},
-	{
-		title: 'Action',
-		key: 'action',
-		render: (_, record) => (
-			<div className="flex gap-4 items-center">
-				<Link to={`/dashboard/pelajaran/${record.kode_kelas}/edit`}>
-					<img src="/image/dashboard/edit.svg" alt="edit" />
-				</Link>
-				<img src="/image/dashboard/trash.svg" alt="edit" />
-			</div>
-		),
-	},
-];
-
 function ListPelajaran() {
+	const columns = [
+		{
+			title: 'No',
+			dataIndex: 'no',
+			key: 'no',
+			render: (item, record, index) => <>{index + 1}</>,
+		},
+		{
+			title: 'Nama Pelajaran',
+			dataIndex: 'nama_kelas',
+			key: 'nama_kelas',
+			render: (_, record) => (
+				<Link to={`/dashboard/pelajaran/${record.kode_kelas}`} className="h-full uppercase">
+					<p className="text-black">{record.nama_kelas}</p>
+				</Link>
+			),
+		},
+		{
+			title: 'Action',
+			key: 'action',
+			render: (_, record) => (
+				<div className="flex gap-4 items-center">
+					<Link to={`/dashboard/pelajaran/${record.kode_kelas}/edit`}>
+						<img src="/image/dashboard/edit.svg" alt="edit" />
+					</Link>
+					<div onClick={() => onDelete(record.kode_kelas)}>
+						<img src="/image/dashboard/trash.svg" alt="edit" />
+					</div>
+				</div>
+			),
+		},
+	];
 	const [loading, setLoading] = useState(false);
 	const [data, setData] = useState([]);
 	const { userData } = useUserStore();
@@ -48,6 +49,21 @@ function ListPelajaran() {
 			setLoading(true);
 			const response = await axiosConfig.get(`${BASE_URL}/Guru/${userData.id}/mapel/`);
 			setData(response.data.data);
+		} catch (error) {
+			console.log(error);
+			Toast.fire({
+				icon: 'error',
+				title: 'Terdapat Kesalahan',
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
+	const onDelete = async kode_kelas => {
+		try {
+			setLoading(true);
+			const response = await axiosConfig.delete(`${BASE_URL}/Guru/${userData.id}/mapel/${kode_kelas}/`);
+			fetchPelajaran();
 		} catch (error) {
 			console.log(error);
 			Toast.fire({
