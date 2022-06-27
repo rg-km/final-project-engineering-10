@@ -79,6 +79,8 @@ func Routes(route *gin.Engine) {
 		v2.DELETE("/:id_Guru/minat/:id_minat/", repository.DeleteMinat)
 
 		v2.GET("/get-sekolah/", repository.GetAllSekolah)
+
+		v2.GET("/get-sekolah/:kode_sekolah", repository.GetSekolahByKode)
 	}
 
 }
