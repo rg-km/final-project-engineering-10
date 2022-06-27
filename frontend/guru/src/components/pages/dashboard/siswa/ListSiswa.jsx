@@ -29,15 +29,6 @@ const columns = [
 		key: 'rata_rata',
 		render: (_, record) => <p className="text-black">80</p>,
 	},
-	{
-		title: 'Action',
-		key: 'action',
-		render: (_, record) => (
-			<div className="flex gap-4 items-center justify-center">
-				<img src="/image/dashboard/trash.svg" alt="delete" />
-			</div>
-		),
-	},
 ];
 
 function ListSiswa() {
