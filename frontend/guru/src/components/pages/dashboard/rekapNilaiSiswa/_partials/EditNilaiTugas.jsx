@@ -13,13 +13,15 @@ import { Toast } from '../../../../reusable/Toast';
 
 const validationSchema = Yup.object().shape({
 	nilai: Yup.number().typeError('Tolong masukan angka yang valid').required('Nilai Tugas wajib diisi'),
+	status: Yup.string().required('Status wajib diisi'),
 });
 
 function EditNilaiTugas() {
-	const { tugasId, pengumpulanId, mapelId } = useParams();
+	const { tugasId, pengumpulanId, mapelId, siswaId } = useParams();
 
 	const initialState = {
-		name: '',
+		nilai: '',
+		link_pengumpulan: '',
 		status: '',
 	};
 	const navigate = useNavigate();
@@ -33,9 +35,14 @@ function EditNilaiTugas() {
 		try {
 			setLoading(true);
 			const response = await axiosConfig.get(
-				`${BASE_URL}/siswa/${userData.id}/mapel/${mapelId}/tugas/${tugasId}/pengumpulan/${pengumpulanId}/`
+				`${BASE_URL}/Guru/${userData.id}/mapel/list/${mapelId}/tugas/${tugasId}/pengumpulan/${pengumpulanId}/`
 			);
 			setData(response.data.data);
+			setInput({
+				nilai: response.data.data.nilai,
+				status: response.data.data.status,
+				link_pengumpulan: response.data.data.link_pengumpulan,
+			});
 		} catch (error) {
 			console.log(error);
 			Toast.fire({
@@ -56,13 +63,14 @@ function EditNilaiTugas() {
 			setLoading(true);
 			values.nilai = parseInt(values.nilai);
 			const response = await axiosConfig.put(
-				`${BASE_URL}/Guru/${userData.id}/mapel/list/${mapelId}/tugas/${tugasId}/pengumpulan/${pengumpulanId}/`,
+				`${BASE_URL}/Guru/${userData.id}/mapel/list/${mapelId}/tugas/${tugasId}/pengumpulan/${pengumpulanId}/${siswaId}/`,
 				values
 			);
 			Toast.fire({
 				icon: 'success',
 				title: 'Berhasil Mengupdate Nilai',
 			});
+			navigate(-1);
 		} catch (error) {
 			console.log(error);
 			Toast.fire({
@@ -102,8 +110,8 @@ function EditNilaiTugas() {
 							}}
 							labelAlign="left"
 						>
-							<FormItem label="Tipe Nilai">
-								<Input value="Ulangan" disabled />
+							<FormItem label="Tipe Tugas">
+								<Input value={data.tipe} className="capitalize" disabled />
 							</FormItem>
 							<FormItem label="Nilai" error={getErrorValue(errors.nilai, errorMessage?.nilai)} touched={touched.nilai}>
 								<Input
@@ -121,7 +129,7 @@ function EditNilaiTugas() {
 							>
 								<Select
 									name="status"
-									defaultValue={''}
+									value={values.status}
 									style={{ width: '100%' }}
 									onBlur={() => setFieldTouched('status')}
 									onChange={value => {
@@ -133,10 +141,26 @@ function EditNilaiTugas() {
 										Pilih Status Tugas
 									</Select.Option>
 									<Select.Option value="Belum">Belum</Select.Option>
-									<Select.Option value="Review">Review</Select.Option>
-									<Select.Option value="Dinilai">Dinilai</Select.Option>
+									<Select.Option value="dikirim">Dikirim</Select.Option>
+									<Select.Option value="selesai">Dinilai</Select.Option>
+									<Select.Option value="gagal">Gagal</Select.Option>
 								</Select>
 							</FormItem>
+							{values.link_pengumpulan && (
+								<FormItem
+									label="Link Pengumpulan"
+									error={getErrorValue(errors.link_pengumpulan, errorMessage?.link_pengumpulan)}
+									touched={touched.link_pengumpulan}
+								>
+									<Input
+										onChange={handleChange}
+										onBlur={handleBlur}
+										value={values.link_pengumpulan}
+										name="link_pengumpulan"
+										placeholder={`Masukkan Nilai ${tugasId}`}
+									/>
+								</FormItem>
+							)}
 							<div className="flex justify-end">
 								<button className="px-12 py-4 bg-blue text-white font-bold rounded-xl text-xl">Kirim</button>
 							</div>

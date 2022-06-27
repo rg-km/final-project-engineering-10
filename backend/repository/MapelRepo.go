@@ -75,6 +75,19 @@ func GetMapelBySiswa(c *gin.Context) {
 	}
 }
 
+func GetMapelBySiswaId(c *gin.Context) {
+	id_siswa, err := strconv.Atoi(c.Param("id_siswa"))
+	CheckErr(err)
+
+	mapel, err := models.GetAllMapelBySiswa(id_siswa)
+	CheckErr(err)
+	if mapel == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Kelas tidak ada"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": mapel})
+	}
+}
+
 func UpdateMapel(c *gin.Context) {
 
 	var json models.Mata_pelajaran

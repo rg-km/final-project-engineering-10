@@ -74,15 +74,6 @@ func GetCreditScoreByIdSiswa(c *gin.Context) {
 
 func GetCreditScoreById(c *gin.Context) {
 
-	var credit models.Credit_score
-
-	if err := c.ShouldBindJSON(&credit); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	// credits,err:=strconv.Atoi(credit.Id_siswa)
-	// CheckErr(err)
 	credits, err := strconv.Atoi(c.Param("id_credit"))
 
 	user, err := models.GetCreditScoreById(credits)
@@ -118,7 +109,7 @@ func UpdateStatusCredit(c *gin.Context) {
 
 func SetBukti(c *gin.Context) {
 
-	var json models.Credit_score
+	var json models.Credit_score_bukti
 
 	if err := c.ShouldBindJSON(&json); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

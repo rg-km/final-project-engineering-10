@@ -79,7 +79,7 @@ func GetAllTugas(id_mata_pelajaran int) ([]ListTugas, error) {
 
 func GetAllTugasBySiswa(id_mata_pelajaran int, id_siswa int) ([]Tugas, error) {
 	assignment := make([]Tugas, 0)
-	sqlstmt := `SELECT pengumpulan_tugas.id,tugas.id,mata_pelajaran.kode_kelas ,pengumpulan_tugas.nilai, pengumpulan_tugas.status ,tugas.judul ,tugas.deskripsi, tugas.tipe ,mata_pelajaran.nama_kelas 
+	sqlstmt := `SELECT pengumpulan_tugas.id, tugas.id ,pengumpulan_tugas.nilai, pengumpulan_tugas.status ,tugas.judul ,tugas.deskripsi, tugas.tipe ,mata_pelajaran.nama_kelas 
 	FROM pengumpulan_tugas
 	JOIN tugas
 	ON pengumpulan_tugas.id_tugas =tugas.id
@@ -95,7 +95,7 @@ func GetAllTugasBySiswa(id_mata_pelajaran int, id_siswa int) ([]Tugas, error) {
 	defer rows.Close()
 	for rows.Next() {
 		tugas := Tugas{}
-		err := rows.Scan(&tugas.Id_pengumpulan,&tugas.Id_tugas,&tugas.Nilai,&tugas.Status,&tugas.Status,&tugas.Judul,&tugas.Deskripsi,&tugas.Tipe,&tugas.Mapel)
+		err := rows.Scan(&tugas.Id_pengumpulan, &tugas.Id_tugas, &tugas.Nilai, &tugas.Status, &tugas.Judul, &tugas.Deskripsi, &tugas.Tipe, &tugas.Mapel)
 		if err != nil {
 			return nil, err
 		}

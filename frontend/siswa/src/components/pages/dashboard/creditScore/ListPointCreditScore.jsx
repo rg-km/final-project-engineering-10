@@ -1,6 +1,12 @@
 import { Progress, Table, Tag } from 'antd';
+import { isEmpty } from 'lodash';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useUserStore from '../../../../store/userStore';
+import axiosConfig from '../../../../utils/axiosConfig';
+import BASE_URL from '../../../../utils/config';
+import Loading from '../../../reusable/Loading';
+import { Toast } from '../../../reusable/Toast';
 
 const columns = [
 	{
@@ -11,8 +17,8 @@ const columns = [
 	},
 	{
 		title: 'Deskripsi Poin',
-		dataIndex: 'deskripsi_poin',
-		key: 'deskripsi_poin',
+		dataIndex: 'deskripsi',
+		key: 'deskripsi',
 	},
 	{
 		title: 'Tipe',
@@ -69,57 +75,52 @@ const columns = [
 	},
 	{
 		title: 'Poin',
-		dataIndex: 'poin',
-		key: 'poin',
+		dataIndex: 'point',
+		key: 'point',
+		render: (_, record) => <p>{record.tipe === 'tugas' ? record.point : -1 * record.point}</p>,
 	},
 	{
 		title: 'Action',
 		key: 'action',
 		render: (_, record) => (
-			<Link to="edit" className="flex gap-4 items-center justify-center">
+			<Link to={`edit/${record.id}`} className="flex gap-4 items-center justify-center">
 				<img src="/image/dashboard/edit.svg" alt="edit" />
 			</Link>
 		),
 	},
 ];
 
-const data = [
-	{
-		key: '1',
-		deskripsi_poin: 'Nyontek',
-		tipe: 'pelanggaran',
-		status: 'selesai',
-		poin: -10,
-	},
-	{
-		key: '2',
-		deskripsi_poin: 'Membantu Guru',
-		tipe: 'tugas',
-		status: 'dikirim',
-		poin: 10,
-	},
-	{
-		key: '3',
-		deskripsi_poin: 'Membersihkan Kelas',
-		tipe: 'tugas',
-		status: 'selesai',
-		poin: 20,
-	},
-	{
-		key: '4',
-		deskripsi_poin: 'Membersihkan Taman',
-		tipe: 'tugas',
-		status: 'belum',
-		poin: 20,
-	},
-];
-
 function ListPointCreditScore() {
-	const { userData, loading: loadingUser, status } = useUserStore();
+	const [loading, setLoading] = useState(false);
+	const [data, setData] = useState([]);
+	const { userData } = useUserStore();
 
-	return (
+	const fetchCreditScore = async () => {
+		try {
+			setLoading(true);
+			const response = await axiosConfig.get(`${BASE_URL}/siswa/${userData.id}/credit/`);
+			setData(response.data.data);
+		} catch (error) {
+			console.log(error);
+			Toast.fire({
+				icon: 'error',
+				title: 'Terdapat Kesalahan',
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
+	useEffect(() => {
+		if (!isEmpty(userData)) {
+			fetchCreditScore();
+		}
+	}, [userData]);
+
+	return loading ? (
+		<Loading />
+	) : (
 		<div>
-			<div className="text-2xl font-bold mb-4">TotalCredit Score Siswa</div>
+			<div className="text-2xl font-bold mb-4">Total Credit Score Siswa</div>
 			<div className="flex justify-center my-8">
 				<Progress
 					type="circle"
@@ -133,17 +134,6 @@ function ListPointCreditScore() {
 				/>
 			</div>
 			<div className="text-2xl font-bold mb-4">List Credit Score Siswa</div>
-			<div className="flex justify-end my-4">
-				<Link
-					to="create"
-					className="p-4 bg-blue flex items-center gap-2 font-bold text-lg text-white rounded-2xl cursor-pointer"
-				>
-					<div>
-						<img src="/image/dashboard/plus.svg" className="w-5" alt="" />
-					</div>
-					<label>Tambah Poin</label>
-				</Link>
-			</div>
 			<Table pagination={false} columns={columns} dataSource={data} />
 		</div>
 	);

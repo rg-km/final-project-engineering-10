@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import CatatanMinat from './components/pages/dashboard/catatanMinat/CatatanMinat';
 import ListSiswaCreditScore from './components/pages/dashboard/creditScore/ListPointCreditScore';
+import EditPoin from './components/pages/dashboard/creditScore/_partials/EditPoin';
 import Dashboard from './components/pages/dashboard/Dashboard';
 import ListPelajaran from './components/pages/dashboard/mataPelajaran/ListPelajaran';
 import EnrollPelajaran from './components/pages/dashboard/mataPelajaran/_partials/EnrollPelajaran';
@@ -90,6 +91,14 @@ function App() {
 						element={
 							<Layout type={'dashboard'}>
 								<ListSiswaCreditScore />
+							</Layout>
+						}
+					/>
+					<Route
+						path="/dashboard/credit-score/edit/:creditscoreId"
+						element={
+							<Layout type={'dashboard'}>
+								<EditPoin />
 							</Layout>
 						}
 					/>

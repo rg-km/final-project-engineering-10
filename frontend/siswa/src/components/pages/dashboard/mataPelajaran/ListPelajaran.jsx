@@ -41,20 +41,6 @@ const columns = [
 	},
 ];
 
-const data = [
-	{
-		key: '1',
-		nama_pelajaran: 'Matematika',
-	},
-	{
-		key: '2',
-		nama_pelajaran: 'Agama',
-	},
-	{
-		key: '3',
-		nama_pelajaran: 'PKWN',
-	},
-];
 
 function ListPelajaran() {
 	const [loading, setLoading] = useState(false);
@@ -79,6 +65,7 @@ function ListPelajaran() {
 	useEffect(() => {
 		fetchPelajaran();
 	}, []);
+	
 	return loading ? (
 		<Loading />
 	) : (

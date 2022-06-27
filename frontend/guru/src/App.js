@@ -97,7 +97,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/pelajaran/:mapelId/:nama/edit/:tugasId/:pengumpulanId"
+						path="/dashboard/pelajaran/:mapelId/:siswaId/edit/:tugasId/:pengumpulanId"
 						element={
 							<Layout type={'dashboard'}>
 								<EditNilaiTugas />
@@ -129,7 +129,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/siswa/:mapelId/:nama/edit/:tugasId/:pengumpulanId"
+						path="/dashboard/siswa/:mapelId/:siswaId/edit/:tugasId/:pengumpulanId"
 						element={
 							<Layout type={'dashboard'}>
 								<EditNilaiTugas />
@@ -193,7 +193,7 @@ function App() {
 						}
 					/>
 					<Route
-						path="/dashboard/credit-score/:siswaId/edit"
+						path="/dashboard/credit-score/:siswaId/edit/:creditscoreId"
 						element={
 							<Layout type={'dashboard'}>
 								<EditPoin />

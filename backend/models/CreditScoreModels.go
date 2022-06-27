@@ -10,13 +10,18 @@ import (
 )
 
 type Credit_score struct {
-	Id        int    `json:"id,omitempty"`
-	Tipe      string `json:"tipe,omitempty"`
-	Deskripsi string `json:"deskripsi,omitempty"`
-	Bukti     string `json:"bukti,omitempty"`
-	Status    string `json:"status,omitempty"`
-	Point     int    `json:"point,omitempty"`
-	Id_siswa  string `json:"id_siswa,omitempty"`
+	Id         int     `json:"id,omitempty"`
+	Tipe       string  `json:"tipe,omitempty"`
+	Deskripsi  string  `json:"deskripsi,omitempty"`
+	Bukti      *string `json:"bukti,omitempty"`
+	Status     string  `json:"status,omitempty"`
+	Point      int     `json:"point,omitempty"`
+	Id_siswa   string  `json:"id_siswa,omitempty"`
+	Nama_siswa *string `json:"nama_siswa,omitempty"`
+}
+
+type Credit_score_bukti struct {
+	Bukti string `json:"bukti,omitempty"`
 }
 
 func GetCreditScoreByIdSiswa(user_id int) ([]Credit_score, error) {
@@ -53,12 +58,12 @@ func AddCreditScore(credit Credit_score, user_id int) (bool, error) {
 		return false, err
 	}
 
-	sqlstmt, err := tx.Prepare(`INSERT INTO siswa_credit_score (tipe,deskripsi,status,point,id_siswa)VALUES (?,?,?,?)`)
+	sqlstmt, err := tx.Prepare(`INSERT INTO siswa_credit_score (tipe,deskripsi,status,point,bukti,id_siswa)VALUES (?,?,?,?,?,?)`)
 	if err != nil {
 		return false, err
 	}
 	defer sqlstmt.Close()
-	_, Err := sqlstmt.Exec(credit.Tipe, credit.Deskripsi, credit.Status, credit.Point, user_id)
+	_, Err := sqlstmt.Exec(credit.Tipe, credit.Deskripsi, credit.Status, credit.Point, credit.Bukti, user_id)
 	if Err != nil {
 		return false, err
 	}
@@ -150,12 +155,12 @@ func UpdateStatusCredit(newCredit Credit_score, id int) (bool, error) {
 	status := strings.ToLower(temp)
 	if status == "berhasil" {
 
-		creds,err:=GetCreditScoreById(id)
-		if err!=nil {
-			return false,err
+		creds, err := GetCreditScoreById(id)
+		if err != nil {
+			return false, err
 		}
 
-		id_siswa,err:=strconv.Atoi(creds.Id_siswa)
+		id_siswa, err := strconv.Atoi(creds.Id_siswa)
 
 		UpdateCreditScore(creds.Point, id_siswa)
 
@@ -170,7 +175,7 @@ func SetBukti(bukti string, id int) (bool, error) {
 		return false, err
 	}
 
-	stmt, err := tx.Prepare("UPDATE siswa_credit_score SET bukti=? WHERE id=?")
+	stmt, err := tx.Prepare("UPDATE siswa_credit_score SET bukti=? , status='dikirim' WHERE id=?")
 	if err != nil {
 		return false, err
 	}
@@ -191,12 +196,12 @@ func SetBukti(bukti string, id int) (bool, error) {
 
 func GetCreditScoreById(id int) (Credit_score, error) {
 
-	sqlstmt, err := DB.Prepare(`SELECT * FROM siswa_credit_score WHERE id = ? `)
+	sqlstmt, err := DB.Prepare(`SELECT scs.id, scs.tipe, scs.deskripsi, scs.bukti, scs.status, scs.point, scs.id_siswa, s.nama FROM siswa_credit_score scs JOIN siswa s ON scs.id_siswa=s.id  WHERE scs.id = ? `)
 	if err != nil {
 		return Credit_score{}, err
 	}
 	credit := Credit_score{}
-	rows := sqlstmt.QueryRow(id).Scan(&credit.Id, &credit.Tipe, &credit.Deskripsi, &credit.Bukti, &credit.Status, &credit.Point, &credit.Id_siswa)
+	rows := sqlstmt.QueryRow(id).Scan(&credit.Id, &credit.Tipe, &credit.Deskripsi, &credit.Bukti, &credit.Status, &credit.Point, &credit.Id_siswa, &credit.Nama_siswa)
 	if rows != nil {
 		if rows == sql.ErrNoRows {
 			return Credit_score{}, nil
