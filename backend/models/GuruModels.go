@@ -121,7 +121,7 @@ func RegisterGuru(NewGuru Guru) (bool, error) { //fungsi untuk testing db
 	return true, nil
 }
 
-func GetProfile(id int) (GuruProfile, error) {
+func GetProfileGuru(id int) (GuruProfile, error) {
 	sqlstmt, err := DB.Prepare(`SELECT id, nama, email, kode_sekolah FROM guru WHERE id = ?`)
 	if err != nil {
 		return GuruProfile{}, err

@@ -5,6 +5,7 @@ import useUserStore from '../../../../store/userStore';
 import axiosConfig from '../../../../utils/axiosConfig';
 import BASE_URL from '../../../../utils/config';
 import { Toast } from '../../../reusable/Toast';
+import { Tag } from 'antd';
 
 const columns = [
 	{
@@ -22,6 +23,34 @@ const columns = [
 		title: 'Tipe',
 		dataIndex: 'tipe',
 		key: 'tipe',
+	},
+	{
+		title: 'Status',
+		dataIndex: 'status',
+		key: 'status',
+		render: (_, record) => {
+			let color;
+			let caption;
+
+			if (record.status === 'Belum') {
+				color = '#F9B577';
+				caption = 'Belum Mengumpulkan';
+			} else if (record.status === 'dikirim') {
+				color = '#2F71EB';
+				caption = 'Bukti Telah dikirim';
+			} else if (record.status === 'selesai') {
+				color = '#A1FF80';
+				caption = 'Selesai';
+			}
+
+			return (
+				<div className="flex justify-center ">
+					<Tag className="text-lg" color={color}>
+						{caption}
+					</Tag>
+				</div>
+			);
+		},
 	},
 	{
 		title: 'Nilai',
@@ -42,7 +71,6 @@ const columns = [
 	},
 ];
 
-
 function RekapNilaiSiswa() {
 	const { mapelId, siswaId } = useParams();
 	const [loading, setLoading] = useState(false);
@@ -52,7 +80,7 @@ function RekapNilaiSiswa() {
 	const fetchRekap = async () => {
 		try {
 			setLoading(true);
-			const response = await axiosConfig.get(`${BASE_URL}/siswa/${siswaId}/mapel/${mapelId}/tugas/`);
+			const response = await axiosConfig.get(`${BASE_URL}/Guru/${userData.id}/mapel/${mapelId}/tugas/${siswaId}/`);
 			setData(response.data.message);
 		} catch (error) {
 			console.log(error);

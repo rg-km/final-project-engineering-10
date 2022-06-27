@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"mactiv/service"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
@@ -125,5 +126,23 @@ func GetUserById(c *gin.Context) {
 	}else{
 		c.JSON(http.StatusOK,gin.H{"data":user})
 	}
+
+}
+
+func GetProfileSiswa(c *gin.Context) {
+	service.AuthJwt()
+
+	temp, err := c.Cookie("user_id")
+	if temp == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	id, _ := strconv.Atoi(temp)
+	guru, err := models.GetProfileSiswa(id)
+
+	CheckErr(err)
+
+	c.JSON(http.StatusOK, gin.H{"message": guru})
 
 }

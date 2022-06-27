@@ -1,31 +1,31 @@
 import { Form } from 'antd';
 import { Formik } from 'formik';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import useUserStore from '../../../../store/userStore';
-import axiosConfig from '../../../../utils/axiosConfig';
-import BASE_URL from '../../../../utils/config';
-import { getErrorValue } from '../../../../utils/getErrors';
-import FormItem from '../../../reusable/FormItem';
-import Input from '../../../reusable/Input';
-import { Toast } from '../../../reusable/Toast';
+import useUserStore from '../../../../../store/userStore';
+import axiosConfig from '../../../../../utils/axiosConfig';
+import BASE_URL from '../../../../../utils/config';
+import { getErrorValue } from '../../../../../utils/getErrors';
+import FormItem from '../../../../reusable/FormItem';
+import Input from '../../../../reusable/Input';
+import { Toast } from '../../../../reusable/Toast';
 
 const validationSchema = Yup.object().shape({
-	nama_kelas: Yup.string().required('Nama Pelajaran wajib diisi'),
+	kode_kelas: Yup.number().required('Kode Kelas wajib diisi'),
 });
 
-function CreatePelajaran() {
+function EnrollPelajaran() {
 	const initialState = {
-		nama_kelas: '',
+		kode_kelas: '',
 	};
 	const { userData, loading: loadingUser, status, setUser } = useUserStore();
 
-
 	const onSubmit = async values => {
 		try {
+			values.kode_kelas = parseInt(values.kode_kelas);
 			setLoading(true);
-			const response = await axiosConfig.post(`${BASE_URL}/Guru/${userData.id}/mapel/`, values);
+			const response = await axiosConfig.post(`${BASE_URL}/siswa/enroll/`, values);
 			Toast.fire({
 				icon: 'success',
 				title: 'Berhasil Membuat Mata Pelajaran',
@@ -47,7 +47,7 @@ function CreatePelajaran() {
 
 	return (
 		<div>
-			<h1 className="text-3xl font-bold">Tambah Mata Pelajaran</h1>
+			<h1 className="text-3xl font-bold">Enroll Mata Pelajaran</h1>
 			<div className="my-3 bg-blue-bright rounded-xl p-4">
 				<Formik initialValues={input} enableReinitialize validationSchema={validationSchema} onSubmit={onSubmit}>
 					{({
@@ -65,16 +65,16 @@ function CreatePelajaran() {
 					}) => (
 						<Form onFinish={handleSubmit} className="my-16">
 							<FormItem
-								label="Nama Mata Pelajaran"
-								error={getErrorValue(errors.nama_kelas, errorMessage?.nama_kelas)}
-								touched={touched.nama_kelas}
+								label="Kode Kelas"
+								error={getErrorValue(errors.kode_kelas, errorMessage?.kode_kelas)}
+								touched={touched.kode_kelas}
 							>
 								<Input
 									onChange={handleChange}
 									onBlur={handleBlur}
-									value={values.nama_kelas}
-									name="nama_kelas"
-									placeholder="Masukkan Nama Mata Pelajaran anda"
+									value={values.kode_kelas}
+									name="kode_kelas"
+									placeholder="Masukkan Kode Kelas anda"
 								/>
 							</FormItem>
 							<div className="flex justify-end">
@@ -88,4 +88,4 @@ function CreatePelajaran() {
 	);
 }
 
-export default CreatePelajaran;
+export default EnrollPelajaran;

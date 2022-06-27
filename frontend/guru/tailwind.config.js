@@ -6,7 +6,7 @@ module.exports = {
 				primary: '#A1D9E1',
 				secondary: '#D2FCFC',
 				blue: '#2F71EB',
-				'blue-bright': '#F1F9F9',
+				'blue-bright': '#e1ebfd',
 			},
 			spacing: {
 				88: '22rem',

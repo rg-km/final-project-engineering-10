@@ -29,6 +29,14 @@ type Siswa struct {
 	Token        string `json:"token,omitempty"`
 }
 
+type SiswaProfile struct {
+	Id           int    `json:"id"`
+	Nama         string `json:"nama"`
+	Email        string `json:"email"`
+	Kode_sekolah string `json:"kode_sekolah"`
+	Credit_score string `json:"credit_score"`
+}
+
 func Login(email string, password string) (Siswa, error) {
 	siswa := Siswa{}
 
@@ -166,4 +174,21 @@ func GetSiswaById(id string) (Siswa, error) {
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
+}
+
+func GetProfileSiswa(id int) (SiswaProfile, error) {
+	sqlstmt, err := DB.Prepare(`SELECT id, nama, email, kode_sekolah, credit_score FROM siswa WHERE id = ?`)
+	if err != nil {
+		return SiswaProfile{}, err
+	}
+	siswaProfile := SiswaProfile{}
+	rows := sqlstmt.QueryRow(id).Scan(&siswaProfile.Id, &siswaProfile.Nama, &siswaProfile.Email, &siswaProfile.Kode_sekolah, &siswaProfile.Credit_score)
+	if rows != nil {
+		if rows == sql.ErrNoRows {
+			return SiswaProfile{}, nil
+		}
+		return SiswaProfile{}, rows
+
+	}
+	return siswaProfile, nil
 }
