@@ -44,7 +44,7 @@ function Register() {
 				icon: 'success',
 				title: 'Berhasil Register',
 			});
-			navigate('/dashboard');
+			navigate('/login');
 		} catch (error) {
 			console.log(error);
 			setLoading(false);
