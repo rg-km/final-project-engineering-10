@@ -27,6 +27,7 @@ type Siswa struct {
 	Credit_score string `json:"credit_score"`
 	Kode_sekolah string `json:"kode_sekolah"`
 	Token        string `json:"token,omitempty"`
+	Rata_rata    *string `json:"rata_rata,omitempty"`
 }
 
 type SiswaProfile struct {

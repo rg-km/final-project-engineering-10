@@ -195,7 +195,7 @@ func FindMapel(kodeKelas int) (Mata_pelajaran, error) {
 }
 
 func GetSiswaByMapel(kode_kelas int) ([]Siswa, error) {
-	sqlstmt := `SELECT mps.id_siswa ,s.nama ,s.email ,s.credit_score ,s.kode_sekolah 
+	sqlstmt := `SELECT mps.id_siswa, mps.rata_rata ,s.nama ,s.email ,s.credit_score ,s.kode_sekolah 
 	FROM mata_pelajaran_siswa mps 
 	JOIN siswa s 
 	ON mps.id_siswa =s.id  
@@ -211,7 +211,7 @@ func GetSiswaByMapel(kode_kelas int) ([]Siswa, error) {
 	defer rows.Close()
 	for rows.Next() {
 		User := Siswa{}
-		err := rows.Scan(&User.Id, &User.Nama, &User.Email, &User.Credit_score, &User.Kode_sekolah)
+		err := rows.Scan(&User.Id, &User.Rata_rata, &User.Nama, &User.Email, &User.Credit_score, &User.Kode_sekolah)
 		if err != nil {
 			return nil, err
 		}
