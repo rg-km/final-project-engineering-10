@@ -37,9 +37,9 @@ func GuruLogin(c *gin.Context) {
 	}
 	userId:=strconv.Itoa(int(user.Id))
 	kodeSekolah:=user.Kode_sekolah
-	c.SetCookie("jwt", token, 3600, "/", "localhost", false, true)
-	c.SetCookie("user_id",userId,3600, "/", "localhost", false, true)
-	c.SetCookie("kode_sekolah",kodeSekolah,3600, "/", "localhost", false, true)
+	c.SetCookie("jwt", token, 604800, "/", "localhost", false, true)
+	c.SetCookie("user_id", userId, 604800, "/", "localhost", false, true)
+	c.SetCookie("kode_sekolah", kodeSekolah, 604800, "/", "localhost", false, true)
 }
 
 

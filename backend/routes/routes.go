@@ -32,7 +32,7 @@ func Routes(route *gin.Engine) {
 		v1.POST("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/", repository.SubmitTugas)            //VV
 		v1.GET("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/", repository.GetPengumpulanTugasById) //vv
 		v1.PUT("/:id_siswa/mapel/:id_mapel/tugas/:id_tugas/pengumpulan/:id_pengumpulan/", repository.UpdatePengumpulan)       //vv
-		v1.PUT("/:id_siswa/credit/:id_credit/", repository.SetBukti)
+		v1.PUT("/:id_siswa/credit/:id_credit/", repository.SetBukti)	
 		v1.GET("/:id_siswa/minat/", repository.GetAllMinatSiswa)
 		v1.GET("/:id_siswa/minat/:id_minat/", repository.GetMinatById)
 

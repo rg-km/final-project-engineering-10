@@ -19,7 +19,14 @@ function App() {
 		<div className="">
 			<BrowserRouter>
 				<Routes>
-					<Route path="/" element={<Landing />} />
+					<Route
+						path="/"
+						element={
+							<Layout type={'front'}>
+								<Landing />
+							</Layout>
+						}
+					/>
 					<Route
 						path="/login"
 						element={
