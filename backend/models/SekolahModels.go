@@ -1,6 +1,8 @@
 package models
 
 import (
+	"database/sql"
+
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -38,4 +40,22 @@ func GetAllSekolah() ([]Sekolah, error) {
 	}
 
 	return school, nil
+}
+
+func GetSekolahByKode(kodeSekolah int) (Sekolah, error) {
+	sqlstmt, err := DB.Prepare(`SELECT * FROM sekolah WHERE kode_sekolah = ?`)
+	if err != nil {
+		return Sekolah{}, err
+	}
+	sekolah := Sekolah{}
+
+	rows := sqlstmt.QueryRow(kodeSekolah).Scan(&sekolah.Id_sekolah, &sekolah.Nama, &sekolah.Kode_sekolah, &sekolah.Kepala_sekolah)
+	if rows != nil {
+		if rows == sql.ErrNoRows {
+			return Sekolah{}, nil
+		}
+		return Sekolah{}, rows
+
+	}
+	return sekolah, nil
 }

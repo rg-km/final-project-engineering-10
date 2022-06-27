@@ -1,27 +1,18 @@
 import { isEmpty } from 'lodash';
-import React from 'react';
-import { Navigate, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useUserStore from '../../store/userStore';
 
-function UnauthenticatedRoute({ element, ...rest }) {
-	const { userData } = useUserStore();
+function UnauthenticatedRoute({ children }) {
+	const { userData, loading } = useUserStore();
+	const navigate = useNavigate();
 
-	return (
-		<Route
-			{...rest}
-			element={() =>
-				isEmpty(userData)() ? (
-					{ element }
-				) : (
-					<Navigate
-						to={{
-							pathname: '/dashboard',
-						}}
-					/>
-				)
-			}
-		/>
-	);
+	useEffect(() => {
+		if (!isEmpty(userData) && !loading) {
+			navigate('/dashboard');
+		}
+	}, [userData]);
+	return <>{children}</>;
 }
 
 export default UnauthenticatedRoute;
