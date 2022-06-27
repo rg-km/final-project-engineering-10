@@ -1,4 +1,35 @@
+import { isEmpty } from 'lodash';
+import { useEffect, useState } from 'react';
+import useUserStore from '../../../store/userStore';
+import axiosConfig from '../../../utils/axiosConfig';
+import BASE_URL from '../../../utils/config';
+import { Toast } from '../../reusable/Toast';
+
 function Dashboard() {
+	const [loading, setLoading] = useState(false);
+	const [data, setData] = useState({});
+	const { userData, loading: loadingUser } = useUserStore();
+
+	const fetchSekolah = async () => {
+		try {
+			setLoading(true);
+			const response = await axiosConfig.get(`${BASE_URL}/Guru/get-sekolah/${userData.kode_sekolah}`);
+			setData(response.data.data);
+		} catch (error) {
+			console.log(error);
+			Toast.fire({
+				icon: 'error',
+				title: 'Terdapat Kesalahan',
+			});
+		} finally {
+			setLoading(false);
+		}
+	};
+	useEffect(() => {
+		if (!isEmpty(userData)) {
+			fetchSekolah();
+		}
+	}, []);
 	return (
 		<div className="">
 			<h1 className="text-3xl font-bold">Dashboard</h1>
@@ -12,13 +43,13 @@ function Dashboard() {
 						<div className="my-4 grid grid-cols-7 text-lg font-bold gap-3 justify-center items-center text-center">
 							<div className="py-3 px-2 bg-white rounded-lg col-span-3">Nama Sekolah</div>
 							<div className="py-3 px-2 bg-white rounded-lg col-span-1">:</div>
-							<div className="py-3 px-2 bg-white rounded-lg col-span-3">SMAN 08 Pekanbaru</div>
+							<div className="py-3 px-2 bg-white rounded-lg col-span-3">{data.nama_sekolah}</div>
 							<div className="py-3 px-2 bg-white rounded-lg col-span-3">Kepala Sekolah</div>
 							<div className="py-3 px-2 bg-white rounded-lg col-span-1">:</div>
-							<div className="py-3 px-2 bg-white rounded-lg col-span-3">Hehe.Msc</div>
+							<div className="py-3 px-2 bg-white rounded-lg col-span-3">{data.kepala_sekolah}</div>
 							<div className="py-3 px-2 bg-white rounded-lg col-span-3">Kode Sekolah</div>
 							<div className="py-3 px-2 bg-white rounded-lg col-span-1">:</div>
-							<div className="py-3 px-2 bg-white rounded-lg col-span-3">SMAN 08 Pekanbaru</div>
+							<div className="py-3 px-2 bg-white rounded-lg col-span-3">{data.kode_sekolah}</div>
 						</div>
 					</div>
 				</div>
@@ -31,13 +62,13 @@ function Dashboard() {
 						<div className="my-4 grid grid-cols-7 text-lg font-bold gap-3 justify-center items-center text-center">
 							<div className="py-3 px-2 bg-white rounded-lg col-span-3">Nama Guru</div>
 							<div className="py-3 px-2 bg-white rounded-lg col-span-1">:</div>
-							<div className="py-3 px-2 bg-white rounded-lg col-span-3">Farhan</div>
+							<div className="py-3 px-2 bg-white rounded-lg col-span-3">{userData.nama}</div>
 							<div className="py-3 px-2 bg-white rounded-lg col-span-3">Email</div>
 							<div className="py-3 px-2 bg-white rounded-lg col-span-1">:</div>
-							<div className="py-3 px-2 bg-white rounded-lg col-span-3 overflow-auto">arhandev.code@gmail.com</div>
+							<div className="py-3 px-2 bg-white rounded-lg col-span-3 overflow-auto">{userData.email}</div>
 							<div className="py-3 px-2 bg-white rounded-lg col-span-3">Kode Sekolah</div>
 							<div className="py-3 px-2 bg-white rounded-lg col-span-1">:</div>
-							<div className="py-3 px-2 bg-white rounded-lg col-span-3">SMAN 08 Pekanbaru</div>
+							<div className="py-3 px-2 bg-white rounded-lg col-span-3">{userData.kode_sekolah}</div>
 						</div>
 					</div>
 				</div>
