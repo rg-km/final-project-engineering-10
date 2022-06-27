@@ -1,5 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
+import AuthenticatedRoute from './components/HOC/AuthenticatedRoute';
+import UnauthenticatedRoute from './components/HOC/UnauthenticatedRoute';
 import CatatanMinat from './components/pages/dashboard/catatanMinat/CatatanMinat';
 import ListSiswaCreditScore from './components/pages/dashboard/creditScore/ListPointCreditScore';
 import EditPoin from './components/pages/dashboard/creditScore/_partials/EditPoin';
@@ -30,91 +32,111 @@ function App() {
 					<Route
 						path="/login"
 						element={
-							<Layout type={'front'}>
-								{' '}
-								<Login />{' '}
-							</Layout>
+							<UnauthenticatedRoute>
+								<Layout type={'front'}>
+									<Login />
+								</Layout>
+							</UnauthenticatedRoute>
 						}
 					/>
 					<Route
 						path="/register"
 						element={
-							<Layout type={'front'}>
-								{' '}
-								<Register />
-							</Layout>
+							<UnauthenticatedRoute>
+								<Layout type={'front'}>
+									<Register />
+								</Layout>
+							</UnauthenticatedRoute>
 						}
 					/>
 					<Route
 						path="/dashboard"
 						element={
-							<Layout type={'dashboard'}>
-								<Dashboard />
-							</Layout>
+							<AuthenticatedRoute>
+								<Layout type={'dashboard'}>
+									<Dashboard />
+								</Layout>
+							</AuthenticatedRoute>
 						}
 					/>
 					<Route
 						path="/dashboard/pelajaran"
 						element={
-							<Layout type={'dashboard'}>
-								<ListPelajaran />
-							</Layout>
+							<AuthenticatedRoute>
+								<Layout type={'dashboard'}>
+									<ListPelajaran />
+								</Layout>
+							</AuthenticatedRoute>
 						}
 					/>
 					<Route
 						path="/dashboard/pelajaran/enroll"
 						element={
-							<Layout type={'dashboard'}>
-								<EnrollPelajaran />
-							</Layout>
+							<AuthenticatedRoute>
+								<Layout type={'dashboard'}>
+									<EnrollPelajaran />
+								</Layout>
+							</AuthenticatedRoute>
 						}
 					/>
 					<Route
 						path="/dashboard/tugas"
 						element={
-							<Layout type={'dashboard'}>
-								<SelectPelajaran />
-							</Layout>
+							<AuthenticatedRoute>
+								<Layout type={'dashboard'}>
+									<SelectPelajaran />
+								</Layout>
+							</AuthenticatedRoute>
 						}
 					/>
 					<Route
 						path="/dashboard/tugas/:mapelId"
 						element={
-							<Layout type={'dashboard'}>
-								<ListTugasPelajaran />
-							</Layout>
+							<AuthenticatedRoute>
+								<Layout type={'dashboard'}>
+									<ListTugasPelajaran />
+								</Layout>
+							</AuthenticatedRoute>
 						}
 					/>
 					<Route
 						path="/dashboard/tugas/:mapelId/edit/:tugasId/:linkId"
 						element={
-							<Layout type={'dashboard'}>
-								<EditTugas />
-							</Layout>
+							<AuthenticatedRoute>
+								<Layout type={'dashboard'}>
+									<EditTugas />
+								</Layout>
+							</AuthenticatedRoute>
 						}
 					/>
 					<Route
 						path="/dashboard/credit-score"
 						element={
-							<Layout type={'dashboard'}>
-								<ListSiswaCreditScore />
-							</Layout>
+							<AuthenticatedRoute>
+								<Layout type={'dashboard'}>
+									<ListSiswaCreditScore />
+								</Layout>
+							</AuthenticatedRoute>
 						}
 					/>
 					<Route
 						path="/dashboard/credit-score/edit/:creditscoreId"
 						element={
-							<Layout type={'dashboard'}>
-								<EditPoin />
-							</Layout>
+							<AuthenticatedRoute>
+								<Layout type={'dashboard'}>
+									<EditPoin />
+								</Layout>
+							</AuthenticatedRoute>
 						}
 					/>
 					<Route
 						path="/dashboard/catatan-minat"
 						element={
-							<Layout type={'dashboard'}>
-								<CatatanMinat />
-							</Layout>
+							<AuthenticatedRoute>
+								<Layout type={'dashboard'}>
+									<CatatanMinat />
+								</Layout>
+							</AuthenticatedRoute>
 						}
 					/>
 				</Routes>
