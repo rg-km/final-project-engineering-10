@@ -53,7 +53,7 @@ func AddCreditScore(credit Credit_score, user_id int) (bool, error) {
 		return false, err
 	}
 
-	sqlstmt, err := tx.Prepare(`INSERT INTO siswa_credit_score (tipe,deskripsi,status,point,id_siswa)VALUES (?,?,?,?)`)
+	sqlstmt, err := tx.Prepare(`INSERT INTO siswa_credit_score (tipe,deskripsi,sta	tus,point,id_siswa)VALUES (?,?,?,?)`)
 	if err != nil {
 		return false, err
 	}
