@@ -24,6 +24,22 @@ const useUserStore = create((set, get) => ({
 			return set(state => ({ ...state, loading: false }));
 		}
 	},
+	deleteUser: async () => {
+		try {
+			set(state => ({ ...state, loading: true }));
+			const response = await axiosConfig.post(`${BASE_URL}/Guru/logout/`);
+		} catch (error) {
+			if (error.response.status !== 400) {
+				Toast.fire({
+					icon: 'error',
+					title: 'Terdapat Kesalahan Saat mengambil profile',
+				});
+			}
+			set(state => ({ ...state, status: error.response.status }));
+		} finally {
+			return set(state => ({ ...state, userData: {}, loading: false }));
+		}
+	},
 }));
 
 export default useUserStore;

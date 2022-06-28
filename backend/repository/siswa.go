@@ -2,10 +2,10 @@ package repository
 
 import (
 	"mactiv/models"
+	"mactiv/service"
 	"net/http"
 	"strconv"
 	"time"
-	"mactiv/service"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
@@ -67,6 +67,14 @@ func Login(c *gin.Context) {
 	c.SetCookie("kode_sekolah", kodeSekolah, 604800, "/", "localhost", false, true)
 }
 
+func Logout(c *gin.Context) {
+
+	c.SetCookie("jwt", "", -1, "/", "localhost", false, true)
+	c.SetCookie("user_id", "", -1, "/", "localhost", false, true)
+	c.SetCookie("kode_sekolah", "", -1, "/", "localhost", false, true)
+
+}
+
 func UpdateToken(c *gin.Context) {
 
 	var json models.Siswa
@@ -117,14 +125,14 @@ func GetAll(c *gin.Context) {
 func GetUserById(c *gin.Context) {
 	var user models.Siswa
 
-	id:=c.Param("id_siswa")
-	
+	id := c.Param("id_siswa")
+
 	user, err := models.GetSiswaById(id)
 	CheckErr(err)
-	if user.Nama=="" {
-		c.JSON(http.StatusBadRequest,gin.H{"message": "Username tidak ditemukan"})
-	}else{
-		c.JSON(http.StatusOK,gin.H{"data":user})
+	if user.Nama == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Username tidak ditemukan"})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"data": user})
 	}
 
 }
