@@ -1,4 +1,11 @@
-import { AuditOutlined, BarChartOutlined, BookFilled, FilePdfFilled, PieChartFilled } from '@ant-design/icons';
+import {
+	AuditOutlined,
+	BarChartOutlined,
+	BookFilled,
+	FilePdfFilled,
+	LogoutOutlined,
+	PieChartFilled,
+} from '@ant-design/icons';
 import { Layout as AntLayout, Menu } from 'antd';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -11,7 +18,7 @@ import useUserStore from '../../store/userStore';
 const { Header, Sider, Content, Footer } = AntLayout;
 
 function Layout({ type, children }) {
-	const { userData, loading: loadingUser } = useUserStore();
+	const { userData, loading: loadingUser, deleteUser } = useUserStore();
 
 	const [collapse, setCollapse] = useState(false);
 	const menu = ['Home', 'Features', 'Pricing', 'Testimonials', 'About Us'];
@@ -143,6 +150,18 @@ function Layout({ type, children }) {
 								<Link to={'/dashboard/catatan-minat'}>
 									<div className="mr-4">Catatan Minat</div>
 								</Link>
+							</Menu.Item>
+							<Menu.Item
+								key={'logout'}
+								icon={
+									<div>
+										<LogoutOutlined style={{ fontSize: '28px' }} className={`ml-4 ${collapse && '-ml-1'}`} />
+									</div>
+								}
+							>
+								<div onClick={deleteUser} className="mr-4">
+									Logout
+								</div>
 							</Menu.Item>
 						</Menu.ItemGroup>
 					</Menu>

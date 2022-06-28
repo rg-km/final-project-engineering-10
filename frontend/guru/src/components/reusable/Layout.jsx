@@ -3,6 +3,7 @@ import {
 	BarChartOutlined,
 	BookFilled,
 	FilePdfFilled,
+	LogoutOutlined,
 	PieChartFilled,
 	UserOutlined,
 } from '@ant-design/icons';
@@ -19,7 +20,7 @@ const { Header, Sider, Content, Footer } = AntLayout;
 
 function Layout({ type, children }) {
 	const [collapse, setCollapse] = useState(false);
-	const { userData, loading, status, setUser } = useUserStore();
+	const { userData, loading, status, deleteUser } = useUserStore();
 	const menu = ['Home', 'Features', 'Pricing', 'Testimonials', 'About Us'];
 
 	if (type === 'front') {
@@ -161,6 +162,18 @@ function Layout({ type, children }) {
 								<Link to={'/dashboard/catatan-minat'}>
 									<div className="mr-4">Catatan Minat</div>
 								</Link>
+							</Menu.Item>
+							<Menu.Item
+								key={'logout'}
+								icon={
+									<div>
+										<LogoutOutlined style={{ fontSize: '28px' }} className={`ml-4 ${collapse && '-ml-1'}`} />
+									</div>
+								}
+							>
+								<div onClick={deleteUser} className="mr-4">
+									Logout
+								</div>
 							</Menu.Item>
 						</Menu.ItemGroup>
 					</Menu>

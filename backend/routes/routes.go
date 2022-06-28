@@ -11,6 +11,7 @@ func Routes(route *gin.Engine) {
 	{
 		v1.GET("/", repository.GetAll)                      //v
 		v1.POST("/login/", repository.Login)                //v
+		v1.POST("/logout/", repository.Logout)                //v
 		v1.POST("/register/", repository.Register)          //v
 		v1.GET("/get-profile/", repository.GetProfileSiswa) //vv
 		v1.GET("/:id_siswa/", repository.GetUserById)       //v
@@ -42,7 +43,8 @@ func Routes(route *gin.Engine) {
 	{
 		v2.GET("/", repository.GetAllGuru)                        //vv
 		v2.GET("/get-profile/", repository.GetProfileGuru)        //vv
-		v2.POST("/login/", repository.GuruLogin)                  //vv
+		v2.POST("/login/", repository.GuruLogin)          
+		v2.POST("/logout/", repository.Logout)            //vv
 		v2.POST("/register/", repository.RegisterGuru)            //vv
 		v2.POST("/:id_Guru/mapel/", repository.AddMapel)          //v
 		v2.DELETE("/:id_Guru/mapel/:id/", repository.DeleteMapel) //vv
