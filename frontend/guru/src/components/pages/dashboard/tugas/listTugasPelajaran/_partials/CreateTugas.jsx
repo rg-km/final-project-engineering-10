@@ -119,9 +119,9 @@ function CreateTugas() {
 									<Option value="" disabled>
 										Pilih Tipe Tugas
 									</Option>
-									<Option value="PR">PR</Option>
-									<Option value="Ulangan">Ulangan</Option>
-									<Option value="Kuis">Kuis</Option>
+									<Option value="tugas">Tugas</Option>
+									<Option value="ulangan">Ulangan</Option>
+									<Option value="kuis">Kuis</Option>
 								</Select>
 							</FormItem>
 							<div className="flex justify-end">

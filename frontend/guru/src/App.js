@@ -114,7 +114,7 @@ function App() {
 								}
 							/>
 							<Route
-								path=":mapelId/:siswaId"
+								path=":siswaId/:mapelId"
 								element={
 									<AuthenticatedRoute>
 										<Layout type={'dashboard'}>
@@ -124,7 +124,7 @@ function App() {
 								}
 							/>
 							<Route
-								path=":mapelId/:siswaId/edit/:tugasId/:pengumpulanId"
+								path=":siswaId/:mapelId/edit/:tugasId/:pengumpulanId"
 								element={
 									<AuthenticatedRoute>
 										<Layout type={'dashboard'}>
@@ -166,7 +166,7 @@ function App() {
 								}
 							/>
 							<Route
-								path=":mapelId/:siswaId/edit/:tugasId/:pengumpulanId"
+								path=":siswaId/:mapelId/edit/:tugasId/:pengumpulanId"
 								element={
 									<AuthenticatedRoute>
 										<Layout type={'dashboard'}>

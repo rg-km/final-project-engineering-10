@@ -92,7 +92,7 @@ func GetCreditScore(user_id int) (Siswa, error) {
 		return Siswa{}, rows
 
 	}
-	return Siswa{}, err
+	return siswa, nil
 
 }
 
@@ -141,7 +141,6 @@ func UpdateStatusCredit(newCredit Credit_score, id int) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-
 	defer stmt.Close()
 
 	_, err = stmt.Exec(newCredit.Status, id)

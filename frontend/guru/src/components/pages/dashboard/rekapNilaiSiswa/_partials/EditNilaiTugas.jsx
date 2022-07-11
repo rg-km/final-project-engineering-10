@@ -140,7 +140,7 @@ function EditNilaiTugas() {
 									<Select.Option value="" disabled>
 										Pilih Status Tugas
 									</Select.Option>
-									<Select.Option value="Belum">Belum</Select.Option>
+									<Select.Option value="belum">Belum</Select.Option>
 									<Select.Option value="dikirim">Dikirim</Select.Option>
 									<Select.Option value="selesai">Dinilai</Select.Option>
 									<Select.Option value="gagal">Gagal</Select.Option>

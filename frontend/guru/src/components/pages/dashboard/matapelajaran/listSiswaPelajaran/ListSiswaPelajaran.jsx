@@ -6,41 +6,41 @@ import axiosConfig from '../../../../../utils/axiosConfig';
 import BASE_URL from '../../../../../utils/config';
 import { Toast } from '../../../../reusable/Toast';
 
-const columns = [
-	{
-		title: 'No',
-		dataIndex: 'no',
-		key: 'no',
-		render: (item, record, index) => <>{index + 1}</>,
-	},
-	{
-		title: 'Nama Siswa',
-		dataIndex: 'nama',
-		key: 'nama',
-		render: (_, record) => (
-			<Link to={`${record.id}`} className="h-full">
-				<p className="text-black">{record.nama}</p>
-			</Link>
-		),
-	},
-	{
-		title: 'Rata-rata',
-		dataIndex: 'rata_rata',
-		key: 'rata_rata',
-	},
-	{
-		title: 'Action',
-		key: 'action',
-		render: (_, record) => (
-			<div className="flex gap-4 items-center justify-center">
-				<img src="/image/dashboard/edit.svg" alt="edit" />
-				<img src="/image/dashboard/trash.svg" alt="edit" />
-			</div>
-		),
-	},
-];
-
 function ListSiswaPelajaran() {
+	const columns = [
+		{
+			title: 'No',
+			dataIndex: 'no',
+			key: 'no',
+			render: (item, record, index) => <>{index + 1}</>,
+		},
+		{
+			title: 'Nama Siswa',
+			dataIndex: 'nama',
+			key: 'nama',
+			render: (_, record) => (
+				<Link to={`/dashboard/pelajaran/${record.id}/${mapelId}`} className="h-full">
+					<p className="text-black">{record.nama}</p>
+				</Link>
+			),
+		},
+		{
+			title: 'Rata-rata',
+			dataIndex: 'rata_rata',
+			key: 'rata_rata',
+		},
+		{
+			title: 'Action',
+			key: 'action',
+			render: (_, record) => (
+				<div className="flex gap-4 items-center justify-center">
+					<img src="/image/dashboard/edit.svg" alt="edit" />
+					<img src="/image/dashboard/trash.svg" alt="edit" />
+				</div>
+			),
+		},
+	];
+
 	const { mapelId } = useParams();
 	const [loading, setLoading] = useState(false);
 	const [data, setData] = useState([]);

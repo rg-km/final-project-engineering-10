@@ -57,7 +57,7 @@ const columns = [
 			} else if (status === 'dikirim') {
 				color = '#2F71EB';
 				caption = 'Bukti Telah dikirim';
-			} else if (status === 'selesai') {
+			} else if (status === 'berhasil') {
 				color = '#A1FF80';
 				caption = 'Selesai';
 			}

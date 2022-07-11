@@ -160,7 +160,7 @@ function EditPoin() {
 									</Option>
 									<Option value="belum">Belum Dikirim</Option>
 									<Option value="dikirim">Tugas Sudah dikirim</Option>
-									<Option value="selesai">Selesai</Option>
+									<Option value="berhasil">Selesai</Option>
 								</Select>
 							</FormItem>
 							{values.bukti && (

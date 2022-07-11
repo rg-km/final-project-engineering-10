@@ -40,6 +40,10 @@ function CreatePoin() {
 			values.point = parseInt(values.point);
 			if (values.tipe === 'tugas') {
 				delete values.bukti;
+				values.point *= -1;
+			} else {
+				values.status = 'berhasil';
+				values.point *= -1;
 			}
 			const response = await axiosConfig.post(`${BASE_URL}/Guru/${userData.id}/credit/siswa/${siswaId}/`, values);
 			Toast.fire({

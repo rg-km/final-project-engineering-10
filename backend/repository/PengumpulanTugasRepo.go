@@ -83,6 +83,8 @@ func SetNilai(c *gin.Context) {
 			CheckErr(err)
 
 			avg := (nilaiUlangan * 50 / 100) + (nilaiKuis * 20 / 100) + (nilaiTugas * 30 / 100)
+			println(avg)
+
 			avg_int := int(avg)
 			temp, err := models.UpdateAvg(avg_int, mapel_id, user_id)
 			CheckErr(err)
