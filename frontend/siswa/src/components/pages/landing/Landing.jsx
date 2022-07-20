@@ -1,28 +1,28 @@
-import IconMactiv from "../../../assets/logo_mactiv_2.png";
+// import IconMactiv from "../../../assets/logo_mactiv_2.png";
 import GambarHome from "../../../assets/gambar_home_4.png";
 import GambarFitur from "../../../assets/gambar_fitur_1.png";
 import Check from "../../../assets/Check.gif";
-import Whatsapp from "../../../assets/sosmed/whatsappp.png";
-import Instagram from "../../../assets/sosmed/Instagramm.png";
-import Gmail from "../../../assets/sosmed/gmaill.png";
+// import Whatsapp from "../../../assets/sosmed/whatsappp.png";
+// import Instagram from "../../../assets/sosmed/Instagramm.png";
+// import Gmail from "../../../assets/sosmed/gmaill.png";
 import PricingPlan from "./_partials/PricingPlan";
 import Testimoni from "./_partials/Testimoni";
 import DeskripsiJudul from "./_partials/DeskripsiJudul";
 import SubsribeNow from "./_partials/SubsribeNow";
-import GambarAboutUs from "../../../assets/logo_mactiv.png";
 import Farhan from "../../../assets/team/Farhan.png";
 import Frisca from "../../../assets/team/Frisca.png";
 import Saifulloh from "../../../assets/team/Saifulloh.png";
 import Hesi from "../../../assets/team/Hesi.png";
 import Fadhil from "../../../assets/team/Fadhil.png";
 import Yusuf from "../../../assets/team/Yusuf.png";
+import Aboutus from "./_partials/Aboutus";
+import { Link } from "react-router-dom";
 
 function Landing() {
-  const menu = ["Home", "Features", "Pricing", "Testimonials", "About Us"];
+  //const menu = ["Home", "Features", "Pricing", "Testimonials", "About Us"];
 
   const fitur = [
     "Perlindungan data yang aman.",
-    "Performa Siswa - Mactiv.",
     "Credit Score - Mactiv.",
     "Rata-rata Siswa- Mactiv.",
     "Catatan Minat Siswa.",
@@ -68,7 +68,10 @@ function Landing() {
   return (
     <div className="bg-white">
       <main>
-        <div className="container max-w-5xl mx-auto grid grid-cols-2 py-24 items-center">
+        <div
+          className="container max-w-5xl mx-auto grid grid-cols-2 py-24 items-center"
+          id="home"
+        >
           <div>
             <h1 className="font-bold text-4xl pb-5">
               Memantau performa siswa lebih mudah
@@ -79,15 +82,18 @@ function Landing() {
               Menyediakan sistem pemantau performa siswa anda dengan efisien dan
               efektif menggunakan MACTIV temukan fitur menarik dari kami.
             </div>
-            <button className="py-4 px-16 bg-[#3D8AC1] rounded-md text-white drop-shadow-3xl">
+            <Link
+              to={"/register"}
+              className="py-4 px-16 bg-[#3D8AC1] rounded-md text-white drop-shadow-3xl"
+            >
               Get Started
-            </button>
+            </Link>
           </div>
           <div>
             <img src={GambarHome} alt="ilustration-mactiv" />
           </div>
         </div>
-        <div className="bg-[#CDF0EA] ">
+        <div className="bg-[#CDF0EA]" id="fitur">
           <div className="container max-w-5xl mx-auto grid grid-cols-2 py-20  items-center ">
             <img src={GambarFitur} alt={"features-lasles-vpn"} />
             <div className="px-16 space-y-4 ">
@@ -113,7 +119,7 @@ function Landing() {
             </div>
           </div>
         </div>
-        <div className="bg-gray-50 py-20">
+        <div className="bg-gray-50 py-20" id="harga">
           <DeskripsiJudul
             title={"Pilih Paket Anda"}
             desc={`Mari pilih paket yang terbaik untuk Anda dan jelajahi
@@ -132,33 +138,12 @@ function Landing() {
               );
             })}
           </div>
-
-          <Testimoni />
-        </div>
-        <div className="bg-[#defff7]">
-          <div className="container max-w-5xl mx-auto grid grid-cols-2 py-20 items-center">
-            <div>
-              <h1 className="font-bold text-4xl pb-5">About Us</h1>
-              <div className="font-medium text-justify text-md pb-12">
-                MACTIV atau Measured Activities merupakan sebuah platform
-                pemantau aktivitas dan performa yang melibatkan guru dan siswa
-                untuk membuat dan memantau nilai, credit score, softskill,
-                rata-rata nilah, hingga pengumpulan tugas secara efektif dan
-                efisien. <br />
-                MACTIV dapat membuat siswa bisa memantau rata-rata nilai sebelum
-                penerimaan rapor, sehingga siswa dapat memperbaiki nilai agar
-                rata-rata nilai naik dan membantu siswa menentukan jurusan yang
-                sesuai dengan nilai dan minat bakat mereka berdasarkan soft
-                skill dan catatan minat yang diberikan oleh guru.
-                <br /> MACTIV juga membantu guru dalam memantau performa siswa,
-                memantau tugas siswa, serta membantu dalam perhitungan nilai
-                dengan cepat, akurat, dan tepat.
-              </div>
-            </div>
-            <div>
-              <img src={GambarAboutUs} alt="ilustration-mactiv" />
-            </div>
+          <div id="testimoni">
+            <Testimoni />
           </div>
+        </div>
+        <div className="bg-[#defff7]" id="about-us">
+          <Aboutus />
         </div>
         <div className="py-10 bg-gray-50">
           <h1 className="font-bold text-4xl text-center pb-2">Our Team</h1>
@@ -205,7 +190,7 @@ function Landing() {
             </div>
           </div>
         </div>
-        <div className="bg-gray-100">
+        <div className="bg-gray-100" id="hubKami">
           <SubsribeNow />
         </div>
       </main>

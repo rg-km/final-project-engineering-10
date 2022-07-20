@@ -14,7 +14,12 @@ export default function SubscribeNow() {
             Mari Berlangganan dengan kami.
           </div>
         </div>
-        <button className="bg-[#3D8AC1] rounded-md drop-shadow-3xl text-white p-3 px-12">
+        <button
+          onClick={() =>
+            (window.location.href = "mailto:frisca.veronica08@gmail.com")
+          }
+          className="bg-[#3D8AC1] rounded-md drop-shadow-3xl text-white p-3 px-12"
+        >
           Hubungi Kami
         </button>
       </div>
