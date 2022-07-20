@@ -2,7 +2,9 @@ package models
 
 import (
 	"database/sql"
+	"fmt"
 	"mactiv/service"
+	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/crypto/bcrypt"
@@ -37,6 +39,28 @@ type SiswaProfile struct {
 	Kode_sekolah string `json:"kode_sekolah"`
 	Credit_score string `json:"credit_score"`
 }
+
+type RequestError struct {
+	StatusCode int
+
+	Err string
+}
+
+func (r *RequestError) Error() string {
+	return fmt.Sprintf("err %v", r.Err)
+}
+
+func errorNoCode() error {
+	return &RequestError{
+		StatusCode: 400,
+		Err:"Kode sekolah tidak ditemukan",
+	}
+}
+
+
+
+
+
 
 func Login(email string, password string) (Siswa, error) {
 	siswa := Siswa{}
@@ -78,6 +102,17 @@ func Register(newSiswa Siswa) (bool, error) {
 	}
 
 	newSiswa.Password = string(pwSlice[:])
+
+	kode,_:=strconv.Atoi(newSiswa.Kode_sekolah)
+
+
+	_,errNew:=GetSekolahByKode(kode)
+	if errNew!=nil {
+		return false, errorNoCode()
+	}
+
+
+
 
 	sqlstmt, err := tx.Prepare(`INSERT INTO siswa (nama,email,password,credit_score,kode_sekolah,token)VALUES (?,?,?,?,?,?)`)
 	if err != nil {

@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/crypto/bcrypt"
@@ -107,6 +108,17 @@ func RegisterGuru(NewGuru Guru) (bool, error) { //fungsi untuk testing db
 	}
 
 	NewGuru.Password = string(pwSlice[:])
+
+	kode,_:=strconv.Atoi(NewGuru.Kode_sekolah)
+
+	
+	_,errNew:=GetSekolahByKode(kode)
+	if errNew!=nil {
+		return false, errorNoCode()
+	}
+
+
+
 
 	sqlstmt, err := tx.Prepare(`INSERT INTO guru (nama,email,password,kode_sekolah,token)VALUES (?,?,?,?,?)`)
 	if err != nil {
