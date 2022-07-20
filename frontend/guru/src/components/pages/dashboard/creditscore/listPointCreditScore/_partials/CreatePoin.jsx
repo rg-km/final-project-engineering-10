@@ -40,7 +40,6 @@ function CreatePoin() {
 			values.point = parseInt(values.point);
 			if (values.tipe === 'tugas') {
 				delete values.bukti;
-				values.point *= -1;
 			} else {
 				values.status = 'berhasil';
 				values.point *= -1;
