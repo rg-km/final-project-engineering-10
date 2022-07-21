@@ -52,7 +52,7 @@ func GetSekolahByKode(kodeSekolah int) (Sekolah, error) {
 	rows := sqlstmt.QueryRow(kodeSekolah).Scan(&sekolah.Id_sekolah, &sekolah.Nama, &sekolah.Kode_sekolah, &sekolah.Kepala_sekolah)
 	if rows != nil {
 		if rows == sql.ErrNoRows {
-			return Sekolah{}, nil
+			return Sekolah{}, sql.ErrNoRows
 		}
 		return Sekolah{}, rows
 
